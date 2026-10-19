@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ASTRA — AI Command Center</title>
+<style>
+:root{--bg:#06080d;--panel:rgba(15,20,30,.78);--line:rgba(130,170,220,.18);--text:#eef5ff;--muted:#8290a6;--accent:#61d8ff;--accent2:#8d7dff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% 25%,#13243a 0,#080b12 42%,#030407 100%);color:var(--text);font:14px Inter,system-ui,sans-serif;min-height:100vh}
+.shell{display:grid;grid-template-columns:250px 1fr 290px;min-height:100vh;gap:1px;background:var(--line)}
+aside,.right,main{background:rgba(5,8,14,.86);backdrop-filter:blur(18px)}
+aside{padding:24px 18px}.brand{font-weight:800;letter-spacing:.22em;font-size:18px;margin-bottom:35px}.brand span{color:var(--accent)}
+.nav{display:grid;gap:8px}.nav button{border:1px solid transparent;background:transparent;color:#9aa8bc;text-align:left;padding:12px 14px;border-radius:12px;cursor:pointer}.nav button:hover,.nav button.active{background:rgba(97,216,255,.08);border-color:var(--line);color:white}
+.status{margin-top:auto;border:1px solid var(--line);border-radius:14px;padding:14px;color:var(--muted)}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#48e39a;box-shadow:0 0 14px #48e39a;margin-right:8px}
+main{display:flex;flex-direction:column;min-width:0}.top{height:70px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 26px}.top small{color:var(--muted)}.top .pill{border:1px solid var(--line);padding:8px 12px;border-radius:999px;color:#a9bad0}
+.stage{flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.halo{position:absolute;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(97,216,255,.14),transparent 65%);filter:blur(4px)}
+.avatar{width:240px;height:240px;border-radius:50%;border:1px solid rgba(97,216,255,.35);box-shadow:0 0 50px rgba(97,216,255,.13),inset 0 0 40px rgba(97,216,255,.08);display:grid;place-items:center;position:relative}
+.avatar:before{content:"";width:150px;height:150px;border-radius:50%;border:2px solid var(--accent);box-shadow:0 0 28px rgba(97,216,255,.35);opacity:.65}.eyes{position:absolute;display:flex;gap:52px;top:91px}.eyes i{width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 18px var(--accent)}
+.wave{position:absolute;bottom:42px;display:flex;gap:5px;align-items:center}.wave i{width:3px;height:18px;background:var(--accent);border-radius:4px;animation:pulse 1s ease-in-out infinite alternate}.wave i:nth-child(2n){animation-delay:.2s}.wave i:nth-child(3n){animation-delay:.4s}@keyframes pulse{to{height:42px;opacity:.45}}
+.composer{border-top:1px solid var(--line);padding:18px 24px;display:flex;gap:10px}.composer input{flex:1;background:#0b1019;border:1px solid var(--line);color:white;border-radius:14px;padding:14px 16px;outline:none}.composer button{border:1px solid var(--line);background:#101926;color:white;border-radius:14px;padding:0 17px;cursor:pointer}.composer .send{background:linear-gradient(135deg,#3cc9f5,#7165ff);border:0}
+.right{padding:24px}.section{margin-bottom:25px}.section h3{font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:#75849a;margin:0 0 12px}.card{border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:14px;margin-bottom:9px}.metric{display:flex;justify-content:space-between;color:#a7b4c7;margin:7px 0}.metric b{color:white}.activity{height:180px;overflow:auto;color:#8290a6;font-size:12px;line-height:1.7}
+@media(max-width:1000px){.shell{grid-template-columns:76px 1fr}.right{display:none}.brand{font-size:0}.brand span{font-size:18px}.nav button{font-size:0;text-align:center}.nav button:first-letter{font-size:18px}}
+@media(max-width:650px){aside{display:none}.shell{display:block}.top{padding:0 16px}.composer{padding:12px}.stage{min-height:55vh}}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside>
+  <div class="brand">J<span>•</span>ARVIS</div>
+  <div class="nav">
+    <button class="active">◉ &nbsp; Command</button>
+    <button>▣ &nbsp; Conversations</button>
+    <button>◈ &nbsp; Memory</button>
+    <button>⚡ &nbsp; Tools</button>
+    <button>◌ &nbsp; System</button>
+    <button>⚙ &nbsp; Settings</button>
+  </div>
+  <div style="height:32vh"></div>
+  <div class="status"><span class="dot"></span>ONLINE<br><small>Gemini Live connected</small></div>
+</aside>
+<main>
+  <div class="top"><div><b>AI COMMAND CENTER</b><br><small>Real-time assistant interface</small></div><div class="pill">LIVE • READY</div></div>
+  <section class="stage">
+    <div class="halo"></div><div class="avatar"><div class="eyes"><i></i><i></i></div></div>
+    <div class="wave">${Array(16).fill('<i></i>').join('')}</div>
+  </section>
+  <div class="composer"><button title="Voice">🎙</button><input id="msg" placeholder="Talk to your AI assistant…"><button class="send" onclick="sendMessage()">Send</button></div>
+</main>
+<section class="right">
+  <div class="section"><h3>System</h3><div class="card"><div class="metric"><span>CPU</span><b>—</b></div><div class="metric"><span>Memory</span><b>—</b></div><div class="metric"><span>Connection</span><b>LIVE</b></div></div></div>
+  <div class="section"><h3>Activity</h3><div class="card activity" id="activity">Web interface initialized.<br>Waiting for command…</div></div>
+  <div class="section"><h3>Capabilities</h3><div class="card">Voice · Vision · Memory · Web Search · Files · Browser · Desktop · Plugins</div></div>
+</section>
+</div>
+<script>
+function sendMessage(){
+ const el=document.getElementById('msg'); const text=el.value.trim(); if(!text)return;
+ document.getElementById('activity').innerHTML += '<br><span style="color:#eef5ff">You:</span> '+text.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
+ el.value='';
+}
+document.getElementById('msg').addEventListener('keydown',e=>{if(e.key==='Enter')sendMessage()});
+</script>
+<div style="position:fixed;right:18px;bottom:10px;font-size:10px;letter-spacing:.16em;color:#66758a;opacity:.8">BY SHLOK</div></body>
+</html>
