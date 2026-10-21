@@ -1,64 +1,257 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ASTRA — AI Command Center</title>
-<style>
-:root{--bg:#06080d;--panel:rgba(15,20,30,.78);--line:rgba(130,170,220,.18);--text:#eef5ff;--muted:#8290a6;--accent:#61d8ff;--accent2:#8d7dff}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% 25%,#13243a 0,#080b12 42%,#030407 100%);color:var(--text);font:14px Inter,system-ui,sans-serif;min-height:100vh}
-.shell{display:grid;grid-template-columns:250px 1fr 290px;min-height:100vh;gap:1px;background:var(--line)}
-aside,.right,main{background:rgba(5,8,14,.86);backdrop-filter:blur(18px)}
-aside{padding:24px 18px}.brand{font-weight:800;letter-spacing:.22em;font-size:18px;margin-bottom:35px}.brand span{color:var(--accent)}
-.nav{display:grid;gap:8px}.nav button{border:1px solid transparent;background:transparent;color:#9aa8bc;text-align:left;padding:12px 14px;border-radius:12px;cursor:pointer}.nav button:hover,.nav button.active{background:rgba(97,216,255,.08);border-color:var(--line);color:white}
-.status{margin-top:auto;border:1px solid var(--line);border-radius:14px;padding:14px;color:var(--muted)}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#48e39a;box-shadow:0 0 14px #48e39a;margin-right:8px}
-main{display:flex;flex-direction:column;min-width:0}.top{height:70px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 26px}.top small{color:var(--muted)}.top .pill{border:1px solid var(--line);padding:8px 12px;border-radius:999px;color:#a9bad0}
-.stage{flex:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.halo{position:absolute;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(97,216,255,.14),transparent 65%);filter:blur(4px)}
-.avatar{width:240px;height:240px;border-radius:50%;border:1px solid rgba(97,216,255,.35);box-shadow:0 0 50px rgba(97,216,255,.13),inset 0 0 40px rgba(97,216,255,.08);display:grid;place-items:center;position:relative}
-.avatar:before{content:"";width:150px;height:150px;border-radius:50%;border:2px solid var(--accent);box-shadow:0 0 28px rgba(97,216,255,.35);opacity:.65}.eyes{position:absolute;display:flex;gap:52px;top:91px}.eyes i{width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 18px var(--accent)}
-.wave{position:absolute;bottom:42px;display:flex;gap:5px;align-items:center}.wave i{width:3px;height:18px;background:var(--accent);border-radius:4px;animation:pulse 1s ease-in-out infinite alternate}.wave i:nth-child(2n){animation-delay:.2s}.wave i:nth-child(3n){animation-delay:.4s}@keyframes pulse{to{height:42px;opacity:.45}}
-.composer{border-top:1px solid var(--line);padding:18px 24px;display:flex;gap:10px}.composer input{flex:1;background:#0b1019;border:1px solid var(--line);color:white;border-radius:14px;padding:14px 16px;outline:none}.composer button{border:1px solid var(--line);background:#101926;color:white;border-radius:14px;padding:0 17px;cursor:pointer}.composer .send{background:linear-gradient(135deg,#3cc9f5,#7165ff);border:0}
-.right{padding:24px}.section{margin-bottom:25px}.section h3{font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:#75849a;margin:0 0 12px}.card{border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:14px;margin-bottom:9px}.metric{display:flex;justify-content:space-between;color:#a7b4c7;margin:7px 0}.metric b{color:white}.activity{height:180px;overflow:auto;color:#8290a6;font-size:12px;line-height:1.7}
-@media(max-width:1000px){.shell{grid-template-columns:76px 1fr}.right{display:none}.brand{font-size:0}.brand span{font-size:18px}.nav button{font-size:0;text-align:center}.nav button:first-letter{font-size:18px}}
-@media(max-width:650px){aside{display:none}.shell{display:block}.top{padding:0 16px}.composer{padding:12px}.stage{min-height:55vh}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASTRA — AI Assistant</title>
+  
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:      #07090f;
+      --surface: rgba(255,255,255,0.04);
+      --border:  rgba(255,255,255,0.07);
+      --accent:  #6366f1;
+      --adim:    rgba(99,102,241,0.14);
+      --text:    #dde3ed;
+      --muted:   #5e6a7e;
+      --green:   #22c55e;
+      --gdim:    rgba(34,197,94,0.14);
+    }
+    html, body {
+      height: 100%; background: var(--bg); color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+
+    /* ── HEADER ── */
+    header {
+      flex-shrink: 0; display: flex; align-items: center; gap: 10px;
+      padding: 12px 16px; border-bottom: 1px solid var(--border);
+      background: rgba(7,9,15,0.95);
+    }
+    .logo { font-size: 15px; font-weight: 700; letter-spacing: 6px; }
+    .logo em { color: var(--accent); font-style: normal; }
+    .pill {
+      display: flex; align-items: center; gap: 6px; padding: 4px 11px;
+      border-radius: 99px; background: var(--surface); border: 1px solid var(--border);
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--muted); transition: all 0.3s;
+    }
+    .pill.on { background: var(--gdim); border-color: rgba(34,197,94,0.3); color: var(--green); }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); transition: background 0.3s; }
+    .pill.on .dot { background: var(--green); animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .spacer { flex: 1; }
+    .enc-badge {
+      font-size: 9px; font-weight: 700; letter-spacing: 1.5px; padding: 3px 8px;
+      border-radius: 4px; display: none;
+    }
+    .enc-badge.on  { display: block; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25); color: var(--green); }
+    .enc-badge.off { display: block; background: rgba(255,100,100,0.08); border: 1px solid rgba(255,100,100,0.2); color: #f87171; }
+    .url { font-size: 10px; font-family: monospace; color: var(--muted); padding: 4px 9px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; }
+
+    /* ── FEED ── */
+    main { flex: 1; overflow-y: auto; padding: 14px 16px 8px; display: flex; flex-direction: column; gap: 10px; }
+    main::-webkit-scrollbar { width: 3px; }
+    main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .msg { max-width: 82%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.55; animation: pop 0.18s ease; }
+    @keyframes pop { from { opacity:0; transform:translateY(4px); } }
+    .msg-j   { align-self:flex-start; background:var(--adim);   border:1px solid rgba(99,102,241,0.18); border-bottom-left-radius:4px; }
+    .msg-u   { align-self:flex-end;   background:var(--surface); border:1px solid var(--border);        border-bottom-right-radius:4px; }
+    .msg-sys { align-self:center; font-size:11px; color:var(--muted); padding:2px 0; background:transparent; border:none; letter-spacing:0.3px; }
+    .lbl { font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase; opacity:0.45; margin-bottom:4px; }
+    .msg-j .lbl { color:var(--accent); }
+    .msg-u .lbl { color:var(--muted); text-align:right; }
+
+    /* ── FILE CARD ── */
+    .msg-file {
+      align-self: flex-end;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; border-bottom-right-radius: 4px;
+      padding: 11px 14px; display: flex; align-items: center; gap: 12px;
+      max-width: 82%; animation: pop 0.18s ease;
+    }
+    .fc-icon { font-size: 26px; flex-shrink: 0; }
+    .fc-meta { flex: 1; min-width: 0; }
+    .fc-lbl  { font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase; opacity:0.45; color:var(--muted); margin-bottom:4px; }
+    .fc-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .fc-size { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .fc-bar-wrap { height: 3px; background: var(--border); border-radius: 2px; margin-top: 7px; overflow: hidden; }
+    .fc-bar { height: 100%; width: 0%; background: var(--accent); border-radius: 2px; transition: width 0.12s linear; }
+    .fc-status { font-size: 10px; font-weight: 700; letter-spacing: 1px; flex-shrink: 0; color: var(--muted); }
+    .fc-status.done { color: var(--green); }
+    .fc-status.err  { color: #f87171; }
+    .fc-dl { display:block; margin-top:6px; font-size:11px; color:var(--accent); text-decoration:none; font-weight:600; }
+    .fc-dl:hover { opacity: 0.8; }
+
+    /* ── FOOTER ── */
+    footer { flex-shrink:0; padding:10px 14px; border-top:1px solid var(--border); background:rgba(7,9,15,0.95); display:flex; gap:8px; align-items:center; }
+    #inp { flex:1; padding:11px 14px; background:var(--surface); border:1.5px solid var(--border); border-radius:12px; color:var(--text); font-size:14px; outline:none; transition:border-color 0.15s; }
+    #inp:focus { border-color: var(--accent); }
+    #inp::placeholder { color: var(--muted); }
+    .btn { padding:11px 15px; border:none; border-radius:12px; font-size:11px; font-weight:700; letter-spacing:1.5px; cursor:pointer; transition:opacity 0.15s,transform 0.1s; }
+    .btn:active { transform: scale(0.96); }
+    .btn:hover  { opacity: 0.82; }
+    .btn-send { background: var(--accent); color: #fff; }
+    .btn-wake { background:var(--surface); border:1px solid var(--border); color:var(--muted); display:none; }
+    .btn-wake.show { display:block; color:var(--green); border-color:rgba(34,197,94,0.35); }
+    .btn-attach {
+      background: var(--surface); border: 1px solid var(--border); color: var(--muted);
+      padding: 11px 13px; font-size: 16px; line-height: 1; border-radius: 12px;
+      cursor: pointer; transition: opacity 0.15s, transform 0.1s; display: flex;
+      align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .btn-attach:hover  { opacity: 0.82; border-color: var(--accent); color: var(--accent); }
+    .btn-attach:active { transform: scale(0.96); }
+
+    /* ── MIC BUTTON ── */
+    #mic-btn { display:none;
+      background: var(--surface); border: 1px solid var(--border); color: var(--muted);
+      padding: 11px 13px; font-size: 16px; line-height: 1; border-radius: 12px;
+      cursor: pointer; transition: opacity 0.15s, transform 0.1s, background 0.2s, border-color 0.2s;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    #mic-btn:hover  { opacity: 0.82; border-color: var(--accent); color: var(--accent); }
+    #mic-btn:active { transform: scale(0.96); }
+    #mic-btn.recording {
+      background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.45); color: #ef4444;
+      animation: mic-pulse 1s ease-in-out infinite;
+    }
+    #mic-btn.unsupported { opacity: 0.3; cursor: not-allowed; }
+    @keyframes mic-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.65;transform:scale(0.97)} }
+
+    /* ── TOAST ── */
+    #toast {
+      position:fixed; top:66px; left:50%; transform:translateX(-50%) translateY(-8px);
+      background:rgba(34,197,94,0.16); border:1px solid rgba(34,197,94,0.4);
+      color:var(--green); font-size:12px; font-weight:700; letter-spacing:1px;
+      padding:7px 18px; border-radius:99px;
+      opacity:0; transition:opacity 0.22s,transform 0.22s;
+      pointer-events:none; white-space:nowrap;
+    }
+    #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  </style>
 </head>
 <body>
-<div class="shell">
-<aside>
-  <div class="brand">J<span>•</span>ARVIS</div>
-  <div class="nav">
-    <button class="active">◉ &nbsp; Command</button>
-    <button>▣ &nbsp; Conversations</button>
-    <button>◈ &nbsp; Memory</button>
-    <button>⚡ &nbsp; Tools</button>
-    <button>◌ &nbsp; System</button>
-    <button>⚙ &nbsp; Settings</button>
-  </div>
-  <div style="height:32vh"></div>
-  <div class="status"><span class="dot"></span>ONLINE<br><small>Gemini Live connected</small></div>
-</aside>
-<main>
-  <div class="top"><div><b>AI COMMAND CENTER</b><br><small>Real-time assistant interface</small></div><div class="pill">LIVE • READY</div></div>
-  <section class="stage">
-    <div class="halo"></div><div class="avatar"><div class="eyes"><i></i><i></i></div></div>
-    <div class="wave">${Array(16).fill('<i></i>').join('')}</div>
-  </section>
-  <div class="composer"><button title="Voice">🎙</button><input id="msg" placeholder="Talk to your AI assistant…"><button class="send" onclick="sendMessage()">Send</button></div>
-</main>
-<section class="right">
-  <div class="section"><h3>System</h3><div class="card"><div class="metric"><span>CPU</span><b>—</b></div><div class="metric"><span>Memory</span><b>—</b></div><div class="metric"><span>Connection</span><b>LIVE</b></div></div></div>
-  <div class="section"><h3>Activity</h3><div class="card activity" id="activity">Web interface initialized.<br>Waiting for command…</div></div>
-  <div class="section"><h3>Capabilities</h3><div class="card">Voice · Vision · Memory · Web Search · Files · Browser · Desktop · Plugins</div></div>
-</section>
-</div>
-<script>
-function sendMessage(){
- const el=document.getElementById('msg'); const text=el.value.trim(); if(!text)return;
- document.getElementById('activity').innerHTML += '<br><span style="color:#eef5ff">You:</span> '+text.replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
- el.value='';
-}
-document.getElementById('msg').addEventListener('keydown',e=>{if(e.key==='Enter')sendMessage()});
-</script>
-<div style="position:fixed;right:18px;bottom:10px;font-size:10px;letter-spacing:.16em;color:#66758a;opacity:.8">BY SHLOK</div></body>
+  <div id="toast"></div>
+  <header>
+    <div class="logo"><em>A</em>STRA</div>
+    <div class="pill" id="pill"><span class="dot"></span><span id="st">Connecting</span></div>
+    <div class="enc-badge" id="enc">AES-256</div>
+    <div class="spacer"></div>
+    <div class="url">astra-backend-2hac.onrender.com</div>
+  </header>
+  <main id="feed"></main>
+  <footer>
+    <input id="inp" placeholder="Send a command to ASTRA…" autocomplete="off">
+    <button class="btn btn-send" onclick="doSend()">SEND</button>
+  </footer>
+
+  <script>
+    const API_BASE = 'https://astra-backend-2hac.onrender.com';
+
+    const feed = document.getElementById('feed');
+    const pill = document.getElementById('pill');
+    const stTxt = document.getElementById('st');
+    const inp = document.getElementById('inp');
+    const sendBtn = document.querySelector('.btn-send');
+
+    function setStatus(text, online = false) {
+      stTxt.textContent = text;
+      pill.className = online ? 'pill on' : 'pill';
+    }
+
+    function esc(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function append(speaker, text) {
+      const d = document.createElement('div');
+      if (speaker === 'ASTRA') {
+        d.className = 'msg msg-j';
+        d.innerHTML = `<div class="lbl">ASTRA</div>${esc(text)}`;
+      } else {
+        d.className = 'msg msg-u';
+        d.innerHTML = `<div class="lbl">You</div>${esc(text)}`;
+      }
+      feed.appendChild(d);
+      feed.scrollTop = feed.scrollHeight;
+    }
+
+    function sys(text) {
+      const d = document.createElement('div');
+      d.className = 'msg msg-sys';
+      d.textContent = text;
+      feed.appendChild(d);
+      feed.scrollTop = feed.scrollHeight;
+    }
+
+    let toastTimer;
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    async function checkBackend() {
+      try {
+        const r = await fetch(`${API_BASE}/health`);
+        if (!r.ok) throw new Error();
+        setStatus('Online', true);
+        toast('Connected to ASTRA');
+      } catch {
+        setStatus('Offline', false);
+        sys('ASTRA backend is not reachable right now.');
+      }
+    }
+
+    async function doSend() {
+      const txt = inp.value.trim();
+      if (!txt || sendBtn.disabled) return;
+
+      inp.value = '';
+      append('You', txt);
+      sendBtn.disabled = true;
+      sendBtn.textContent = '...';
+      setStatus('Thinking', true);
+
+      try {
+        const response = await fetch(`${API_BASE}/api/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: txt })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.detail || `Request failed (${response.status})`);
+        }
+
+        append('ASTRA', data.reply || '');
+        setStatus('Online', true);
+      } catch (error) {
+        append('ASTRA', `Sorry, I couldn't process that request. ${error.message}`);
+        setStatus('Online', true);
+      } finally {
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'SEND';
+        inp.focus();
+      }
+    }
+
+    inp.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        doSend();
+      }
+    });
+
+    checkBackend();
+    inp.focus();
+  </script>
+</body>
 </html>
