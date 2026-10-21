@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASTRA AI</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #0b0f14;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app {
+      width: 95%;
+      max-width: 900px;
+      height: 90vh;
+      background: #111820;
+      border: 1px solid #26313d;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    }
+
+    header {
+      padding: 20px 25px;
+      border-bottom: 1px solid #26313d;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 3px;
+    }
+
+    .status {
+      font-size: 13px;
+      color: #55d68a;
+    }
+
+    .chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 25px;
+    }
+
+    .message {
+      margin-bottom: 18px;
+      display: flex;
+    }
+
+    .message.user {
+      justify-content: flex-end;
+    }
+
+    .bubble {
+      max-width: 75%;
+      padding: 13px 17px;
+      border-radius: 15px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .assistant .bubble {
+      background: #1b2530;
+    }
+
+    .user .bubble {
+      background: #315d91;
+    }
+
+    .welcome {
+      text-align: center;
+      margin-top: 25%;
+      color: #9ba7b4;
+    }
+
+    .welcome h1 {
+      color: white;
+      font-size: 42px;
+      margin-bottom: 10px;
+    }
+
+    .input-area {
+      padding: 18px;
+      border-top: 1px solid #26313d;
+      display: flex;
+      gap: 10px;
+    }
+
+    #messageInput {
+      flex: 1;
+      background: #0b1016;
+      color: white;
+      border: 1px solid #344250;
+      border-radius: 12px;
+      padding: 14px;
+      outline: none;
+      font-size: 16px;
+    }
+
+    #messageInput:focus {
+      border-color: #557da8;
+    }
+
+    #sendButton {
+      border: none;
+      border-radius: 12px;
+      padding: 0 22px;
+      background: #315d91;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #sendButton:hover {
+      background: #3b6fa9;
+    }
+
+    #sendButton:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .typing {
+      color: #9ba7b4;
+      font-style: italic;
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: 600px) {
+      .app {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+      }
+
+      .bubble {
+        max-width: 88%;
+      }
+
+      .welcome h1 {
+        font-size: 34px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+
+    <header>
+      <div class="logo">ASTRA</div>
+      <div class="status" id="status">● Checking...</div>
+    </header>
+
+    <div class="chat" id="chat">
+
+      <div class="welcome" id="welcome">
+        <h1>ASTRA</h1>
+        <p>Your AI assistant</p>
+      </div>
+
+    </div>
+
+    <div class="input-area">
+      <input
+        id="messageInput"
+        type="text"
+        placeholder="Message ASTRA..."
+        autocomplete="off"
+      >
+
+      <button id="sendButton">Send</button>
+    </div>
+
+  </div>
+
+  <script>
+
+    // YOUR LIVE BACKEND
+    const API_BASE = "https://astra-backend-2hac.onrender.com";
+
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("messageInput");
+    const sendButton = document.getElementById("sendButton");
+    const status = document.getElementById("status");
+    const welcome = document.getElementById("welcome");
+
+    // Check backend
+    async function checkBackend() {
+      try {
+        const response = await fetch(API_BASE + "/health");
+
+        if (response.ok) {
+          status.textContent = "● Online";
+          status.style.color = "#55d68a";
+        } else {
+          throw new Error("Backend unavailable");
+        }
+
+      } catch (error) {
+        status.textContent = "● Offline";
+        status.style.color = "#ff6464";
+      }
+    }
+
+    function addMessage(text, type) {
+
+      if (welcome) {
+        welcome.style.display = "none";
+      }
+
+      const message = document.createElement("div");
+      message.className = "message " + type;
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.textContent = text;
+
+      message.appendChild(bubble);
+      chat.appendChild(message);
+
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    async function sendMessage() {
+
+      const message = input.value.trim();
+
+      if (!message) {
+        return;
+      }
+
+      addMessage(message, "user");
+
+      input.value = "";
+      sendButton.disabled = true;
+      input.disabled = true;
+
+      const typing = document.createElement("div");
+      typing.className = "typing";
+      typing.textContent = "ASTRA is thinking...";
+      chat.appendChild(typing);
+
+      chat.scrollTop = chat.scrollHeight;
+
+      try {
+
+        const response = await fetch(API_BASE + "/api/chat", {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            message: message
+          })
+        });
+
+        const data = await response.json();
+
+        typing.remove();
+
+        if (!response.ok) {
+          throw new Error(data.detail || "Request failed");
+        }
+
+        addMessage(data.reply || "ASTRA did not return a response.", "assistant");
+
+      } catch (error) {
+
+        typing.remove();
+
+        addMessage(
+          "Sorry, I couldn't connect to ASTRA right now.\n\nError: " +
+          error.message,
+          "assistant"
+        );
+
+      } finally {
+
+        sendButton.disabled = false;
+        input.disabled = false;
+        input.focus();
+      }
+    }
+
+    sendButton.addEventListener("click", sendMessage);
+
+    input.addEventListener("keydown", function(event) {
+
+      if (event.key === "Enter") {
+        sendMessage();
+      }
+
+    });
+
+    checkBackend();
+
+  </script>
+
+</body>
+</html>
