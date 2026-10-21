@@ -3,255 +3,320 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ASTRA — AI Assistant</title>
-  
+  <title>ASTRA AI</title>
+
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg:      #07090f;
-      --surface: rgba(255,255,255,0.04);
-      --border:  rgba(255,255,255,0.07);
-      --accent:  #6366f1;
-      --adim:    rgba(99,102,241,0.14);
-      --text:    #dde3ed;
-      --muted:   #5e6a7e;
-      --green:   #22c55e;
-      --gdim:    rgba(34,197,94,0.14);
-    }
-    html, body {
-      height: 100%; background: var(--bg); color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      display: flex; flex-direction: column; overflow: hidden;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    /* ── HEADER ── */
+    body {
+      font-family: Arial, sans-serif;
+      background: #0b0f14;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app {
+      width: 95%;
+      max-width: 900px;
+      height: 90vh;
+      background: #111820;
+      border: 1px solid #26313d;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    }
+
     header {
-      flex-shrink: 0; display: flex; align-items: center; gap: 10px;
-      padding: 12px 16px; border-bottom: 1px solid var(--border);
-      background: rgba(7,9,15,0.95);
+      padding: 20px 25px;
+      border-bottom: 1px solid #26313d;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .logo { font-size: 15px; font-weight: 700; letter-spacing: 6px; }
-    .logo em { color: var(--accent); font-style: normal; }
-    .pill {
-      display: flex; align-items: center; gap: 6px; padding: 4px 11px;
-      border-radius: 99px; background: var(--surface); border: 1px solid var(--border);
-      font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
-      color: var(--muted); transition: all 0.3s;
-    }
-    .pill.on { background: var(--gdim); border-color: rgba(34,197,94,0.3); color: var(--green); }
-    .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); transition: background 0.3s; }
-    .pill.on .dot { background: var(--green); animation: blink 2s infinite; }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
-    .spacer { flex: 1; }
-    .enc-badge {
-      font-size: 9px; font-weight: 700; letter-spacing: 1.5px; padding: 3px 8px;
-      border-radius: 4px; display: none;
-    }
-    .enc-badge.on  { display: block; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25); color: var(--green); }
-    .enc-badge.off { display: block; background: rgba(255,100,100,0.08); border: 1px solid rgba(255,100,100,0.2); color: #f87171; }
-    .url { font-size: 10px; font-family: monospace; color: var(--muted); padding: 4px 9px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; }
 
-    /* ── FEED ── */
-    main { flex: 1; overflow-y: auto; padding: 14px 16px 8px; display: flex; flex-direction: column; gap: 10px; }
-    main::-webkit-scrollbar { width: 3px; }
-    main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-    .msg { max-width: 82%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.55; animation: pop 0.18s ease; }
-    @keyframes pop { from { opacity:0; transform:translateY(4px); } }
-    .msg-j   { align-self:flex-start; background:var(--adim);   border:1px solid rgba(99,102,241,0.18); border-bottom-left-radius:4px; }
-    .msg-u   { align-self:flex-end;   background:var(--surface); border:1px solid var(--border);        border-bottom-right-radius:4px; }
-    .msg-sys { align-self:center; font-size:11px; color:var(--muted); padding:2px 0; background:transparent; border:none; letter-spacing:0.3px; }
-    .lbl { font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase; opacity:0.45; margin-bottom:4px; }
-    .msg-j .lbl { color:var(--accent); }
-    .msg-u .lbl { color:var(--muted); text-align:right; }
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 3px;
+    }
 
-    /* ── FILE CARD ── */
-    .msg-file {
-      align-self: flex-end;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 14px; border-bottom-right-radius: 4px;
-      padding: 11px 14px; display: flex; align-items: center; gap: 12px;
-      max-width: 82%; animation: pop 0.18s ease;
+    .status {
+      font-size: 13px;
+      color: #55d68a;
     }
-    .fc-icon { font-size: 26px; flex-shrink: 0; }
-    .fc-meta { flex: 1; min-width: 0; }
-    .fc-lbl  { font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase; opacity:0.45; color:var(--muted); margin-bottom:4px; }
-    .fc-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .fc-size { font-size: 11px; color: var(--muted); margin-top: 2px; }
-    .fc-bar-wrap { height: 3px; background: var(--border); border-radius: 2px; margin-top: 7px; overflow: hidden; }
-    .fc-bar { height: 100%; width: 0%; background: var(--accent); border-radius: 2px; transition: width 0.12s linear; }
-    .fc-status { font-size: 10px; font-weight: 700; letter-spacing: 1px; flex-shrink: 0; color: var(--muted); }
-    .fc-status.done { color: var(--green); }
-    .fc-status.err  { color: #f87171; }
-    .fc-dl { display:block; margin-top:6px; font-size:11px; color:var(--accent); text-decoration:none; font-weight:600; }
-    .fc-dl:hover { opacity: 0.8; }
 
-    /* ── FOOTER ── */
-    footer { flex-shrink:0; padding:10px 14px; border-top:1px solid var(--border); background:rgba(7,9,15,0.95); display:flex; gap:8px; align-items:center; }
-    #inp { flex:1; padding:11px 14px; background:var(--surface); border:1.5px solid var(--border); border-radius:12px; color:var(--text); font-size:14px; outline:none; transition:border-color 0.15s; }
-    #inp:focus { border-color: var(--accent); }
-    #inp::placeholder { color: var(--muted); }
-    .btn { padding:11px 15px; border:none; border-radius:12px; font-size:11px; font-weight:700; letter-spacing:1.5px; cursor:pointer; transition:opacity 0.15s,transform 0.1s; }
-    .btn:active { transform: scale(0.96); }
-    .btn:hover  { opacity: 0.82; }
-    .btn-send { background: var(--accent); color: #fff; }
-    .btn-wake { background:var(--surface); border:1px solid var(--border); color:var(--muted); display:none; }
-    .btn-wake.show { display:block; color:var(--green); border-color:rgba(34,197,94,0.35); }
-    .btn-attach {
-      background: var(--surface); border: 1px solid var(--border); color: var(--muted);
-      padding: 11px 13px; font-size: 16px; line-height: 1; border-radius: 12px;
-      cursor: pointer; transition: opacity 0.15s, transform 0.1s; display: flex;
-      align-items: center; justify-content: center; flex-shrink: 0;
+    .chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 25px;
     }
-    .btn-attach:hover  { opacity: 0.82; border-color: var(--accent); color: var(--accent); }
-    .btn-attach:active { transform: scale(0.96); }
 
-    /* ── MIC BUTTON ── */
-    #mic-btn { display:none;
-      background: var(--surface); border: 1px solid var(--border); color: var(--muted);
-      padding: 11px 13px; font-size: 16px; line-height: 1; border-radius: 12px;
-      cursor: pointer; transition: opacity 0.15s, transform 0.1s, background 0.2s, border-color 0.2s;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    .message {
+      margin-bottom: 18px;
+      display: flex;
     }
-    #mic-btn:hover  { opacity: 0.82; border-color: var(--accent); color: var(--accent); }
-    #mic-btn:active { transform: scale(0.96); }
-    #mic-btn.recording {
-      background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.45); color: #ef4444;
-      animation: mic-pulse 1s ease-in-out infinite;
-    }
-    #mic-btn.unsupported { opacity: 0.3; cursor: not-allowed; }
-    @keyframes mic-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.65;transform:scale(0.97)} }
 
-    /* ── TOAST ── */
-    #toast {
-      position:fixed; top:66px; left:50%; transform:translateX(-50%) translateY(-8px);
-      background:rgba(34,197,94,0.16); border:1px solid rgba(34,197,94,0.4);
-      color:var(--green); font-size:12px; font-weight:700; letter-spacing:1px;
-      padding:7px 18px; border-radius:99px;
-      opacity:0; transition:opacity 0.22s,transform 0.22s;
-      pointer-events:none; white-space:nowrap;
+    .message.user {
+      justify-content: flex-end;
     }
-    #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+    .bubble {
+      max-width: 75%;
+      padding: 13px 17px;
+      border-radius: 15px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .assistant .bubble {
+      background: #1b2530;
+    }
+
+    .user .bubble {
+      background: #315d91;
+    }
+
+    .welcome {
+      text-align: center;
+      margin-top: 25%;
+      color: #9ba7b4;
+    }
+
+    .welcome h1 {
+      color: white;
+      font-size: 42px;
+      margin-bottom: 10px;
+    }
+
+    .input-area {
+      padding: 18px;
+      border-top: 1px solid #26313d;
+      display: flex;
+      gap: 10px;
+    }
+
+    #messageInput {
+      flex: 1;
+      background: #0b1016;
+      color: white;
+      border: 1px solid #344250;
+      border-radius: 12px;
+      padding: 14px;
+      outline: none;
+      font-size: 16px;
+    }
+
+    #messageInput:focus {
+      border-color: #557da8;
+    }
+
+    #sendButton {
+      border: none;
+      border-radius: 12px;
+      padding: 0 22px;
+      background: #315d91;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #sendButton:hover {
+      background: #3b6fa9;
+    }
+
+    #sendButton:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .typing {
+      color: #9ba7b4;
+      font-style: italic;
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: 600px) {
+      .app {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+      }
+
+      .bubble {
+        max-width: 88%;
+      }
+
+      .welcome h1 {
+        font-size: 34px;
+      }
+    }
   </style>
 </head>
+
 <body>
-  <div id="toast"></div>
-  <header>
-    <div class="logo"><em>A</em>STRA</div>
-    <div class="pill" id="pill"><span class="dot"></span><span id="st">Connecting</span></div>
-    <div class="enc-badge" id="enc">AES-256</div>
-    <div class="spacer"></div>
-    <div class="url">astra-backend-2hac.onrender.com</div>
-  </header>
-  <main id="feed"></main>
-  <footer>
-    <input id="inp" placeholder="Send a command to ASTRA…" autocomplete="off">
-    <button class="btn btn-send" onclick="doSend()">SEND</button>
-  </footer>
+
+  <div class="app">
+
+    <header>
+      <div class="logo">ASTRA</div>
+      <div class="status" id="status">● Checking...</div>
+    </header>
+
+    <div class="chat" id="chat">
+
+      <div class="welcome" id="welcome">
+        <h1>ASTRA</h1>
+        <p>Your AI assistant</p>
+      </div>
+
+    </div>
+
+    <div class="input-area">
+      <input
+        id="messageInput"
+        type="text"
+        placeholder="Message ASTRA..."
+        autocomplete="off"
+      >
+
+      <button id="sendButton">Send</button>
+    </div>
+
+  </div>
 
   <script>
-    const API_BASE = 'https://astra-backend-2hac.onrender.com';
 
-    const feed = document.getElementById('feed');
-    const pill = document.getElementById('pill');
-    const stTxt = document.getElementById('st');
-    const inp = document.getElementById('inp');
-    const sendBtn = document.querySelector('.btn-send');
+    // YOUR LIVE BACKEND
+    const API_BASE = "https://astra-backend-2hac.onrender.com";
 
-    function setStatus(text, online = false) {
-      stTxt.textContent = text;
-      pill.className = online ? 'pill on' : 'pill';
-    }
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("messageInput");
+    const sendButton = document.getElementById("sendButton");
+    const status = document.getElementById("status");
+    const welcome = document.getElementById("welcome");
 
-    function esc(s) {
-      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    }
-
-    function append(speaker, text) {
-      const d = document.createElement('div');
-      if (speaker === 'ASTRA') {
-        d.className = 'msg msg-j';
-        d.innerHTML = `<div class="lbl">ASTRA</div>${esc(text)}`;
-      } else {
-        d.className = 'msg msg-u';
-        d.innerHTML = `<div class="lbl">You</div>${esc(text)}`;
-      }
-      feed.appendChild(d);
-      feed.scrollTop = feed.scrollHeight;
-    }
-
-    function sys(text) {
-      const d = document.createElement('div');
-      d.className = 'msg msg-sys';
-      d.textContent = text;
-      feed.appendChild(d);
-      feed.scrollTop = feed.scrollHeight;
-    }
-
-    let toastTimer;
-    function toast(msg) {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
-    }
-
+    // Check backend
     async function checkBackend() {
       try {
-        const r = await fetch(`${API_BASE}/health`);
-        if (!r.ok) throw new Error();
-        setStatus('Online', true);
-        toast('Connected to ASTRA');
-      } catch {
-        setStatus('Offline', false);
-        sys('ASTRA backend is not reachable right now.');
+        const response = await fetch(API_BASE + "/health");
+
+        if (response.ok) {
+          status.textContent = "● Online";
+          status.style.color = "#55d68a";
+        } else {
+          throw new Error("Backend unavailable");
+        }
+
+      } catch (error) {
+        status.textContent = "● Offline";
+        status.style.color = "#ff6464";
       }
     }
 
-    async function doSend() {
-      const txt = inp.value.trim();
-      if (!txt || sendBtn.disabled) return;
+    function addMessage(text, type) {
 
-      inp.value = '';
-      append('You', txt);
-      sendBtn.disabled = true;
-      sendBtn.textContent = '...';
-      setStatus('Thinking', true);
+      if (welcome) {
+        welcome.style.display = "none";
+      }
+
+      const message = document.createElement("div");
+      message.className = "message " + type;
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.textContent = text;
+
+      message.appendChild(bubble);
+      chat.appendChild(message);
+
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    async function sendMessage() {
+
+      const message = input.value.trim();
+
+      if (!message) {
+        return;
+      }
+
+      addMessage(message, "user");
+
+      input.value = "";
+      sendButton.disabled = true;
+      input.disabled = true;
+
+      const typing = document.createElement("div");
+      typing.className = "typing";
+      typing.textContent = "ASTRA is thinking...";
+      chat.appendChild(typing);
+
+      chat.scrollTop = chat.scrollHeight;
 
       try {
-        const response = await fetch(`${API_BASE}/api/chat`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: txt })
+
+        const response = await fetch(API_BASE + "/api/chat", {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            message: message
+          })
         });
 
         const data = await response.json();
 
+        typing.remove();
+
         if (!response.ok) {
-          throw new Error(data.detail || `Request failed (${response.status})`);
+          throw new Error(data.detail || "Request failed");
         }
 
-        append('ASTRA', data.reply || '');
-        setStatus('Online', true);
+        addMessage(data.reply || "ASTRA did not return a response.", "assistant");
+
       } catch (error) {
-        append('ASTRA', `Sorry, I couldn't process that request. ${error.message}`);
-        setStatus('Online', true);
+
+        typing.remove();
+
+        addMessage(
+          "Sorry, I couldn't connect to ASTRA right now.\n\nError: " +
+          error.message,
+          "assistant"
+        );
+
       } finally {
-        sendBtn.disabled = false;
-        sendBtn.textContent = 'SEND';
-        inp.focus();
+
+        sendButton.disabled = false;
+        input.disabled = false;
+        input.focus();
       }
     }
 
-    inp.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        doSend();
+    sendButton.addEventListener("click", sendMessage);
+
+    input.addEventListener("keydown", function(event) {
+
+      if (event.key === "Enter") {
+        sendMessage();
       }
+
     });
 
     checkBackend();
-    inp.focus();
+
   </script>
+
 </body>
 </html>
