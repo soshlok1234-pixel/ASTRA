@@ -6,327 +6,266 @@
   <title>ASTRA AI</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #05070b;
+      --panel: rgba(12, 17, 26, .82);
+      --panel2: rgba(18, 25, 37, .86);
+      --border: rgba(255,255,255,.09);
+      --text: #f4f7fb;
+      --muted: #8995a7;
+      --blue: #4c8dff;
+      --blue2: #78b4ff;
+      --green: #49e28b;
     }
 
     body {
-      font-family: Arial, sans-serif;
-      background: #0b0f14;
-      color: white;
+      font-family: Inter, Arial, sans-serif;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(53,102,180,.18), transparent 30%),
+        radial-gradient(circle at 85% 85%, rgba(31,118,255,.12), transparent 30%),
+        var(--bg);
+      color: var(--text);
       min-height: 100vh;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, black, transparent);
     }
 
     .app {
-      width: 95%;
-      max-width: 900px;
-      height: 90vh;
-      background: #111820;
-      border: 1px solid #26313d;
-      border-radius: 20px;
+      width: min(1180px, 96vw);
+      height: min(92vh, 900px);
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      background: var(--panel);
+      backdrop-filter: blur(24px);
+      box-shadow: 0 30px 100px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.04);
     }
 
     header {
-      padding: 20px 25px;
-      border-bottom: 1px solid #26313d;
+      min-height: 82px;
+      padding: 16px 24px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(5,8,13,.55);
     }
 
-    .logo {
-      font-size: 28px;
-      font-weight: bold;
-      letter-spacing: 3px;
+    .brand { display:flex; align-items:center; gap:14px; }
+    .logo-wrap {
+      width: 50px; height: 50px; border-radius: 14px; overflow:hidden;
+      border: 1px solid rgba(255,255,255,.18);
+      background:#111722; box-shadow:0 8px 25px rgba(0,0,0,.35);
+      flex: 0 0 auto;
     }
+    .logo-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
+
+    .brand-name { font-size: 25px; font-weight: 800; letter-spacing: 3px; }
+    .brand-sub { color: var(--muted); font-size: 11px; margin-top: 3px; letter-spacing: .8px; }
 
     .status {
-      font-size: 13px;
-      color: #55d68a;
+      display:flex; align-items:center; gap:8px;
+      color:#c8d3e2; font-size:13px; font-weight:600;
+      padding:9px 13px; border:1px solid var(--border);
+      border-radius:999px; background:rgba(255,255,255,.025);
     }
+    .status-dot { width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 12px var(--green); }
 
     .chat {
-      flex: 1;
-      overflow-y: auto;
-      padding: 25px;
+      flex:1; overflow-y:auto; padding:34px 7%;
+      scroll-behavior:smooth;
     }
-
-    .message {
-      margin-bottom: 18px;
-      display: flex;
-    }
-
-    .message.user {
-      justify-content: flex-end;
-    }
-
-    .bubble {
-      max-width: 75%;
-      padding: 13px 17px;
-      border-radius: 15px;
-      line-height: 1.5;
-      white-space: pre-wrap;
-    }
-
-    .assistant .bubble {
-      background: #1b2530;
-    }
-
-    .user .bubble {
-      background: #315d91;
-    }
+    .chat::-webkit-scrollbar { width:8px; }
+    .chat::-webkit-scrollbar-thumb { background:#253041; border-radius:20px; }
 
     .welcome {
-      text-align: center;
-      margin-top: 25%;
-      color: #9ba7b4;
+      min-height: 100%;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      text-align:center; padding:30px;
+    }
+    .welcome-logo {
+      width:90px; height:90px; border-radius:24px; object-fit:cover;
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow:0 15px 50px rgba(42,113,255,.18);
+      margin-bottom:20px;
+    }
+    .welcome h1 { font-size:clamp(36px,6vw,58px); letter-spacing:6px; }
+    .welcome p { color:var(--muted); margin-top:10px; font-size:15px; }
+    .welcome .tagline { color:#c5cfdd; margin-top:5px; }
+
+    .examples {
+      display:flex; flex-wrap:wrap; justify-content:center; gap:10px;
+      max-width:760px; margin-top:28px;
+    }
+    .example {
+      border:1px solid var(--border); background:rgba(255,255,255,.035);
+      color:#cbd5e1; border-radius:14px; padding:11px 14px;
+      cursor:pointer; transition:.2s; font-size:13px;
+    }
+    .example:hover { border-color:rgba(100,160,255,.45); background:rgba(70,130,220,.1); transform:translateY(-1px); }
+
+    .message { display:flex; margin-bottom:24px; animation:fadeUp .25s ease; }
+    .message.user { justify-content:flex-end; }
+    .bubble {
+      max-width:min(78%, 760px); padding:15px 18px; border-radius:20px;
+      line-height:1.65; white-space:pre-wrap; font-size:15px;
+    }
+    .assistant .bubble {
+      background:linear-gradient(145deg, rgba(24,33,47,.94), rgba(15,21,31,.94));
+      border:1px solid var(--border);
+      border-top-left-radius:7px;
+    }
+    .user .bubble {
+      background:linear-gradient(135deg,#2d66a5,#3d79ba);
+      border:1px solid rgba(255,255,255,.08);
+      border-bottom-right-radius:7px;
     }
 
-    .welcome h1 {
-      color: white;
-      font-size: 42px;
-      margin-bottom: 10px;
+    .assistant-box { max-width:min(82%, 780px); }
+    .voice-controls { display:flex; gap:7px; margin-top:9px; align-items:center; }
+    .voice-button {
+      border:1px solid var(--border); background:rgba(255,255,255,.035);
+      color:#cbd5e1; border-radius:9px; padding:7px 10px; cursor:pointer; font-size:12px;
     }
-
-    .input-area {
-      padding: 18px;
-      border-top: 1px solid #26313d;
-      display: flex;
-      gap: 10px;
-    }
-
-    #messageInput {
-      flex: 1;
-      background: #0b1016;
-      color: white;
-      border: 1px solid #344250;
-      border-radius: 12px;
-      padding: 14px;
-      outline: none;
-      font-size: 16px;
-    }
-
-    #messageInput:focus {
-      border-color: #557da8;
-    }
-
-    #sendButton {
-      border: none;
-      border-radius: 12px;
-      padding: 0 22px;
-      background: #315d91;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    #sendButton:hover {
-      background: #3b6fa9;
-    }
-
-    #sendButton:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
+    .voice-button:hover { background:rgba(255,255,255,.08); color:white; }
+    .speaking { display:none; color:#65e69b; font-size:12px; }
+    .speaking.active { display:inline-block; }
 
     .typing {
-      color: #9ba7b4;
-      font-style: italic;
-      margin-bottom: 15px;
+      color:#91a0b3; font-size:13px; display:flex; align-items:center; gap:8px;
+      margin:4px 0 20px;
     }
+    .dots { display:flex; gap:4px; }
+    .dots span { width:5px; height:5px; border-radius:50%; background:#7f8da1; animation:bounce 1.2s infinite; }
+    .dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}
 
-    /* VOICE CONTROLS */
-
-    .voice-controls {
-      margin-top: 10px;
-      display: flex;
-      gap: 7px;
+    .input-shell {
+      padding:16px 22px 20px; border-top:1px solid var(--border);
+      background:rgba(5,8,13,.62);
     }
-
-    .voice-button {
-      border: 1px solid #344250;
-      background: #111820;
-      color: #cbd5df;
-      border-radius: 8px;
-      padding: 6px 10px;
-      font-size: 13px;
-      cursor: pointer;
+    .input-area {
+      max-width:1000px; margin:auto; display:flex; gap:10px; align-items:center;
+      padding:7px; border:1px solid #2b394b; border-radius:18px;
+      background:#0a0f16; box-shadow:0 12px 35px rgba(0,0,0,.25);
     }
-
-    .voice-button:hover {
-      background: #263544;
-      color: white;
+    #messageInput {
+      flex:1; min-width:0; background:transparent; color:white; border:0;
+      outline:0; padding:13px 12px; font-size:15px;
     }
-
-    .speaking {
-      color: #55d68a;
-      font-size: 12px;
-      margin-left: 5px;
-      display: none;
-      align-items: center;
+    #messageInput::placeholder { color:#667487; }
+    #sendButton {
+      border:0; border-radius:13px; padding:12px 20px; min-width:82px;
+      background:linear-gradient(135deg,#3977c2,#4b8ef0); color:white;
+      font-weight:700; cursor:pointer; box-shadow:0 7px 20px rgba(40,100,190,.25);
     }
+    #sendButton:hover { filter:brightness(1.1); }
+    #sendButton:disabled { opacity:.45; cursor:not-allowed; }
+    .footer-note { text-align:center; color:#586679; font-size:10px; margin-top:9px; }
 
-    .speaking.active {
-      display: inline-flex;
-    }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+    @keyframes bounce { 0%,60%,100%{transform:translateY(0);opacity:.55} 30%{transform:translateY(-4px);opacity:1} }
 
-    @media (max-width: 600px) {
-
-      .app {
-        width: 100%;
-        height: 100vh;
-        border-radius: 0;
-      }
-
-      .bubble {
-        max-width: 88%;
-      }
-
-      .welcome h1 {
-        font-size: 34px;
-      }
-
-      .input-area {
-        padding: 12px;
-      }
-
-      #sendButton {
-        padding: 0 17px;
-      }
+    @media(max-width:700px){
+      body { overflow:auto; }
+      .app { width:100%; height:100vh; min-height:100vh; border-radius:0; border:0; }
+      header { padding:14px 16px; }
+      .brand-sub { display:none; }
+      .chat { padding:24px 14px; }
+      .bubble,.assistant-box { max-width:90%; }
+      .input-shell { padding:10px; }
+      .welcome-logo { width:72px;height:72px; }
+      .examples { gap:7px; }
+      .example { font-size:12px; }
     }
   </style>
 </head>
 
 <body>
-
   <div class="app">
-
     <header>
-      <div class="logo">ASTRA</div>
-      <div class="status" id="status">● Checking...</div>
+      <div class="brand">
+        <div class="logo-wrap">
+          <img src="logo.png" alt="Officer's Career Academy Pune logo">
+        </div>
+        <div>
+          <div class="brand-name">ASTRA</div>
+          <div class="brand-sub">AI LEARNING ASSISTANT • OFFICER'S CAREER ACADEMY</div>
+        </div>
+      </div>
+
+      <div class="status">
+        <span class="status-dot"></span>
+        <span id="status">Checking...</span>
+      </div>
     </header>
 
     <div class="chat" id="chat">
-
       <div class="welcome" id="welcome">
+        <img class="welcome-logo" src="logo.png" alt="Academy logo">
         <h1>ASTRA</h1>
-        <p>Your AI assistant</p>
+        <p>Your intelligent learning assistant</p>
+        <p class="tagline">Ask. Learn. Understand.</p>
+
+        <div class="examples">
+          <button class="example">Explain Newton's three laws</button>
+          <button class="example">Solve 2x + 5 = 15</button>
+          <button class="example">Explain photosynthesis simply</button>
+          <button class="example">Tell me the latest news</button>
+        </div>
       </div>
-
     </div>
 
-    <div class="input-area">
-
-      <input
-        id="messageInput"
-        type="text"
-        placeholder="Message ASTRA..."
-        autocomplete="off"
-      >
-
-      <button id="sendButton">
-        Send
-      </button>
-
+    <div class="input-shell">
+      <div class="input-area">
+        <input id="messageInput" type="text" placeholder="Ask ASTRA anything..." autocomplete="off">
+        <button id="sendButton">Send</button>
+      </div>
+      <div class="footer-note">ASTRA • AI learning assistant</div>
     </div>
-
   </div>
 
   <script>
+    const API_BASE = "https://astra-backend-2hac.onrender.com";
 
-    // =====================================================
-    // YOUR LIVE BACKEND
-    // =====================================================
-
-    const API_BASE =
-      "https://astra-backend-2hac.onrender.com";
-
-
-    // =====================================================
-    // ELEMENTS
-    // =====================================================
-
-    const chat =
-      document.getElementById("chat");
-
-    const input =
-      document.getElementById("messageInput");
-
-    const sendButton =
-      document.getElementById("sendButton");
-
-    const status =
-      document.getElementById("status");
-
-    const welcome =
-      document.getElementById("welcome");
-
-
-    // =====================================================
-    // VOICE SETTINGS
-    // =====================================================
-
-    let currentSpeech = null;
-
-
-    // =====================================================
-    // STOP SPEAKING
-    // =====================================================
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("messageInput");
+    const sendButton = document.getElementById("sendButton");
+    const status = document.getElementById("status");
+    const welcome = document.getElementById("welcome");
 
     function stopSpeaking() {
-
-      if ("speechSynthesis" in window) {
-
-        window.speechSynthesis.cancel();
-
-      }
-
-      currentSpeech = null;
-
-      document
-        .querySelectorAll(".speaking")
-        .forEach(function(element) {
-
-          element.classList.remove("active");
-
-        });
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+      document.querySelectorAll(".speaking").forEach(x => x.classList.remove("active"));
     }
 
-
-    // =====================================================
-    // SPEAK ASTRA ANSWER
-    // =====================================================
-
     function speakText(text, indicator = null) {
+      if (!("speechSynthesis" in window)) return;
 
-      if (!("speechSynthesis" in window)) {
-
-        console.log(
-          "Text-to-speech is not supported by this browser."
-        );
-
-        return;
-
-      }
-
-      // Stop previous speech first.
       window.speechSynthesis.cancel();
 
-      if (indicator) {
-        indicator.classList.add("active");
-      }
+      if (indicator) indicator.classList.add("active");
 
-      // Clean some markdown symbols before speaking.
-      let cleanText = text
+      const cleanText = text
         .replace(/```[\s\S]*?```/g, "")
         .replace(/[*#_`]/g, "")
         .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
@@ -334,469 +273,178 @@
         .replace(/\s+/g, " ")
         .trim();
 
-      if (!cleanText) {
+      if (!cleanText) return;
 
-        if (indicator) {
-          indicator.classList.remove("active");
-        }
-
-        return;
-      }
-
-      const speech =
-        new SpeechSynthesisUtterance(cleanText);
-
+      const speech = new SpeechSynthesisUtterance(cleanText);
       speech.lang = "en-IN";
-
       speech.rate = 0.95;
+      speech.pitch = 1;
+      speech.volume = 1;
 
-      speech.pitch = 1.0;
+      const voices = window.speechSynthesis.getVoices();
+      const voice = voices.find(v => v.lang === "en-IN") ||
+                    voices.find(v => v.lang.startsWith("en"));
+      if (voice) speech.voice = voice;
 
-      speech.volume = 1.0;
-
-
-      // Try to select a good English voice.
-      const voices =
-        window.speechSynthesis.getVoices();
-
-      const preferredVoice =
-        voices.find(function(voice) {
-
-          return (
-            voice.lang === "en-IN"
-          );
-
-        }) ||
-        voices.find(function(voice) {
-
-          return (
-            voice.lang.startsWith("en")
-          );
-
-        });
-
-      if (preferredVoice) {
-
-        speech.voice = preferredVoice;
-
-      }
-
-
-      speech.onend = function() {
-
-        if (indicator) {
-          indicator.classList.remove("active");
-        }
-
-        currentSpeech = null;
-
+      speech.onend = () => {
+        if (indicator) indicator.classList.remove("active");
       };
 
-
-      speech.onerror = function() {
-
-        if (indicator) {
-          indicator.classList.remove("active");
-        }
-
-        currentSpeech = null;
-
+      speech.onerror = () => {
+        if (indicator) indicator.classList.remove("active");
       };
-
-
-      currentSpeech = speech;
 
       window.speechSynthesis.speak(speech);
     }
 
-
-    // =====================================================
-    // LOAD BROWSER VOICES
-    // =====================================================
-
     if ("speechSynthesis" in window) {
-
-      window.speechSynthesis.onvoiceschanged =
-        function() {
-
-          window.speechSynthesis.getVoices();
-
-        };
-
+      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
     }
-
-
-    // =====================================================
-    // CHECK BACKEND
-    // =====================================================
 
     async function checkBackend() {
-
       try {
-
-        const response =
-          await fetch(
-            API_BASE + "/health"
-          );
-
-        if (response.ok) {
-
-          status.textContent =
-            "● Online";
-
-          status.style.color =
-            "#55d68a";
-
-        } else {
-
-          throw new Error(
-            "Backend unavailable"
-          );
-
-        }
-
-      } catch (error) {
-
-        status.textContent =
-          "● Offline";
-
-        status.style.color =
-          "#ff6464";
-
+        const response = await fetch(API_BASE + "/health");
+        if (!response.ok) throw new Error("Backend unavailable");
+        status.textContent = "Online";
+        status.style.color = "#c8d3e2";
+      } catch {
+        status.textContent = "Offline";
+        status.style.color = "#ff6464";
       }
     }
-
-
-    // =====================================================
-    // ADD USER MESSAGE
-    // =====================================================
 
     function addUserMessage(text) {
+      if (welcome) welcome.style.display = "none";
 
-      if (welcome) {
-        welcome.style.display = "none";
-      }
+      const message = document.createElement("div");
+      message.className = "message user";
 
-      const message =
-        document.createElement("div");
-
-      message.className =
-        "message user";
-
-      const bubble =
-        document.createElement("div");
-
-      bubble.className =
-        "bubble";
-
-      bubble.textContent =
-        text;
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.textContent = text;
 
       message.appendChild(bubble);
-
       chat.appendChild(message);
-
-      chat.scrollTop =
-        chat.scrollHeight;
+      chat.scrollTop = chat.scrollHeight;
     }
-
-
-    // =====================================================
-    // ADD ASTRA MESSAGE
-    // =====================================================
 
     function addAssistantMessage(text) {
+      if (welcome) welcome.style.display = "none";
 
-      if (welcome) {
-        welcome.style.display = "none";
-      }
+      const message = document.createElement("div");
+      message.className = "message assistant";
 
-      const message =
-        document.createElement("div");
+      const box = document.createElement("div");
+      box.className = "assistant-box";
 
-      message.className =
-        "message assistant";
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.textContent = text;
 
+      const controls = document.createElement("div");
+      controls.className = "voice-controls";
 
-      const container =
-        document.createElement("div");
+      const readButton = document.createElement("button");
+      readButton.className = "voice-button";
+      readButton.textContent = "🔊 Read aloud";
 
-      container.style.maxWidth =
-        "75%";
+      const stopButton = document.createElement("button");
+      stopButton.className = "voice-button";
+      stopButton.textContent = "⏹ Stop";
 
+      const speaking = document.createElement("span");
+      speaking.className = "speaking";
+      speaking.textContent = "● Speaking";
 
-      const bubble =
-        document.createElement("div");
+      readButton.onclick = () => speakText(text, speaking);
+      stopButton.onclick = stopSpeaking;
 
-      bubble.className =
-        "bubble";
+      controls.append(readButton, stopButton, speaking);
+      box.append(bubble, controls);
+      message.appendChild(box);
+      chat.appendChild(message);
 
-      bubble.textContent =
-        text;
+      chat.scrollTop = chat.scrollHeight;
 
-
-      // ---------------------------------------------------
-      // VOICE CONTROLS
-      // ---------------------------------------------------
-
-      const controls =
-        document.createElement("div");
-
-      controls.className =
-        "voice-controls";
-
-
-      const readButton =
-        document.createElement("button");
-
-      readButton.className =
-        "voice-button";
-
-      readButton.textContent =
-        "🔊 Read aloud";
-
-
-      const stopButton =
-        document.createElement("button");
-
-      stopButton.className =
-        "voice-button";
-
-      stopButton.textContent =
-        "⏹ Stop";
-
-
-      const speaking =
-        document.createElement("span");
-
-      speaking.className =
-        "speaking";
-
-      speaking.textContent =
-        "● Speaking";
-
-
-      readButton.onclick =
-        function() {
-
-          speakText(
-            text,
-            speaking
-          );
-
-        };
-
-
-      stopButton.onclick =
-        function() {
-
-          stopSpeaking();
-
-        };
-
-
-      controls.appendChild(
-        readButton
-      );
-
-      controls.appendChild(
-        stopButton
-      );
-
-      controls.appendChild(
-        speaking
-      );
-
-
-      container.appendChild(
-        bubble
-      );
-
-      container.appendChild(
-        controls
-      );
-
-      message.appendChild(
-        container
-      );
-
-      chat.appendChild(
-        message
-      );
-
-
-      chat.scrollTop =
-        chat.scrollHeight;
-
-
-      // ---------------------------------------------------
-      // AUTOMATICALLY READ ANSWER
-      // ---------------------------------------------------
-
-      speakText(
-        text,
-        speaking
-      );
+      speakText(text, speaking);
     }
 
+    function addTyping() {
+      const typing = document.createElement("div");
+      typing.className = "typing";
+      typing.id = "typing";
 
-    // =====================================================
-    // SEND MESSAGE
-    // =====================================================
+      typing.innerHTML = `
+        <span>ASTRA is thinking</span>
+        <span class="dots"><span></span><span></span><span></span></span>
+      `;
+
+      chat.appendChild(typing);
+      chat.scrollTop = chat.scrollHeight;
+    }
 
     async function sendMessage() {
+      const message = input.value.trim();
+      if (!message) return;
 
-      const message =
-        input.value.trim();
-
-      if (!message) {
-        return;
-      }
-
-
-      // Stop any previous speech.
       stopSpeaking();
-
-
-      // Add user message.
       addUserMessage(message);
 
-
       input.value = "";
-
-      sendButton.disabled =
-        true;
-
-      input.disabled =
-        true;
-
-
-      // Typing indicator.
-      const typing =
-        document.createElement("div");
-
-      typing.className =
-        "typing";
-
-      typing.textContent =
-        "ASTRA is thinking...";
-
-
-      chat.appendChild(
-        typing
-      );
-
-      chat.scrollTop =
-        chat.scrollHeight;
-
+      sendButton.disabled = true;
+      input.disabled = true;
+      addTyping();
 
       try {
+        const response = await fetch(API_BASE + "/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
 
-        const response =
-          await fetch(
-            API_BASE + "/api/chat",
-            {
-              method: "POST",
+        const data = await response.json();
 
-              headers: {
-                "Content-Type":
-                  "application/json"
-              },
-
-              body: JSON.stringify({
-                message: message
-              })
-            }
-          );
-
-
-        const data =
-          await response.json();
-
-
-        typing.remove();
-
+        const typing = document.getElementById("typing");
+        if (typing) typing.remove();
 
         if (!response.ok) {
-
-          throw new Error(
-            data.detail ||
-            "Request failed"
-          );
-
+          throw new Error(data.detail || "Request failed");
         }
 
-
-        const answer =
-          data.reply ||
-          "ASTRA did not return a response.";
-
-
         addAssistantMessage(
-          answer
+          data.reply || "ASTRA did not return a response."
         );
 
-
       } catch (error) {
-
-        typing.remove();
-
+        const typing = document.getElementById("typing");
+        if (typing) typing.remove();
 
         addAssistantMessage(
           "Sorry, I couldn't connect to ASTRA right now.\n\nError: " +
           error.message
         );
-
-
       } finally {
-
-        sendButton.disabled =
-          false;
-
-        input.disabled =
-          false;
-
+        sendButton.disabled = false;
+        input.disabled = false;
         input.focus();
-
       }
     }
 
+    sendButton.addEventListener("click", sendMessage);
 
-    // =====================================================
-    // BUTTON
-    // =====================================================
+    input.addEventListener("keydown", event => {
+      if (event.key === "Enter") sendMessage();
+    });
 
-    sendButton.addEventListener(
-      "click",
-      sendMessage
-    );
-
-
-    // =====================================================
-    // ENTER KEY
-    // =====================================================
-
-    input.addEventListener(
-      "keydown",
-      function(event) {
-
-        if (event.key === "Enter") {
-
-          sendMessage();
-
-        }
-
-      }
-    );
-
-
-    // =====================================================
-    // START
-    // =====================================================
+    document.querySelectorAll(".example").forEach(button => {
+      button.addEventListener("click", () => {
+        input.value = button.textContent;
+        input.focus();
+        sendMessage();
+      });
+    });
 
     checkBackend();
-
   </script>
-
 </body>
 </html>
