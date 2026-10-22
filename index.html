@@ -144,7 +144,43 @@
       margin-bottom: 15px;
     }
 
+    /* VOICE CONTROLS */
+
+    .voice-controls {
+      margin-top: 10px;
+      display: flex;
+      gap: 7px;
+    }
+
+    .voice-button {
+      border: 1px solid #344250;
+      background: #111820;
+      color: #cbd5df;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .voice-button:hover {
+      background: #263544;
+      color: white;
+    }
+
+    .speaking {
+      color: #55d68a;
+      font-size: 12px;
+      margin-left: 5px;
+      display: none;
+      align-items: center;
+    }
+
+    .speaking.active {
+      display: inline-flex;
+    }
+
     @media (max-width: 600px) {
+
       .app {
         width: 100%;
         height: 100vh;
@@ -157,6 +193,14 @@
 
       .welcome h1 {
         font-size: 34px;
+      }
+
+      .input-area {
+        padding: 12px;
+      }
+
+      #sendButton {
+        padding: 0 17px;
       }
     }
   </style>
@@ -181,6 +225,7 @@
     </div>
 
     <div class="input-area">
+
       <input
         id="messageInput"
         type="text"
@@ -188,131 +233,566 @@
         autocomplete="off"
       >
 
-      <button id="sendButton">Send</button>
+      <button id="sendButton">
+        Send
+      </button>
+
     </div>
 
   </div>
 
   <script>
 
+    // =====================================================
     // YOUR LIVE BACKEND
-    const API_BASE = "https://astra-backend-2hac.onrender.com";
+    // =====================================================
 
-    const chat = document.getElementById("chat");
-    const input = document.getElementById("messageInput");
-    const sendButton = document.getElementById("sendButton");
-    const status = document.getElementById("status");
-    const welcome = document.getElementById("welcome");
+    const API_BASE =
+      "https://astra-backend-2hac.onrender.com";
 
-    // Check backend
+
+    // =====================================================
+    // ELEMENTS
+    // =====================================================
+
+    const chat =
+      document.getElementById("chat");
+
+    const input =
+      document.getElementById("messageInput");
+
+    const sendButton =
+      document.getElementById("sendButton");
+
+    const status =
+      document.getElementById("status");
+
+    const welcome =
+      document.getElementById("welcome");
+
+
+    // =====================================================
+    // VOICE SETTINGS
+    // =====================================================
+
+    let currentSpeech = null;
+
+
+    // =====================================================
+    // STOP SPEAKING
+    // =====================================================
+
+    function stopSpeaking() {
+
+      if ("speechSynthesis" in window) {
+
+        window.speechSynthesis.cancel();
+
+      }
+
+      currentSpeech = null;
+
+      document
+        .querySelectorAll(".speaking")
+        .forEach(function(element) {
+
+          element.classList.remove("active");
+
+        });
+    }
+
+
+    // =====================================================
+    // SPEAK ASTRA ANSWER
+    // =====================================================
+
+    function speakText(text, indicator = null) {
+
+      if (!("speechSynthesis" in window)) {
+
+        console.log(
+          "Text-to-speech is not supported by this browser."
+        );
+
+        return;
+
+      }
+
+      // Stop previous speech first.
+      window.speechSynthesis.cancel();
+
+      if (indicator) {
+        indicator.classList.add("active");
+      }
+
+      // Clean some markdown symbols before speaking.
+      let cleanText = text
+        .replace(/```[\s\S]*?```/g, "")
+        .replace(/[*#_`]/g, "")
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+        .replace(/\n+/g, ". ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      if (!cleanText) {
+
+        if (indicator) {
+          indicator.classList.remove("active");
+        }
+
+        return;
+      }
+
+      const speech =
+        new SpeechSynthesisUtterance(cleanText);
+
+      speech.lang = "en-IN";
+
+      speech.rate = 0.95;
+
+      speech.pitch = 1.0;
+
+      speech.volume = 1.0;
+
+
+      // Try to select a good English voice.
+      const voices =
+        window.speechSynthesis.getVoices();
+
+      const preferredVoice =
+        voices.find(function(voice) {
+
+          return (
+            voice.lang === "en-IN"
+          );
+
+        }) ||
+        voices.find(function(voice) {
+
+          return (
+            voice.lang.startsWith("en")
+          );
+
+        });
+
+      if (preferredVoice) {
+
+        speech.voice = preferredVoice;
+
+      }
+
+
+      speech.onend = function() {
+
+        if (indicator) {
+          indicator.classList.remove("active");
+        }
+
+        currentSpeech = null;
+
+      };
+
+
+      speech.onerror = function() {
+
+        if (indicator) {
+          indicator.classList.remove("active");
+        }
+
+        currentSpeech = null;
+
+      };
+
+
+      currentSpeech = speech;
+
+      window.speechSynthesis.speak(speech);
+    }
+
+
+    // =====================================================
+    // LOAD BROWSER VOICES
+    // =====================================================
+
+    if ("speechSynthesis" in window) {
+
+      window.speechSynthesis.onvoiceschanged =
+        function() {
+
+          window.speechSynthesis.getVoices();
+
+        };
+
+    }
+
+
+    // =====================================================
+    // CHECK BACKEND
+    // =====================================================
+
     async function checkBackend() {
+
       try {
-        const response = await fetch(API_BASE + "/health");
+
+        const response =
+          await fetch(
+            API_BASE + "/health"
+          );
 
         if (response.ok) {
-          status.textContent = "● Online";
-          status.style.color = "#55d68a";
+
+          status.textContent =
+            "● Online";
+
+          status.style.color =
+            "#55d68a";
+
         } else {
-          throw new Error("Backend unavailable");
+
+          throw new Error(
+            "Backend unavailable"
+          );
+
         }
 
       } catch (error) {
-        status.textContent = "● Offline";
-        status.style.color = "#ff6464";
+
+        status.textContent =
+          "● Offline";
+
+        status.style.color =
+          "#ff6464";
+
       }
     }
 
-    function addMessage(text, type) {
+
+    // =====================================================
+    // ADD USER MESSAGE
+    // =====================================================
+
+    function addUserMessage(text) {
 
       if (welcome) {
         welcome.style.display = "none";
       }
 
-      const message = document.createElement("div");
-      message.className = "message " + type;
+      const message =
+        document.createElement("div");
 
-      const bubble = document.createElement("div");
-      bubble.className = "bubble";
-      bubble.textContent = text;
+      message.className =
+        "message user";
+
+      const bubble =
+        document.createElement("div");
+
+      bubble.className =
+        "bubble";
+
+      bubble.textContent =
+        text;
 
       message.appendChild(bubble);
+
       chat.appendChild(message);
 
-      chat.scrollTop = chat.scrollHeight;
+      chat.scrollTop =
+        chat.scrollHeight;
     }
+
+
+    // =====================================================
+    // ADD ASTRA MESSAGE
+    // =====================================================
+
+    function addAssistantMessage(text) {
+
+      if (welcome) {
+        welcome.style.display = "none";
+      }
+
+      const message =
+        document.createElement("div");
+
+      message.className =
+        "message assistant";
+
+
+      const container =
+        document.createElement("div");
+
+      container.style.maxWidth =
+        "75%";
+
+
+      const bubble =
+        document.createElement("div");
+
+      bubble.className =
+        "bubble";
+
+      bubble.textContent =
+        text;
+
+
+      // ---------------------------------------------------
+      // VOICE CONTROLS
+      // ---------------------------------------------------
+
+      const controls =
+        document.createElement("div");
+
+      controls.className =
+        "voice-controls";
+
+
+      const readButton =
+        document.createElement("button");
+
+      readButton.className =
+        "voice-button";
+
+      readButton.textContent =
+        "🔊 Read aloud";
+
+
+      const stopButton =
+        document.createElement("button");
+
+      stopButton.className =
+        "voice-button";
+
+      stopButton.textContent =
+        "⏹ Stop";
+
+
+      const speaking =
+        document.createElement("span");
+
+      speaking.className =
+        "speaking";
+
+      speaking.textContent =
+        "● Speaking";
+
+
+      readButton.onclick =
+        function() {
+
+          speakText(
+            text,
+            speaking
+          );
+
+        };
+
+
+      stopButton.onclick =
+        function() {
+
+          stopSpeaking();
+
+        };
+
+
+      controls.appendChild(
+        readButton
+      );
+
+      controls.appendChild(
+        stopButton
+      );
+
+      controls.appendChild(
+        speaking
+      );
+
+
+      container.appendChild(
+        bubble
+      );
+
+      container.appendChild(
+        controls
+      );
+
+      message.appendChild(
+        container
+      );
+
+      chat.appendChild(
+        message
+      );
+
+
+      chat.scrollTop =
+        chat.scrollHeight;
+
+
+      // ---------------------------------------------------
+      // AUTOMATICALLY READ ANSWER
+      // ---------------------------------------------------
+
+      speakText(
+        text,
+        speaking
+      );
+    }
+
+
+    // =====================================================
+    // SEND MESSAGE
+    // =====================================================
 
     async function sendMessage() {
 
-      const message = input.value.trim();
+      const message =
+        input.value.trim();
 
       if (!message) {
         return;
       }
 
-      addMessage(message, "user");
+
+      // Stop any previous speech.
+      stopSpeaking();
+
+
+      // Add user message.
+      addUserMessage(message);
+
 
       input.value = "";
-      sendButton.disabled = true;
-      input.disabled = true;
 
-      const typing = document.createElement("div");
-      typing.className = "typing";
-      typing.textContent = "ASTRA is thinking...";
-      chat.appendChild(typing);
+      sendButton.disabled =
+        true;
 
-      chat.scrollTop = chat.scrollHeight;
+      input.disabled =
+        true;
+
+
+      // Typing indicator.
+      const typing =
+        document.createElement("div");
+
+      typing.className =
+        "typing";
+
+      typing.textContent =
+        "ASTRA is thinking...";
+
+
+      chat.appendChild(
+        typing
+      );
+
+      chat.scrollTop =
+        chat.scrollHeight;
+
 
       try {
 
-        const response = await fetch(API_BASE + "/api/chat", {
-          method: "POST",
+        const response =
+          await fetch(
+            API_BASE + "/api/chat",
+            {
+              method: "POST",
 
-          headers: {
-            "Content-Type": "application/json"
-          },
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
 
-          body: JSON.stringify({
-            message: message
-          })
-        });
+              body: JSON.stringify({
+                message: message
+              })
+            }
+          );
 
-        const data = await response.json();
+
+        const data =
+          await response.json();
+
 
         typing.remove();
 
+
         if (!response.ok) {
-          throw new Error(data.detail || "Request failed");
+
+          throw new Error(
+            data.detail ||
+            "Request failed"
+          );
+
         }
 
-        addMessage(data.reply || "ASTRA did not return a response.", "assistant");
+
+        const answer =
+          data.reply ||
+          "ASTRA did not return a response.";
+
+
+        addAssistantMessage(
+          answer
+        );
+
 
       } catch (error) {
 
         typing.remove();
 
-        addMessage(
+
+        addAssistantMessage(
           "Sorry, I couldn't connect to ASTRA right now.\n\nError: " +
-          error.message,
-          "assistant"
+          error.message
         );
+
 
       } finally {
 
-        sendButton.disabled = false;
-        input.disabled = false;
+        sendButton.disabled =
+          false;
+
+        input.disabled =
+          false;
+
         input.focus();
+
       }
     }
 
-    sendButton.addEventListener("click", sendMessage);
 
-    input.addEventListener("keydown", function(event) {
+    // =====================================================
+    // BUTTON
+    // =====================================================
 
-      if (event.key === "Enter") {
-        sendMessage();
+    sendButton.addEventListener(
+      "click",
+      sendMessage
+    );
+
+
+    // =====================================================
+    // ENTER KEY
+    // =====================================================
+
+    input.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (event.key === "Enter") {
+
+          sendMessage();
+
+        }
+
       }
+    );
 
-    });
+
+    // =====================================================
+    // START
+    // =====================================================
 
     checkBackend();
 
