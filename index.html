@@ -4,173 +4,393 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ASTRA AI</title>
+<title>ASTRA | OCA NDA AI</title>
 
 <style>
+/* =========================================================
+   OCA ASTRA — NDA DEFENCE ACADEMY THEME
+========================================================= */
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+:root {
+    --bg: #080b08;
+    --panel: #0d120e;
+    --panel2: #111811;
+    --border: #30382f;
+
+    --olive: #596642;
+    --olive-light: #7f9160;
+
+    --gold: #c5a75b;
+    --gold-light: #e0c77d;
+
+    --white: #f1f2ed;
+    --muted: #929a8d;
+
+    --user: #344b35;
+    --assistant: #151d16;
+
+    --green: #54c477;
+}
+
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #05080c;
-    color: #ffffff;
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(93, 111, 67, 0.14),
+            transparent 40%
+        ),
+        #080b08;
+
+    color: var(--white);
+
     min-height: 100vh;
+
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* ================= APP ================= */
+/* =========================================================
+   MAIN APP
+========================================================= */
 
 .app {
-    width: 96%;
-    max-width: 1350px;
+    width: 97%;
+    max-width: 1450px;
+
     height: 94vh;
 
-    background: rgba(7, 12, 18, 0.94);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(16, 22, 16, .97),
+            rgba(7, 10, 8, .98)
+        );
 
-    border: 1px solid #303b47;
-    border-radius: 22px;
+    border: 1px solid #3b4337;
+
+    border-radius: 18px;
+
+    overflow: hidden;
 
     display: flex;
     flex-direction: column;
 
-    overflow: hidden;
+    position: relative;
 
     box-shadow:
-        0 25px 80px rgba(0,0,0,.55),
-        inset 0 0 50px rgba(255,255,255,.015);
-
-    position: relative;
+        0 30px 100px rgba(0,0,0,.65),
+        inset 0 0 80px rgba(255,255,255,.015);
 }
 
-/* ================= WATERMARK ================= */
+/* =========================================================
+   DECORATIVE MILITARY GRID
+========================================================= */
 
-.app::before {
+.app::after {
     content: "";
 
     position: absolute;
 
-    width: 480px;
-    height: 480px;
-
-    left: 50%;
-    top: 54%;
-
-    transform: translate(-50%, -50%);
-
-    background-image: url("logo.png");
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    opacity: 0.075;
+    inset: 0;
 
     pointer-events: none;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,.018) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.018) 1px,
+            transparent 1px
+        );
+
+    background-size: 45px 45px;
+
+    opacity: .18;
 
     z-index: 0;
 }
 
-/* ================= HEADER ================= */
+/* =========================================================
+   OCA LOGO WATERMARK
+========================================================= */
+
+.watermark {
+    position: absolute;
+
+    width: 520px;
+    height: 520px;
+
+    left: 50%;
+    top: 53%;
+
+    transform: translate(-50%, -50%);
+
+    background-image: url("logo.png");
+
+    background-size: contain;
+
+    background-position: center;
+
+    background-repeat: no-repeat;
+
+    opacity: .055;
+
+    filter:
+        grayscale(100%)
+        brightness(1.7);
+
+    pointer-events: none;
+
+    z-index: 1;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
 
 header {
     height: 105px;
 
-    padding: 0 28px;
-
-    border-bottom: 1px solid #303b47;
+    padding: 0 30px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
-    position: relative;
-    z-index: 5;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(18,24,18,.98),
+            rgba(10,14,10,.96)
+        );
 
-    background: rgba(6, 10, 15, .88);
-    backdrop-filter: blur(15px);
+    border-bottom: 1px solid #394236;
+
+    position: relative;
+
+    z-index: 10;
 }
 
-.logo-area {
+/* LEFT HEADER */
+
+.brand {
     display: flex;
+
     align-items: center;
+
     gap: 18px;
 }
 
-.logo-text {
-    font-size: 42px;
-    font-weight: 700;
-    letter-spacing: 8px;
+.brand-mark {
+    width: 52px;
+    height: 52px;
 
-    background: linear-gradient(
-        90deg,
-        #ffffff,
-        #9ca9b7
-    );
+    border: 1px solid #70623d;
 
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.status {
-    font-size: 17px;
-    color: #4ade80;
+    border-radius: 10px;
 
     display: flex;
+
     align-items: center;
+
+    justify-content: center;
+
+    color: var(--gold);
+
+    font-weight: bold;
+
+    font-size: 19px;
+
+    letter-spacing: 2px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #20271c,
+            #0e130e
+        );
+
+    box-shadow:
+        inset 0 0 20px rgba(197,167,91,.06);
+}
+
+.brand-text {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+.astra {
+    font-size: 31px;
+
+    font-weight: 800;
+
+    letter-spacing: 7px;
+
+    color: #f3f3ef;
+}
+
+.subtitle {
+    font-size: 11px;
+
+    letter-spacing: 2.8px;
+
+    color: var(--gold);
+
+    text-transform: uppercase;
+}
+
+/* STATUS */
+
+.header-right {
+    display: flex;
+
+    align-items: center;
+
+    gap: 25px;
+}
+
+.system-status {
+    display: flex;
+
+    align-items: center;
+
     gap: 8px;
+
+    color: #8fd49e;
+
+    font-size: 13px;
+
+    letter-spacing: 1px;
 }
 
 .status-dot {
-    width: 9px;
-    height: 9px;
-
-    background: #4ade80;
+    width: 8px;
+    height: 8px;
 
     border-radius: 50%;
 
-    box-shadow: 0 0 12px #4ade80;
+    background: var(--green);
+
+    box-shadow:
+        0 0 12px rgba(84,196,119,.8);
 }
 
-/* ================= NEW CHAT ================= */
+/* NEW CHAT */
 
 #newChatButton {
-    background: rgba(20, 29, 40, .9);
+    padding: 12px 19px;
 
-    color: #ffffff;
+    background:
+        linear-gradient(
+            145deg,
+            #1b241a,
+            #111711
+        );
 
-    border: 1px solid #465362;
+    color: #dddccf;
 
-    border-radius: 12px;
+    border: 1px solid #4c5646;
 
-    padding: 13px 20px;
-
-    font-size: 16px;
+    border-radius: 9px;
 
     cursor: pointer;
+
+    font-size: 14px;
+
+    letter-spacing: .5px;
 
     transition: .2s;
 }
 
 #newChatButton:hover {
-    background: #1c2a3a;
-    border-color: #6b7b8d;
+    border-color: var(--gold);
+
+    color: white;
+
+    background: #222c1f;
 }
 
-/* ================= CHAT ================= */
+/* =========================================================
+   COMMAND BAR
+========================================================= */
+
+.command-bar {
+    height: 44px;
+
+    padding: 0 30px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 25px;
+
+    background: #0b100b;
+
+    border-bottom: 1px solid #252c24;
+
+    position: relative;
+
+    z-index: 8;
+}
+
+.command-item {
+    color: #687064;
+
+    font-size: 10px;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+}
+
+.command-item.active {
+    color: var(--gold);
+}
+
+.separator {
+    height: 15px;
+
+    width: 1px;
+
+    background: #323a30;
+}
+
+/* =========================================================
+   CHAT
+========================================================= */
 
 .chat {
     flex: 1;
 
     overflow-y: auto;
 
-    padding: 35px 30px 30px;
+    padding: 35px 32px 30px;
 
     position: relative;
-    z-index: 2;
+
+    z-index: 5;
 
     scroll-behavior: smooth;
 }
@@ -184,28 +404,31 @@ header {
 }
 
 .chat::-webkit-scrollbar-thumb {
-    background: #283441;
+    background: #30382f;
+
     border-radius: 10px;
 }
 
 .message {
-    margin-bottom: 22px;
+    margin-bottom: 24px;
 
     display: flex;
 
-    animation: messageIn .25s ease;
+    animation: messageIn .22s ease;
 }
 
 @keyframes messageIn {
+
     from {
         opacity: 0;
-        transform: translateY(8px);
+        transform: translateY(7px);
     }
 
     to {
         opacity: 1;
         transform: translateY(0);
     }
+
 }
 
 .message.user {
@@ -213,123 +436,204 @@ header {
 }
 
 .bubble {
-    max-width: 76%;
+    max-width: 78%;
 
-    padding: 16px 20px;
+    padding: 17px 20px;
 
-    border-radius: 18px;
+    border-radius: 14px;
 
     line-height: 1.65;
 
     white-space: pre-wrap;
 
-    font-size: 17px;
-
     word-wrap: break-word;
+
+    font-size: 16px;
+
+    position: relative;
 }
 
 .assistant .bubble {
-    background: rgba(18, 26, 35, .94);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(23,31,23,.96),
+            rgba(15,21,16,.96)
+        );
 
-    border: 1px solid rgba(70, 84, 100, .25);
+    border: 1px solid #293329;
 
-    color: #e4e9ef;
+    color: #e5e8df;
 
-    border-bottom-left-radius: 6px;
+    border-left: 3px solid #667650;
+
+    border-bottom-left-radius: 4px;
 }
 
 .user .bubble {
-    background: linear-gradient(
-        135deg,
-        #244b75,
-        #315f91
-    );
+    background:
+        linear-gradient(
+            145deg,
+            #3b523b,
+            #2b402f
+        );
 
-    color: white;
+    border: 1px solid #4d644c;
 
-    border-bottom-right-radius: 6px;
+    color: #f2f4ed;
 
-    box-shadow: 0 5px 20px rgba(20,70,120,.18);
+    border-bottom-right-radius: 4px;
 }
 
-/* ================= WELCOME ================= */
+/* =========================================================
+   SMALL MESSAGE LABEL
+========================================================= */
+
+.message.assistant::before {
+    content: "ASTRA";
+
+    position: absolute;
+
+    margin-top: -19px;
+
+    margin-left: 4px;
+
+    font-size: 9px;
+
+    letter-spacing: 1.5px;
+
+    color: #77846b;
+}
+
+/* =========================================================
+   WELCOME
+========================================================= */
 
 .welcome {
-    height: 100%;
+    min-height: 100%;
 
     display: flex;
 
-    justify-content: center;
     align-items: center;
 
-    text-align: center;
+    justify-content: center;
 
-    position: relative;
+    text-align: center;
 }
 
 .welcome-content {
     position: relative;
-    z-index: 2;
+
+    z-index: 3;
 }
 
-.welcome h1 {
-    font-size: 65px;
+.welcome-emblem {
+    width: 82px;
+    height: 82px;
 
-    letter-spacing: 12px;
+    margin: 0 auto 20px;
 
-    margin-bottom: 12px;
-
-    background: linear-gradient(
-        90deg,
-        #ffffff,
-        #8997a7
-    );
-
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.welcome p {
-    color: #8d99a6;
-    font-size: 18px;
-}
-
-/* ================= TYPING ================= */
-
-.typing {
-    display: flex;
-    align-items: center;
-
-    gap: 7px;
-
-    margin-bottom: 20px;
-
-    color: #8f9baa;
-
-    font-size: 15px;
-}
-
-.typing span {
-    width: 7px;
-    height: 7px;
-
-    background: #7d8b9a;
+    border: 1px solid #685a38;
 
     border-radius: 50%;
 
-    animation: typing 1.2s infinite;
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: var(--gold);
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    background:
+        radial-gradient(
+            circle,
+            #242b1d,
+            #0d120d
+        );
+
+    box-shadow:
+        0 0 35px rgba(197,167,91,.08);
 }
 
-.typing span:nth-child(2) {
-    animation-delay: .2s;
+.welcome h1 {
+    font-size: 52px;
+
+    letter-spacing: 11px;
+
+    margin-bottom: 9px;
+
+    color: #f1f2ed;
 }
 
-.typing span:nth-child(3) {
-    animation-delay: .4s;
+.welcome .tagline {
+    color: var(--gold);
+
+    font-size: 12px;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 17px;
+}
+
+.welcome p {
+    color: #788174;
+
+    font-size: 15px;
+
+    max-width: 520px;
+
+    line-height: 1.7;
+}
+
+/* =========================================================
+   TYPING
+========================================================= */
+
+.typing {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-bottom: 20px;
+
+    color: #7d8778;
+
+    font-size: 13px;
+}
+
+.typing span.dot {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #82906f;
+
+    animation: typing 1.1s infinite;
+}
+
+.typing span.dot:nth-child(2) {
+    animation-delay: .15s;
+}
+
+.typing span.dot:nth-child(3) {
+    animation-delay: .3s;
 }
 
 @keyframes typing {
-    0%, 60%, 100% {
+
+    0%,60%,100% {
         opacity: .3;
         transform: translateY(0);
     }
@@ -338,73 +642,96 @@ header {
         opacity: 1;
         transform: translateY(-4px);
     }
+
 }
 
-/* ================= INPUT ================= */
+/* =========================================================
+   INPUT AREA
+========================================================= */
 
 .input-area {
-    min-height: 92px;
+    min-height: 90px;
 
-    padding: 16px 20px;
-
-    border-top: 1px solid #303b47;
+    padding: 15px 20px;
 
     display: flex;
 
-    gap: 12px;
+    gap: 11px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #0b100b,
+            #090d09
+        );
+
+    border-top: 1px solid #30382f;
 
     position: relative;
 
-    z-index: 5;
+    z-index: 10;
+}
 
-    background: rgba(6, 10, 15, .92);
+.input-wrap {
+    flex: 1;
 
-    backdrop-filter: blur(15px);
+    position: relative;
 }
 
 #messageInput {
-    flex: 1;
+    width: 100%;
 
-    background: #0b1118;
+    height: 58px;
 
-    color: white;
+    background: #0c120d;
 
-    border: 1px solid #344250;
+    color: #f1f2ed;
 
-    border-radius: 14px;
+    border: 1px solid #394538;
 
-    padding: 15px 17px;
+    border-radius: 11px;
+
+    padding: 0 18px;
 
     outline: none;
 
-    font-size: 17px;
+    font-size: 16px;
 
     transition: .2s;
 }
 
+#messageInput::placeholder {
+    color: #697267;
+}
+
 #messageInput:focus {
-    border-color: #557da8;
+    border-color: #687953;
 
     box-shadow:
-        0 0 0 3px rgba(49,93,145,.12);
+        0 0 0 3px rgba(104,121,83,.08);
 }
 
 #sendButton {
-    border: none;
+    height: 58px;
 
-    border-radius: 14px;
+    min-width: 105px;
 
-    padding: 0 26px;
+    border: 1px solid #77643a;
 
-    background: linear-gradient(
-        135deg,
-        #315d91,
-        #244d7c
-    );
+    border-radius: 11px;
 
-    color: white;
+    background:
+        linear-gradient(
+            145deg,
+            #77643a,
+            #5c4c2d
+        );
 
-    font-size: 17px;
+    color: #fff8df;
+
+    font-size: 15px;
+
+    font-weight: 600;
 
     cursor: pointer;
 
@@ -412,13 +739,14 @@ header {
 }
 
 #sendButton:hover {
-    transform: translateY(-1px);
+    background:
+        linear-gradient(
+            145deg,
+            #8c7645,
+            #6d5a34
+        );
 
-    background: linear-gradient(
-        135deg,
-        #3b6fa9,
-        #2d5d91
-    );
+    transform: translateY(-1px);
 }
 
 #sendButton:disabled {
@@ -429,54 +757,103 @@ header {
     transform: none;
 }
 
-/* ================= MOBILE ================= */
+/* =========================================================
+   MOBILE
+========================================================= */
 
-@media (max-width: 700px) {
+@media(max-width: 750px) {
 
     .app {
         width: 100%;
         height: 100vh;
+
         border-radius: 0;
     }
 
     header {
         height: 82px;
-        padding: 0 18px;
+
+        padding: 0 16px;
     }
 
-    .logo-text {
-        font-size: 28px;
+    .brand-mark {
+        width: 42px;
+        height: 42px;
+
+        font-size: 15px;
+    }
+
+    .astra {
+        font-size: 25px;
+
         letter-spacing: 5px;
     }
 
-    .status {
-        font-size: 13px;
+    .subtitle {
+        font-size: 8px;
+
+        letter-spacing: 1.8px;
+    }
+
+    .system-status {
+        display: none;
     }
 
     #newChatButton {
         padding: 10px 12px;
-        font-size: 13px;
+
+        font-size: 12px;
+    }
+
+    .command-bar {
+        padding: 0 15px;
+
+        gap: 12px;
+
+        overflow: hidden;
+    }
+
+    .command-item {
+        font-size: 8px;
+
+        white-space: nowrap;
     }
 
     .chat {
-        padding: 25px 16px;
+        padding: 28px 15px;
     }
 
     .bubble {
         max-width: 90%;
-        font-size: 16px;
+
+        font-size: 15px;
     }
 
     .welcome h1 {
-        font-size: 45px;
+        font-size: 40px;
+
+        letter-spacing: 7px;
+    }
+
+    .watermark {
+        width: 350px;
+        height: 350px;
     }
 
     .input-area {
-        padding: 12px;
+        padding: 11px;
+    }
+
+    #messageInput {
+        height: 53px;
+
+        font-size: 15px;
     }
 
     #sendButton {
-        padding: 0 18px;
+        height: 53px;
+
+        min-width: 72px;
     }
 }
 </style>
@@ -486,28 +863,95 @@ header {
 
 <div class="app">
 
-    <!-- HEADER -->
+    <!-- OCA WATERMARK -->
+    <div class="watermark"></div>
 
+
+    <!-- HEADER -->
     <header>
 
-        <div class="logo-area">
+        <div class="brand">
 
-            <div class="logo-text">
-                ASTRA
+            <div class="brand-mark">
+                OCA
             </div>
 
-            <div class="status">
-                <span class="status-dot"></span>
-                <span id="statusText">Checking...</span>
+            <div class="brand-text">
+
+                <div class="astra">
+                    ASTRA
+                </div>
+
+                <div class="subtitle">
+                    OCA • NDA PREPARATION AI
+                </div>
+
             </div>
 
         </div>
 
-        <button id="newChatButton">
-            + New Chat
-        </button>
+
+        <div class="header-right">
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                <span id="statusText">
+                    SYSTEM ONLINE
+                </span>
+
+            </div>
+
+
+            <button id="newChatButton">
+                + New Chat
+            </button>
+
+        </div>
 
     </header>
+
+
+    <!-- COMMAND BAR -->
+
+    <div class="command-bar">
+
+        <span class="command-item active">
+            ASTRA COMMAND
+        </span>
+
+        <span class="separator"></span>
+
+        <span class="command-item">
+            NDA PREPARATION
+        </span>
+
+        <span class="separator"></span>
+
+        <span class="command-item">
+            GAT
+        </span>
+
+        <span class="separator"></span>
+
+        <span class="command-item">
+            MATHEMATICS
+        </span>
+
+        <span class="separator"></span>
+
+        <span class="command-item">
+            CURRENT AFFAIRS
+        </span>
+
+        <span class="separator"></span>
+
+        <span class="command-item">
+            DEFENCE
+        </span>
+
+    </div>
 
 
     <!-- CHAT -->
@@ -518,10 +962,20 @@ header {
 
             <div class="welcome-content">
 
+                <div class="welcome-emblem">
+                    OCA
+                </div>
+
                 <h1>ASTRA</h1>
 
+                <div class="tagline">
+                    NDA PREPARATION AI
+                </div>
+
                 <p>
-                    Your intelligent AI assistant
+                    Your intelligent academic assistant
+                    for NDA preparation, mathematics,
+                    GAT, current affairs and defence studies.
                 </p>
 
             </div>
@@ -535,15 +989,19 @@ header {
 
     <div class="input-area">
 
-        <input
-            id="messageInput"
-            type="text"
-            placeholder="Message ASTRA..."
-            autocomplete="off"
-        >
+        <div class="input-wrap">
+
+            <input
+                id="messageInput"
+                type="text"
+                placeholder="Enter your question for ASTRA..."
+                autocomplete="off"
+            >
+
+        </div>
 
         <button id="sendButton">
-            Send
+            SEND
         </button>
 
     </div>
@@ -585,21 +1043,14 @@ const welcome =
 
 
 /* =========================================================
-   CHAT HISTORY
+   LOCAL CHAT HISTORY
 ========================================================= */
-
-/*
-   This is the important part.
-
-   ASTRA now saves messages inside the browser.
-
-   When you refresh the website,
-   the previous messages are loaded again.
-*/
 
 let chatHistory =
     JSON.parse(
-        localStorage.getItem("astra_chat_history")
+        localStorage.getItem(
+            "astra_chat_history"
+        )
     ) || [];
 
 
@@ -658,13 +1109,10 @@ function addMessage(
         chat.scrollHeight;
 
 
-    /*
-       Save message to history
-    */
-
     if (save) {
 
         chatHistory.push({
+
             role:
                 type === "user"
                     ? "user"
@@ -674,6 +1122,7 @@ function addMessage(
 
             time:
                 new Date().toISOString()
+
         });
 
 
@@ -684,7 +1133,7 @@ function addMessage(
 
 
 /* =========================================================
-   LOAD CHAT HISTORY
+   LOAD HISTORY
 ========================================================= */
 
 function loadHistory() {
@@ -699,19 +1148,21 @@ function loadHistory() {
     }
 
 
-    for (
-        const message of chatHistory
-    ) {
+    chatHistory.forEach(
+        message => {
 
-        addMessage(
-            message.text,
-            message.role === "user"
-                ? "user"
-                : "assistant",
-            false
-        );
+            addMessage(
+                message.text,
 
-    }
+                message.role === "user"
+                    ? "user"
+                    : "assistant",
+
+                false
+            );
+
+        }
+    );
 
 
     chat.scrollTop =
@@ -726,15 +1177,15 @@ function loadHistory() {
 
 newChatButton.addEventListener(
     "click",
-    function () {
+    function() {
 
-        const confirmNew =
+        const confirmation =
             confirm(
-                "Start a new chat?\n\nYour current chat history will be cleared."
+                "Start a new chat?\n\nThis will clear the current conversation from this browser."
             );
 
 
-        if (!confirmNew) {
+        if (!confirmation) {
             return;
         }
 
@@ -747,20 +1198,13 @@ newChatButton.addEventListener(
         );
 
 
-        /*
-           Remove all messages
-        */
-
         chat.querySelectorAll(
             ".message, .typing"
         ).forEach(
-            element => element.remove()
+            element =>
+                element.remove()
         );
 
-
-        /*
-           Show welcome screen
-        */
 
         if (welcome) {
             welcome.style.display = "flex";
@@ -774,7 +1218,7 @@ newChatButton.addEventListener(
 
 
 /* =========================================================
-   CHECK BACKEND
+   BACKEND STATUS
 ========================================================= */
 
 async function checkBackend() {
@@ -788,21 +1232,19 @@ async function checkBackend() {
 
 
         if (!response.ok) {
-            throw new Error(
-                "Backend unavailable"
-            );
+            throw new Error();
         }
 
 
         statusText.textContent =
-            "Online";
+            "SYSTEM ONLINE";
 
     }
 
-    catch (error) {
+    catch {
 
         statusText.textContent =
-            "Offline";
+            "SYSTEM OFFLINE";
 
     }
 
@@ -810,7 +1252,7 @@ async function checkBackend() {
 
 
 /* =========================================================
-   TYPING INDICATOR
+   TYPING
 ========================================================= */
 
 function createTyping() {
@@ -823,14 +1265,15 @@ function createTyping() {
 
 
     typing.innerHTML = `
-        <span></span>
-        <span></span>
-        <span></span>
-        <span>ASTRA is thinking...</span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span>ASTRA is processing...</span>
     `;
 
 
     chat.appendChild(typing);
+
 
     chat.scrollTop =
         chat.scrollHeight;
@@ -856,10 +1299,6 @@ async function sendMessage() {
     }
 
 
-    /*
-       Show user's message
-    */
-
     addMessage(
         message,
         "user"
@@ -869,6 +1308,7 @@ async function sendMessage() {
     input.value = "";
 
     sendButton.disabled = true;
+
     input.disabled = true;
 
 
@@ -882,6 +1322,7 @@ async function sendMessage() {
             await fetch(
                 API_BASE + "/api/chat",
                 {
+
                     method: "POST",
 
                     headers: {
@@ -894,11 +1335,13 @@ async function sendMessage() {
                             message:
                                 message
                         })
+
                 }
             );
 
 
         let data;
+
 
         try {
 
@@ -923,7 +1366,7 @@ async function sendMessage() {
 
             throw new Error(
                 data.detail ||
-                "Request failed"
+                "ASTRA request failed"
             );
 
         }
@@ -933,10 +1376,6 @@ async function sendMessage() {
             data.reply ||
             "ASTRA did not return a response.";
 
-
-        /*
-           Add answer and save it
-        */
 
         addMessage(
             answer,
@@ -952,7 +1391,7 @@ async function sendMessage() {
 
 
         addMessage(
-            "Sorry, I couldn't connect to ASTRA right now.\n\nError: " +
+            "Connection error.\n\n" +
             error.message,
             "assistant"
         );
@@ -973,7 +1412,7 @@ async function sendMessage() {
 
 
 /* =========================================================
-   SEND BUTTON
+   BUTTON
 ========================================================= */
 
 sendButton.addEventListener(
@@ -983,7 +1422,7 @@ sendButton.addEventListener(
 
 
 /* =========================================================
-   ENTER KEY
+   ENTER
 ========================================================= */
 
 input.addEventListener(
@@ -991,8 +1430,7 @@ input.addEventListener(
     function(event) {
 
         if (
-            event.key === "Enter" &&
-            !event.shiftKey
+            event.key === "Enter"
         ) {
 
             event.preventDefault();
@@ -1006,7 +1444,7 @@ input.addEventListener(
 
 
 /* =========================================================
-   START ASTRA
+   START
 ========================================================= */
 
 loadHistory();
