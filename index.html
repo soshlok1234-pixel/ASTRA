@@ -1,49 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>ASTRA AI</title>
 
+
   <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
+
     body {
-      font-family: Arial, sans-serif;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
       background: #0b0f14;
+
       color: white;
+
       min-height: 100vh;
 
       display: flex;
+
       justify-content: center;
+
       align-items: center;
+
     }
+
 
     /* ==============================
        MAIN APP
     ============================== */
 
     .app {
+
       width: 95%;
+
       max-width: 900px;
+
       height: 90vh;
 
       background: #111820;
 
       border: 1px solid #26313d;
+
       border-radius: 20px;
 
       display: flex;
+
       flex-direction: column;
 
       overflow: hidden;
 
-      box-shadow: 0 20px 60px rgba(0, 0, 0, .4);
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, .4);
+
     }
 
 
@@ -52,29 +79,90 @@
     ============================== */
 
     header {
-      padding: 20px 25px;
 
-      border-bottom: 1px solid #26313d;
+      padding: 18px 22px;
+
+      border-bottom:
+        1px solid #26313d;
 
       display: flex;
-      justify-content: space-between;
+
+      justify-content:
+        space-between;
+
       align-items: center;
 
       background: #111820;
 
       position: relative;
+
       z-index: 5;
+
     }
+
+
+    .header-left {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+
+    }
+
 
     .logo {
+
       font-size: 28px;
+
       font-weight: bold;
+
       letter-spacing: 3px;
+
     }
 
+
     .status {
+
       font-size: 13px;
+
       color: #55d68a;
+
+    }
+
+
+    /* ==============================
+       NEW CHAT BUTTON
+    ============================== */
+
+    #newChatButton {
+
+      border: 1px solid #344250;
+
+      background: #18222d;
+
+      color: #cbd5df;
+
+      border-radius: 9px;
+
+      padding: 8px 12px;
+
+      cursor: pointer;
+
+      font-size: 13px;
+
+      transition: .2s;
+
+    }
+
+
+    #newChatButton:hover {
+
+      background: #263646;
+
+      color: white;
+
     }
 
 
@@ -83,6 +171,7 @@
     ============================== */
 
     .chat {
+
       position: relative;
 
       flex: 1;
@@ -92,38 +181,45 @@
       padding: 25px;
 
       background: transparent;
+
     }
 
 
     /* ==============================
        PDF STYLE WATERMARK
-       SINGLE CENTERED LOGO
     ============================== */
 
     .chat::before {
+
       content: "";
 
       position: absolute;
 
       left: 50%;
+
       top: 50%;
 
-      transform: translate(-50%, -50%);
+      transform:
+        translate(-50%, -50%);
 
       width: 380px;
+
       height: 380px;
 
-      background-image: url("./logo.png");
+      background-image:
+        url("./logo.png");
 
-      background-repeat: no-repeat;
+      background-repeat:
+        no-repeat;
 
-      background-position: center;
+      background-position:
+        center;
 
-      background-size: contain;
+      background-size:
+        contain;
 
       /*
-        Change this number if you want
-        the logo lighter/darker.
+        Watermark brightness.
 
         0.04 = very faint
         0.07 = recommended
@@ -132,18 +228,10 @@
 
       opacity: 0.07;
 
-      /*
-        Makes sure the watermark
-        never blocks clicking.
-      */
-
       pointer-events: none;
 
-      /*
-        Watermark stays behind messages.
-      */
-
       z-index: 0;
+
     }
 
 
@@ -152,9 +240,11 @@
     ============================== */
 
     .chat > * {
+
       position: relative;
 
       z-index: 1;
+
     }
 
 
@@ -163,16 +253,50 @@
     ============================== */
 
     .message {
+
       margin-bottom: 18px;
 
       display: flex;
+
+      animation:
+        messageAppear .2s ease;
+
     }
+
+
+    @keyframes messageAppear {
+
+      from {
+
+        opacity: 0;
+
+        transform:
+          translateY(5px);
+
+      }
+
+      to {
+
+        opacity: 1;
+
+        transform:
+          translateY(0);
+
+      }
+
+    }
+
 
     .message.user {
-      justify-content: flex-end;
+
+      justify-content:
+        flex-end;
+
     }
 
+
     .bubble {
+
       max-width: 75%;
 
       padding: 13px 17px;
@@ -183,48 +307,66 @@
 
       white-space: pre-wrap;
 
-      /*
-        Slight transparency allows
-        the watermark to remain subtly
-        visible like a PDF watermark.
-      */
+      backdrop-filter:
+        blur(2px);
 
-      backdrop-filter: blur(2px);
+      word-wrap: break-word;
+
     }
 
 
-    /* ASTRA MESSAGE */
+    /* ASTRA */
 
     .assistant .bubble {
-      background: rgba(27, 37, 48, 0.94);
+
+      background:
+        rgba(27, 37, 48, .94);
+
     }
 
 
-    /* USER MESSAGE */
+    /* USER */
 
     .user .bubble {
-      background: rgba(49, 93, 145, 0.94);
+
+      background:
+        rgba(49, 93, 145, .94);
+
     }
 
 
     /* ==============================
-       WELCOME SCREEN
+       WELCOME
     ============================== */
 
     .welcome {
+
       text-align: center;
 
       margin-top: 25%;
 
       color: #9ba7b4;
+
     }
 
+
     .welcome h1 {
+
       color: white;
 
       font-size: 42px;
 
       margin-bottom: 10px;
+
+      letter-spacing: 2px;
+
+    }
+
+
+    .welcome p {
+
+      font-size: 15px;
+
     }
 
 
@@ -233,9 +375,11 @@
     ============================== */
 
     .input-area {
+
       padding: 18px;
 
-      border-top: 1px solid #26313d;
+      border-top:
+        1px solid #26313d;
 
       display: flex;
 
@@ -246,19 +390,22 @@
       position: relative;
 
       z-index: 5;
+
     }
 
 
     /* INPUT */
 
     #messageInput {
+
       flex: 1;
 
       background: #0b1016;
 
       color: white;
 
-      border: 1px solid #344250;
+      border:
+        1px solid #344250;
 
       border-radius: 12px;
 
@@ -267,16 +414,22 @@
       outline: none;
 
       font-size: 16px;
+
     }
 
+
     #messageInput:focus {
-      border-color: #557da8;
+
+      border-color:
+        #557da8;
+
     }
 
 
     /* SEND BUTTON */
 
     #sendButton {
+
       border: none;
 
       border-radius: 12px;
@@ -291,17 +444,26 @@
 
       cursor: pointer;
 
-      transition: background 0.2s ease;
+      transition:
+        background .2s ease;
+
     }
+
 
     #sendButton:hover {
+
       background: #3b6fa9;
+
     }
 
+
     #sendButton:disabled {
+
       opacity: .5;
 
-      cursor: not-allowed;
+      cursor:
+        not-allowed;
+
     }
 
 
@@ -310,11 +472,33 @@
     ============================== */
 
     .typing {
+
       color: #9ba7b4;
 
       font-style: italic;
 
       margin-bottom: 15px;
+
+      animation:
+        pulse 1.2s infinite;
+
+    }
+
+
+    @keyframes pulse {
+
+      0% {
+        opacity: .4;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: .4;
+      }
+
     }
 
 
@@ -323,21 +507,33 @@
     ============================== */
 
     .chat::-webkit-scrollbar {
+
       width: 8px;
+
     }
+
 
     .chat::-webkit-scrollbar-track {
-      background: transparent;
+
+      background:
+        transparent;
+
     }
 
+
     .chat::-webkit-scrollbar-thumb {
+
       background: #344250;
 
       border-radius: 10px;
+
     }
 
+
     .chat::-webkit-scrollbar-thumb:hover {
+
       background: #46586a;
+
     }
 
 
@@ -348,37 +544,71 @@
     @media (max-width: 600px) {
 
       .app {
+
         width: 100%;
 
         height: 100vh;
 
         border-radius: 0;
+
       }
+
+
+      header {
+
+        padding:
+          15px;
+
+      }
+
 
       .bubble {
+
         max-width: 88%;
+
       }
+
 
       .welcome h1 {
+
         font-size: 34px;
+
       }
 
+
       .chat::before {
+
         width: 280px;
 
         height: 280px;
+
       }
 
+
       #sendButton {
-        padding: 0 16px;
+
+        padding:
+          0 16px;
+
       }
+
+
+      #newChatButton {
+
+        padding:
+          7px 9px;
+
+      }
+
     }
 
   </style>
+
 </head>
 
 
 <body>
+
 
   <div class="app">
 
@@ -389,16 +619,28 @@
 
     <header>
 
-      <div class="logo">
-        ASTRA
+      <div class="header-left">
+
+        <div class="logo">
+          ASTRA
+        </div>
+
+        <div
+          class="status"
+          id="status"
+        >
+          ● Checking...
+        </div>
+
       </div>
 
-      <div
-        class="status"
-        id="status"
+
+      <button
+        id="newChatButton"
+        title="Start a new conversation"
       >
-        ● Checking...
-      </div>
+        + New Chat
+      </button>
 
     </header>
 
@@ -443,6 +685,7 @@
         autocomplete="off"
       >
 
+
       <button
         id="sendButton"
       >
@@ -454,43 +697,175 @@
   </div>
 
 
-  <!-- ==============================
-       JAVASCRIPT
-  ============================== -->
-
   <script>
 
-    /*
-      YOUR LIVE BACKEND
-    */
+
+    /* =================================================
+       YOUR LIVE BACKEND
+    ================================================= */
 
     const API_BASE =
       "https://astra-backend-2hac.onrender.com";
 
 
-    /*
-      ELEMENTS
-    */
+    /* =================================================
+       ELEMENTS
+    ================================================= */
 
     const chat =
       document.getElementById("chat");
 
+
     const input =
       document.getElementById("messageInput");
+
 
     const sendButton =
       document.getElementById("sendButton");
 
+
     const status =
       document.getElementById("status");
+
 
     const welcome =
       document.getElementById("welcome");
 
 
-    /* ==============================
+    const newChatButton =
+      document.getElementById("newChatButton");
+
+
+    /* =================================================
+       LOAD CHAT HISTORY
+       
+       History is stored in the browser.
+       It survives page refresh.
+    ================================================= */
+
+    let chatHistory = [];
+
+    try {
+
+      chatHistory =
+        JSON.parse(
+          localStorage.getItem(
+            "astra_history"
+          ) || "[]"
+        );
+
+      if (!Array.isArray(chatHistory)) {
+
+        chatHistory = [];
+
+      }
+
+    } catch (error) {
+
+      console.log(
+        "Could not load history."
+      );
+
+      chatHistory = [];
+
+    }
+
+
+    /* =================================================
+       LIMIT HISTORY
+       
+       Only last 8 messages are sent to backend.
+       This helps keep ASTRA fast.
+    ================================================= */
+
+    function limitHistory() {
+
+      if (chatHistory.length > 8) {
+
+        chatHistory =
+          chatHistory.slice(-8);
+
+      }
+
+    }
+
+
+    /* =================================================
+       SAVE HISTORY
+    ================================================= */
+
+    function saveHistory() {
+
+      limitHistory();
+
+      localStorage.setItem(
+        "astra_history",
+        JSON.stringify(
+          chatHistory
+        )
+      );
+
+    }
+
+
+    /* =================================================
+       RESTORE OLD CHAT ON PAGE LOAD
+    ================================================= */
+
+    function restoreHistory() {
+
+      if (
+        !chatHistory ||
+        chatHistory.length === 0
+      ) {
+
+        return;
+
+      }
+
+
+      if (welcome) {
+
+        welcome.style.display =
+          "none";
+
+      }
+
+
+      chatHistory.forEach(
+        function(item) {
+
+          if (
+            !item ||
+            !item.content
+          ) {
+
+            return;
+
+          }
+
+
+          addMessage(
+            item.content,
+            item.role === "user"
+              ? "user"
+              : "assistant",
+            false
+          );
+
+        }
+      );
+
+
+      chat.scrollTop =
+        chat.scrollHeight;
+
+    }
+
+
+    /* =================================================
        CHECK BACKEND
-    ============================== */
+    ================================================= */
 
     async function checkBackend() {
 
@@ -498,7 +873,8 @@
 
         const response =
           await fetch(
-            API_BASE + "/health"
+            API_BASE +
+            "/health"
           );
 
 
@@ -518,6 +894,7 @@
 
         }
 
+
       } catch (error) {
 
         status.textContent =
@@ -525,23 +902,27 @@
 
         status.style.color =
           "#ff6464";
+
       }
+
     }
 
 
-    /* ==============================
+    /* =================================================
        ADD MESSAGE
-    ============================== */
+    ================================================= */
 
     function addMessage(
       text,
-      type
+      type,
+      scroll = true
     ) {
 
       if (welcome) {
 
         welcome.style.display =
           "none";
+
       }
 
 
@@ -549,6 +930,7 @@
         document.createElement(
           "div"
         );
+
 
       message.className =
         "message " + type;
@@ -559,8 +941,10 @@
           "div"
         );
 
+
       bubble.className =
         "bubble";
+
 
       bubble.textContent =
         text;
@@ -576,14 +960,91 @@
       );
 
 
-      chat.scrollTop =
-        chat.scrollHeight;
+      if (scroll) {
+
+        chat.scrollTop =
+          chat.scrollHeight;
+
+      }
+
     }
 
 
-    /* ==============================
+    /* =================================================
+       NEW CHAT
+    ================================================= */
+
+    function startNewChat() {
+
+      const confirmed =
+        confirm(
+          "Start a new chat?\n\nYour current conversation will be cleared from this browser."
+        );
+
+
+      if (!confirmed) {
+
+        return;
+
+      }
+
+
+      chatHistory = [];
+
+
+      localStorage.removeItem(
+        "astra_history"
+      );
+
+
+      /*
+        Remove old messages.
+        Keep welcome screen.
+      */
+
+      chat.innerHTML = "";
+
+
+      const newWelcome =
+        document.createElement(
+          "div"
+        );
+
+
+      newWelcome.className =
+        "welcome";
+
+
+      newWelcome.id =
+        "welcome";
+
+
+      newWelcome.innerHTML =
+        `
+          <h1>ASTRA</h1>
+          <p>Your AI assistant</p>
+        `;
+
+
+      chat.appendChild(
+        newWelcome
+      );
+
+
+      input.focus();
+
+    }
+
+
+    newChatButton.addEventListener(
+      "click",
+      startNewChat
+    );
+
+
+    /* =================================================
        SEND MESSAGE
-    ============================== */
+    ================================================= */
 
     async function sendMessage() {
 
@@ -594,12 +1055,25 @@
       if (!message) {
 
         return;
+
       }
 
 
       /*
-        Add user message
+        Save a copy of the previous history.
+
+        IMPORTANT:
+        We send previous messages to backend,
+        not the current question twice.
       */
+
+      const previousHistory =
+        [...chatHistory];
+
+
+      /* ---------------------------------------------
+         SHOW USER MESSAGE
+      --------------------------------------------- */
 
       addMessage(
         message,
@@ -607,35 +1081,30 @@
       );
 
 
-      /*
-        Clear input
-      */
-
       input.value = "";
 
 
-      /*
-        Disable controls
-      */
-
       sendButton.disabled =
         true;
+
 
       input.disabled =
         true;
 
 
-      /*
-        Typing indicator
-      */
+      /* ---------------------------------------------
+         TYPING INDICATOR
+      --------------------------------------------- */
 
       const typing =
         document.createElement(
           "div"
         );
 
+
       typing.className =
         "typing";
+
 
       typing.textContent =
         "ASTRA is thinking...";
@@ -652,48 +1121,59 @@
 
       try {
 
-        /*
-          SEND TO BACKEND
-        */
+
+        /* ============================================
+           SEND MESSAGE + HISTORY TO BACKEND
+        ============================================ */
 
         const response =
           await fetch(
-            API_BASE + "/api/chat",
+            API_BASE +
+            "/api/chat",
             {
+
               method: "POST",
 
               headers: {
+
                 "Content-Type":
                   "application/json"
+
               },
 
               body:
                 JSON.stringify({
+
                   message:
-                    message
+                    message,
+
+                  history:
+                    previousHistory
+
                 })
+
             }
           );
 
 
-        /*
-          Read response
-        */
+        /* ---------------------------------------------
+           READ RESPONSE
+        --------------------------------------------- */
 
         const data =
           await response.json();
 
 
-        /*
-          Remove typing
-        */
+        /* ---------------------------------------------
+           REMOVE TYPING
+        --------------------------------------------- */
 
         typing.remove();
 
 
-        /*
-          Check error
-        */
+        /* ---------------------------------------------
+           CHECK ERROR
+        --------------------------------------------- */
 
         if (!response.ok) {
 
@@ -701,61 +1181,124 @@
             data.detail ||
             "Request failed"
           );
+
         }
 
 
-        /*
-          Add ASTRA response
-        */
+        /* ---------------------------------------------
+           GET ASTRA REPLY
+        --------------------------------------------- */
+
+        const reply =
+          data.reply ||
+          "ASTRA did not return a response.";
+
+
+        /* ---------------------------------------------
+           SHOW ASTRA RESPONSE
+        --------------------------------------------- */
 
         addMessage(
-          data.reply ||
-          "ASTRA did not return a response.",
+          reply,
           "assistant"
         );
+
+
+        /* ============================================
+           SAVE BOTH MESSAGES TO HISTORY
+        ============================================ */
+
+        chatHistory.push({
+
+          role:
+            "user",
+
+          content:
+            message
+
+        });
+
+
+        chatHistory.push({
+
+          role:
+            "assistant",
+
+          content:
+            reply
+
+        });
+
+
+        /*
+          Keep only latest 8 messages.
+        */
+
+        limitHistory();
+
+
+        /*
+          Save to browser.
+        */
+
+        saveHistory();
 
 
       } catch (error) {
 
-        /*
-          Remove typing
-        */
 
-        typing.remove();
+        /* ---------------------------------------------
+           REMOVE TYPING
+        --------------------------------------------- */
+
+        if (
+          typing &&
+          typing.parentNode
+        ) {
+
+          typing.remove();
+
+        }
 
 
-        /*
-          Show error
-        */
+        /* ---------------------------------------------
+           SHOW ERROR
+        --------------------------------------------- */
 
         addMessage(
+
           "Sorry, I couldn't connect to ASTRA right now.\n\nError: " +
           error.message,
-          "assistant"
-        );
 
+          "assistant"
+
+        );
 
       } finally {
 
-        /*
-          Enable controls
-        */
+
+        /* ---------------------------------------------
+           ENABLE CONTROLS
+        --------------------------------------------- */
 
         sendButton.disabled =
           false;
 
+
         input.disabled =
           false;
 
+
         input.focus();
+
       }
 
     }
 
 
-    /* ==============================
+    /* =================================================
        SEND BUTTON
-    ============================== */
+    ================================================= */
 
     sendButton.addEventListener(
       "click",
@@ -763,9 +1306,9 @@
     );
 
 
-    /* ==============================
+    /* =================================================
        ENTER KEY
-    ============================== */
+    ================================================= */
 
     input.addEventListener(
       "keydown",
@@ -775,6 +1318,8 @@
           event.key === "Enter"
         ) {
 
+          event.preventDefault();
+
           sendMessage();
 
         }
@@ -783,13 +1328,20 @@
     );
 
 
-    /* ==============================
+    /* =================================================
        START
-    ============================== */
+    ================================================= */
+
+    restoreHistory();
 
     checkBackend();
 
+    input.focus();
+
+
   </script>
 
+
 </body>
+
 </html>
