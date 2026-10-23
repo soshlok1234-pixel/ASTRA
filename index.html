@@ -1,1347 +1,1021 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta charset="UTF-8">
+<title>ASTRA AI</title>
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-  <title>ASTRA AI</title>
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #05080c;
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+/* ================= APP ================= */
 
-  <style>
+.app {
+    width: 96%;
+    max-width: 1350px;
+    height: 94vh;
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    background: rgba(7, 12, 18, 0.94);
+
+    border: 1px solid #303b47;
+    border-radius: 22px;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.55),
+        inset 0 0 50px rgba(255,255,255,.015);
+
+    position: relative;
+}
+
+/* ================= WATERMARK ================= */
+
+.app::before {
+    content: "";
+
+    position: absolute;
+
+    width: 480px;
+    height: 480px;
+
+    left: 50%;
+    top: 54%;
+
+    transform: translate(-50%, -50%);
+
+    background-image: url("logo.png");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    opacity: 0.075;
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+/* ================= HEADER ================= */
+
+header {
+    height: 105px;
+
+    padding: 0 28px;
+
+    border-bottom: 1px solid #303b47;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    position: relative;
+    z-index: 5;
+
+    background: rgba(6, 10, 15, .88);
+    backdrop-filter: blur(15px);
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.logo-text {
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: 8px;
+
+    background: linear-gradient(
+        90deg,
+        #ffffff,
+        #9ca9b7
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.status {
+    font-size: 17px;
+    color: #4ade80;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+
+    background: #4ade80;
+
+    border-radius: 50%;
+
+    box-shadow: 0 0 12px #4ade80;
+}
+
+/* ================= NEW CHAT ================= */
+
+#newChatButton {
+    background: rgba(20, 29, 40, .9);
+
+    color: #ffffff;
+
+    border: 1px solid #465362;
+
+    border-radius: 12px;
+
+    padding: 13px 20px;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+#newChatButton:hover {
+    background: #1c2a3a;
+    border-color: #6b7b8d;
+}
+
+/* ================= CHAT ================= */
+
+.chat {
+    flex: 1;
+
+    overflow-y: auto;
+
+    padding: 35px 30px 30px;
+
+    position: relative;
+    z-index: 2;
+
+    scroll-behavior: smooth;
+}
+
+.chat::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat::-webkit-scrollbar-thumb {
+    background: #283441;
+    border-radius: 10px;
+}
+
+.message {
+    margin-bottom: 22px;
+
+    display: flex;
+
+    animation: messageIn .25s ease;
+}
+
+@keyframes messageIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
     }
 
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-    body {
+.message.user {
+    justify-content: flex-end;
+}
 
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+.bubble {
+    max-width: 76%;
 
-      background: #0b0f14;
+    padding: 16px 20px;
 
-      color: white;
+    border-radius: 18px;
 
-      min-height: 100vh;
+    line-height: 1.65;
 
-      display: flex;
+    white-space: pre-wrap;
 
-      justify-content: center;
+    font-size: 17px;
 
-      align-items: center;
+    word-wrap: break-word;
+}
 
+.assistant .bubble {
+    background: rgba(18, 26, 35, .94);
+
+    border: 1px solid rgba(70, 84, 100, .25);
+
+    color: #e4e9ef;
+
+    border-bottom-left-radius: 6px;
+}
+
+.user .bubble {
+    background: linear-gradient(
+        135deg,
+        #244b75,
+        #315f91
+    );
+
+    color: white;
+
+    border-bottom-right-radius: 6px;
+
+    box-shadow: 0 5px 20px rgba(20,70,120,.18);
+}
+
+/* ================= WELCOME ================= */
+
+.welcome {
+    height: 100%;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    position: relative;
+}
+
+.welcome-content {
+    position: relative;
+    z-index: 2;
+}
+
+.welcome h1 {
+    font-size: 65px;
+
+    letter-spacing: 12px;
+
+    margin-bottom: 12px;
+
+    background: linear-gradient(
+        90deg,
+        #ffffff,
+        #8997a7
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.welcome p {
+    color: #8d99a6;
+    font-size: 18px;
+}
+
+/* ================= TYPING ================= */
+
+.typing {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin-bottom: 20px;
+
+    color: #8f9baa;
+
+    font-size: 15px;
+}
+
+.typing span {
+    width: 7px;
+    height: 7px;
+
+    background: #7d8b9a;
+
+    border-radius: 50%;
+
+    animation: typing 1.2s infinite;
+}
+
+.typing span:nth-child(2) {
+    animation-delay: .2s;
+}
+
+.typing span:nth-child(3) {
+    animation-delay: .4s;
+}
+
+@keyframes typing {
+    0%, 60%, 100% {
+        opacity: .3;
+        transform: translateY(0);
     }
 
+    30% {
+        opacity: 1;
+        transform: translateY(-4px);
+    }
+}
 
-    /* ==============================
-       MAIN APP
-    ============================== */
+/* ================= INPUT ================= */
+
+.input-area {
+    min-height: 92px;
+
+    padding: 16px 20px;
+
+    border-top: 1px solid #303b47;
+
+    display: flex;
+
+    gap: 12px;
+
+    position: relative;
+
+    z-index: 5;
+
+    background: rgba(6, 10, 15, .92);
+
+    backdrop-filter: blur(15px);
+}
+
+#messageInput {
+    flex: 1;
+
+    background: #0b1118;
+
+    color: white;
+
+    border: 1px solid #344250;
+
+    border-radius: 14px;
+
+    padding: 15px 17px;
+
+    outline: none;
+
+    font-size: 17px;
+
+    transition: .2s;
+}
+
+#messageInput:focus {
+    border-color: #557da8;
+
+    box-shadow:
+        0 0 0 3px rgba(49,93,145,.12);
+}
+
+#sendButton {
+    border: none;
+
+    border-radius: 14px;
+
+    padding: 0 26px;
+
+    background: linear-gradient(
+        135deg,
+        #315d91,
+        #244d7c
+    );
+
+    color: white;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+#sendButton:hover {
+    transform: translateY(-1px);
+
+    background: linear-gradient(
+        135deg,
+        #3b6fa9,
+        #2d5d91
+    );
+}
+
+#sendButton:disabled {
+    opacity: .5;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 700px) {
 
     .app {
-
-      width: 95%;
-
-      max-width: 900px;
-
-      height: 90vh;
-
-      background: #111820;
-
-      border: 1px solid #26313d;
-
-      border-radius: 20px;
-
-      display: flex;
-
-      flex-direction: column;
-
-      overflow: hidden;
-
-      box-shadow:
-        0 20px 60px rgba(0, 0, 0, .4);
-
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
     }
-
-
-    /* ==============================
-       HEADER
-    ============================== */
 
     header {
-
-      padding: 18px 22px;
-
-      border-bottom:
-        1px solid #26313d;
-
-      display: flex;
-
-      justify-content:
-        space-between;
-
-      align-items: center;
-
-      background: #111820;
-
-      position: relative;
-
-      z-index: 5;
-
+        height: 82px;
+        padding: 0 18px;
     }
 
-
-    .header-left {
-
-      display: flex;
-
-      align-items: center;
-
-      gap: 12px;
-
+    .logo-text {
+        font-size: 28px;
+        letter-spacing: 5px;
     }
-
-
-    .logo {
-
-      font-size: 28px;
-
-      font-weight: bold;
-
-      letter-spacing: 3px;
-
-    }
-
 
     .status {
-
-      font-size: 13px;
-
-      color: #55d68a;
-
+        font-size: 13px;
     }
-
-
-    /* ==============================
-       NEW CHAT BUTTON
-    ============================== */
 
     #newChatButton {
-
-      border: 1px solid #344250;
-
-      background: #18222d;
-
-      color: #cbd5df;
-
-      border-radius: 9px;
-
-      padding: 8px 12px;
-
-      cursor: pointer;
-
-      font-size: 13px;
-
-      transition: .2s;
-
+        padding: 10px 12px;
+        font-size: 13px;
     }
-
-
-    #newChatButton:hover {
-
-      background: #263646;
-
-      color: white;
-
-    }
-
-
-    /* ==============================
-       CHAT AREA
-    ============================== */
 
     .chat {
-
-      position: relative;
-
-      flex: 1;
-
-      overflow-y: auto;
-
-      padding: 25px;
-
-      background: transparent;
-
+        padding: 25px 16px;
     }
-
-
-    /* ==============================
-       PDF STYLE WATERMARK
-    ============================== */
-
-    .chat::before {
-
-      content: "";
-
-      position: absolute;
-
-      left: 50%;
-
-      top: 50%;
-
-      transform:
-        translate(-50%, -50%);
-
-      width: 380px;
-
-      height: 380px;
-
-      background-image:
-        url("./logo.png");
-
-      background-repeat:
-        no-repeat;
-
-      background-position:
-        center;
-
-      background-size:
-        contain;
-
-      /*
-        Watermark brightness.
-
-        0.04 = very faint
-        0.07 = recommended
-        0.10 = more visible
-      */
-
-      opacity: 0.07;
-
-      pointer-events: none;
-
-      z-index: 0;
-
-    }
-
-
-    /* ==============================
-       CHAT CONTENT ABOVE WATERMARK
-    ============================== */
-
-    .chat > * {
-
-      position: relative;
-
-      z-index: 1;
-
-    }
-
-
-    /* ==============================
-       MESSAGES
-    ============================== */
-
-    .message {
-
-      margin-bottom: 18px;
-
-      display: flex;
-
-      animation:
-        messageAppear .2s ease;
-
-    }
-
-
-    @keyframes messageAppear {
-
-      from {
-
-        opacity: 0;
-
-        transform:
-          translateY(5px);
-
-      }
-
-      to {
-
-        opacity: 1;
-
-        transform:
-          translateY(0);
-
-      }
-
-    }
-
-
-    .message.user {
-
-      justify-content:
-        flex-end;
-
-    }
-
 
     .bubble {
-
-      max-width: 75%;
-
-      padding: 13px 17px;
-
-      border-radius: 15px;
-
-      line-height: 1.5;
-
-      white-space: pre-wrap;
-
-      backdrop-filter:
-        blur(2px);
-
-      word-wrap: break-word;
-
+        max-width: 90%;
+        font-size: 16px;
     }
-
-
-    /* ASTRA */
-
-    .assistant .bubble {
-
-      background:
-        rgba(27, 37, 48, .94);
-
-    }
-
-
-    /* USER */
-
-    .user .bubble {
-
-      background:
-        rgba(49, 93, 145, .94);
-
-    }
-
-
-    /* ==============================
-       WELCOME
-    ============================== */
-
-    .welcome {
-
-      text-align: center;
-
-      margin-top: 25%;
-
-      color: #9ba7b4;
-
-    }
-
 
     .welcome h1 {
-
-      color: white;
-
-      font-size: 42px;
-
-      margin-bottom: 10px;
-
-      letter-spacing: 2px;
-
+        font-size: 45px;
     }
-
-
-    .welcome p {
-
-      font-size: 15px;
-
-    }
-
-
-    /* ==============================
-       INPUT AREA
-    ============================== */
 
     .input-area {
-
-      padding: 18px;
-
-      border-top:
-        1px solid #26313d;
-
-      display: flex;
-
-      gap: 10px;
-
-      background: #111820;
-
-      position: relative;
-
-      z-index: 5;
-
+        padding: 12px;
     }
-
-
-    /* INPUT */
-
-    #messageInput {
-
-      flex: 1;
-
-      background: #0b1016;
-
-      color: white;
-
-      border:
-        1px solid #344250;
-
-      border-radius: 12px;
-
-      padding: 14px;
-
-      outline: none;
-
-      font-size: 16px;
-
-    }
-
-
-    #messageInput:focus {
-
-      border-color:
-        #557da8;
-
-    }
-
-
-    /* SEND BUTTON */
 
     #sendButton {
-
-      border: none;
-
-      border-radius: 12px;
-
-      padding: 0 22px;
-
-      background: #315d91;
-
-      color: white;
-
-      font-size: 16px;
-
-      cursor: pointer;
-
-      transition:
-        background .2s ease;
-
+        padding: 0 18px;
     }
-
-
-    #sendButton:hover {
-
-      background: #3b6fa9;
-
-    }
-
-
-    #sendButton:disabled {
-
-      opacity: .5;
-
-      cursor:
-        not-allowed;
-
-    }
-
-
-    /* ==============================
-       TYPING
-    ============================== */
-
-    .typing {
-
-      color: #9ba7b4;
-
-      font-style: italic;
-
-      margin-bottom: 15px;
-
-      animation:
-        pulse 1.2s infinite;
-
-    }
-
-
-    @keyframes pulse {
-
-      0% {
-        opacity: .4;
-      }
-
-      50% {
-        opacity: 1;
-      }
-
-      100% {
-        opacity: .4;
-      }
-
-    }
-
-
-    /* ==============================
-       SCROLLBAR
-    ============================== */
-
-    .chat::-webkit-scrollbar {
-
-      width: 8px;
-
-    }
-
-
-    .chat::-webkit-scrollbar-track {
-
-      background:
-        transparent;
-
-    }
-
-
-    .chat::-webkit-scrollbar-thumb {
-
-      background: #344250;
-
-      border-radius: 10px;
-
-    }
-
-
-    .chat::-webkit-scrollbar-thumb:hover {
-
-      background: #46586a;
-
-    }
-
-
-    /* ==============================
-       MOBILE
-    ============================== */
-
-    @media (max-width: 600px) {
-
-      .app {
-
-        width: 100%;
-
-        height: 100vh;
-
-        border-radius: 0;
-
-      }
-
-
-      header {
-
-        padding:
-          15px;
-
-      }
-
-
-      .bubble {
-
-        max-width: 88%;
-
-      }
-
-
-      .welcome h1 {
-
-        font-size: 34px;
-
-      }
-
-
-      .chat::before {
-
-        width: 280px;
-
-        height: 280px;
-
-      }
-
-
-      #sendButton {
-
-        padding:
-          0 16px;
-
-      }
-
-
-      #newChatButton {
-
-        padding:
-          7px 9px;
-
-      }
-
-    }
-
-  </style>
-
+}
+</style>
 </head>
-
 
 <body>
 
+<div class="app">
 
-  <div class="app">
-
-
-    <!-- ==============================
-         HEADER
-    ============================== -->
+    <!-- HEADER -->
 
     <header>
 
-      <div class="header-left">
+        <div class="logo-area">
 
-        <div class="logo">
-          ASTRA
+            <div class="logo-text">
+                ASTRA
+            </div>
+
+            <div class="status">
+                <span class="status-dot"></span>
+                <span id="statusText">Checking...</span>
+            </div>
+
         </div>
 
-        <div
-          class="status"
-          id="status"
-        >
-          ● Checking...
-        </div>
-
-      </div>
-
-
-      <button
-        id="newChatButton"
-        title="Start a new conversation"
-      >
-        + New Chat
-      </button>
+        <button id="newChatButton">
+            + New Chat
+        </button>
 
     </header>
 
 
-    <!-- ==============================
-         CHAT
-    ============================== -->
+    <!-- CHAT -->
 
-    <div
-      class="chat"
-      id="chat"
-    >
+    <div class="chat" id="chat">
 
-      <div
-        class="welcome"
-        id="welcome"
-      >
+        <div class="welcome" id="welcome">
 
-        <h1>
-          ASTRA
-        </h1>
+            <div class="welcome-content">
 
-        <p>
-          Your AI assistant
-        </p>
+                <h1>ASTRA</h1>
 
-      </div>
+                <p>
+                    Your intelligent AI assistant
+                </p>
+
+            </div>
+
+        </div>
 
     </div>
 
 
-    <!-- ==============================
-         INPUT
-    ============================== -->
+    <!-- INPUT -->
 
     <div class="input-area">
 
-      <input
-        id="messageInput"
-        type="text"
-        placeholder="Message ASTRA..."
-        autocomplete="off"
-      >
+        <input
+            id="messageInput"
+            type="text"
+            placeholder="Message ASTRA..."
+            autocomplete="off"
+        >
 
-
-      <button
-        id="sendButton"
-      >
-        Send
-      </button>
+        <button id="sendButton">
+            Send
+        </button>
 
     </div>
 
-  </div>
+</div>
 
 
-  <script>
+<script>
+
+/* =========================================================
+   ASTRA BACKEND
+========================================================= */
+
+const API_BASE =
+    "https://astra-backend-2hac.onrender.com";
 
 
-    /* =================================================
-       YOUR LIVE BACKEND
-    ================================================= */
+/* =========================================================
+   ELEMENTS
+========================================================= */
 
-    const API_BASE =
-      "https://astra-backend-2hac.onrender.com";
+const chat =
+    document.getElementById("chat");
 
+const input =
+    document.getElementById("messageInput");
 
-    /* =================================================
-       ELEMENTS
-    ================================================= */
+const sendButton =
+    document.getElementById("sendButton");
 
-    const chat =
-      document.getElementById("chat");
+const newChatButton =
+    document.getElementById("newChatButton");
 
+const statusText =
+    document.getElementById("statusText");
 
-    const input =
-      document.getElementById("messageInput");
-
-
-    const sendButton =
-      document.getElementById("sendButton");
-
-
-    const status =
-      document.getElementById("status");
+const welcome =
+    document.getElementById("welcome");
 
 
-    const welcome =
-      document.getElementById("welcome");
+/* =========================================================
+   CHAT HISTORY
+========================================================= */
+
+/*
+   This is the important part.
+
+   ASTRA now saves messages inside the browser.
+
+   When you refresh the website,
+   the previous messages are loaded again.
+*/
+
+let chatHistory =
+    JSON.parse(
+        localStorage.getItem("astra_chat_history")
+    ) || [];
 
 
-    const newChatButton =
-      document.getElementById("newChatButton");
+/* =========================================================
+   SAVE HISTORY
+========================================================= */
+
+function saveHistory() {
+
+    localStorage.setItem(
+        "astra_chat_history",
+        JSON.stringify(chatHistory)
+    );
+
+}
 
 
-    /* =================================================
-       LOAD CHAT HISTORY
-       
-       History is stored in the browser.
-       It survives page refresh.
-    ================================================= */
+/* =========================================================
+   ADD MESSAGE
+========================================================= */
 
-    let chatHistory = [];
+function addMessage(
+    text,
+    type,
+    save = true
+) {
 
-    try {
-
-      chatHistory =
-        JSON.parse(
-          localStorage.getItem(
-            "astra_history"
-          ) || "[]"
-        );
-
-      if (!Array.isArray(chatHistory)) {
-
-        chatHistory = [];
-
-      }
-
-    } catch (error) {
-
-      console.log(
-        "Could not load history."
-      );
-
-      chatHistory = [];
-
+    if (welcome) {
+        welcome.style.display = "none";
     }
 
 
-    /* =================================================
-       LIMIT HISTORY
-       
-       Only last 8 messages are sent to backend.
-       This helps keep ASTRA fast.
-    ================================================= */
+    const message =
+        document.createElement("div");
 
-    function limitHistory() {
-
-      if (chatHistory.length > 8) {
-
-        chatHistory =
-          chatHistory.slice(-8);
-
-      }
-
-    }
-
-
-    /* =================================================
-       SAVE HISTORY
-    ================================================= */
-
-    function saveHistory() {
-
-      limitHistory();
-
-      localStorage.setItem(
-        "astra_history",
-        JSON.stringify(
-          chatHistory
-        )
-      );
-
-    }
-
-
-    /* =================================================
-       RESTORE OLD CHAT ON PAGE LOAD
-    ================================================= */
-
-    function restoreHistory() {
-
-      if (
-        !chatHistory ||
-        chatHistory.length === 0
-      ) {
-
-        return;
-
-      }
-
-
-      if (welcome) {
-
-        welcome.style.display =
-          "none";
-
-      }
-
-
-      chatHistory.forEach(
-        function(item) {
-
-          if (
-            !item ||
-            !item.content
-          ) {
-
-            return;
-
-          }
-
-
-          addMessage(
-            item.content,
-            item.role === "user"
-              ? "user"
-              : "assistant",
-            false
-          );
-
-        }
-      );
-
-
-      chat.scrollTop =
-        chat.scrollHeight;
-
-    }
-
-
-    /* =================================================
-       CHECK BACKEND
-    ================================================= */
-
-    async function checkBackend() {
-
-      try {
-
-        const response =
-          await fetch(
-            API_BASE +
-            "/health"
-          );
-
-
-        if (response.ok) {
-
-          status.textContent =
-            "● Online";
-
-          status.style.color =
-            "#55d68a";
-
-        } else {
-
-          throw new Error(
-            "Backend unavailable"
-          );
-
-        }
-
-
-      } catch (error) {
-
-        status.textContent =
-          "● Offline";
-
-        status.style.color =
-          "#ff6464";
-
-      }
-
-    }
-
-
-    /* =================================================
-       ADD MESSAGE
-    ================================================= */
-
-    function addMessage(
-      text,
-      type,
-      scroll = true
-    ) {
-
-      if (welcome) {
-
-        welcome.style.display =
-          "none";
-
-      }
-
-
-      const message =
-        document.createElement(
-          "div"
-        );
-
-
-      message.className =
+    message.className =
         "message " + type;
 
 
-      const bubble =
-        document.createElement(
-          "div"
-        );
+    const bubble =
+        document.createElement("div");
 
-
-      bubble.className =
+    bubble.className =
         "bubble";
 
-
-      bubble.textContent =
+    bubble.textContent =
         text;
 
 
-      message.appendChild(
-        bubble
-      );
+    message.appendChild(bubble);
 
+    chat.appendChild(message);
 
-      chat.appendChild(
-        message
-      );
 
-
-      if (scroll) {
-
-        chat.scrollTop =
-          chat.scrollHeight;
-
-      }
-
-    }
-
-
-    /* =================================================
-       NEW CHAT
-    ================================================= */
-
-    function startNewChat() {
-
-      const confirmed =
-        confirm(
-          "Start a new chat?\n\nYour current conversation will be cleared from this browser."
-        );
-
-
-      if (!confirmed) {
-
-        return;
-
-      }
-
-
-      chatHistory = [];
-
-
-      localStorage.removeItem(
-        "astra_history"
-      );
-
-
-      /*
-        Remove old messages.
-        Keep welcome screen.
-      */
-
-      chat.innerHTML = "";
-
-
-      const newWelcome =
-        document.createElement(
-          "div"
-        );
-
-
-      newWelcome.className =
-        "welcome";
-
-
-      newWelcome.id =
-        "welcome";
-
-
-      newWelcome.innerHTML =
-        `
-          <h1>ASTRA</h1>
-          <p>Your AI assistant</p>
-        `;
-
-
-      chat.appendChild(
-        newWelcome
-      );
-
-
-      input.focus();
-
-    }
-
-
-    newChatButton.addEventListener(
-      "click",
-      startNewChat
-    );
-
-
-    /* =================================================
-       SEND MESSAGE
-    ================================================= */
-
-    async function sendMessage() {
-
-      const message =
-        input.value.trim();
-
-
-      if (!message) {
-
-        return;
-
-      }
-
-
-      /*
-        Save a copy of the previous history.
-
-        IMPORTANT:
-        We send previous messages to backend,
-        not the current question twice.
-      */
-
-      const previousHistory =
-        [...chatHistory];
-
-
-      /* ---------------------------------------------
-         SHOW USER MESSAGE
-      --------------------------------------------- */
-
-      addMessage(
-        message,
-        "user"
-      );
-
-
-      input.value = "";
-
-
-      sendButton.disabled =
-        true;
-
-
-      input.disabled =
-        true;
-
-
-      /* ---------------------------------------------
-         TYPING INDICATOR
-      --------------------------------------------- */
-
-      const typing =
-        document.createElement(
-          "div"
-        );
-
-
-      typing.className =
-        "typing";
-
-
-      typing.textContent =
-        "ASTRA is thinking...";
-
-
-      chat.appendChild(
-        typing
-      );
-
-
-      chat.scrollTop =
+    chat.scrollTop =
         chat.scrollHeight;
 
 
-      try {
+    /*
+       Save message to history
+    */
 
-
-        /* ============================================
-           SEND MESSAGE + HISTORY TO BACKEND
-        ============================================ */
-
-        const response =
-          await fetch(
-            API_BASE +
-            "/api/chat",
-            {
-
-              method: "POST",
-
-              headers: {
-
-                "Content-Type":
-                  "application/json"
-
-              },
-
-              body:
-                JSON.stringify({
-
-                  message:
-                    message,
-
-                  history:
-                    previousHistory
-
-                })
-
-            }
-          );
-
-
-        /* ---------------------------------------------
-           READ RESPONSE
-        --------------------------------------------- */
-
-        const data =
-          await response.json();
-
-
-        /* ---------------------------------------------
-           REMOVE TYPING
-        --------------------------------------------- */
-
-        typing.remove();
-
-
-        /* ---------------------------------------------
-           CHECK ERROR
-        --------------------------------------------- */
-
-        if (!response.ok) {
-
-          throw new Error(
-            data.detail ||
-            "Request failed"
-          );
-
-        }
-
-
-        /* ---------------------------------------------
-           GET ASTRA REPLY
-        --------------------------------------------- */
-
-        const reply =
-          data.reply ||
-          "ASTRA did not return a response.";
-
-
-        /* ---------------------------------------------
-           SHOW ASTRA RESPONSE
-        --------------------------------------------- */
-
-        addMessage(
-          reply,
-          "assistant"
-        );
-
-
-        /* ============================================
-           SAVE BOTH MESSAGES TO HISTORY
-        ============================================ */
+    if (save) {
 
         chatHistory.push({
+            role:
+                type === "user"
+                    ? "user"
+                    : "assistant",
 
-          role:
-            "user",
+            text: text,
 
-          content:
-            message
-
+            time:
+                new Date().toISOString()
         });
 
-
-        chatHistory.push({
-
-          role:
-            "assistant",
-
-          content:
-            reply
-
-        });
-
-
-        /*
-          Keep only latest 8 messages.
-        */
-
-        limitHistory();
-
-
-        /*
-          Save to browser.
-        */
 
         saveHistory();
+    }
+
+}
 
 
-      } catch (error) {
+/* =========================================================
+   LOAD CHAT HISTORY
+========================================================= */
+
+function loadHistory() {
+
+    if (!chatHistory.length) {
+        return;
+    }
 
 
-        /* ---------------------------------------------
-           REMOVE TYPING
-        --------------------------------------------- */
+    if (welcome) {
+        welcome.style.display = "none";
+    }
 
-        if (
-          typing &&
-          typing.parentNode
-        ) {
 
-          typing.remove();
+    for (
+        const message of chatHistory
+    ) {
 
+        addMessage(
+            message.text,
+            message.role === "user"
+                ? "user"
+                : "assistant",
+            false
+        );
+
+    }
+
+
+    chat.scrollTop =
+        chat.scrollHeight;
+
+}
+
+
+/* =========================================================
+   NEW CHAT
+========================================================= */
+
+newChatButton.addEventListener(
+    "click",
+    function () {
+
+        const confirmNew =
+            confirm(
+                "Start a new chat?\n\nYour current chat history will be cleared."
+            );
+
+
+        if (!confirmNew) {
+            return;
         }
 
 
-        /* ---------------------------------------------
-           SHOW ERROR
-        --------------------------------------------- */
+        chatHistory = [];
 
-        addMessage(
 
-          "Sorry, I couldn't connect to ASTRA right now.\n\nError: " +
-          error.message,
-
-          "assistant"
-
+        localStorage.removeItem(
+            "astra_chat_history"
         );
 
-      } finally {
+
+        /*
+           Remove all messages
+        */
+
+        chat.querySelectorAll(
+            ".message, .typing"
+        ).forEach(
+            element => element.remove()
+        );
 
 
-        /* ---------------------------------------------
-           ENABLE CONTROLS
-        --------------------------------------------- */
+        /*
+           Show welcome screen
+        */
 
-        sendButton.disabled =
-          false;
-
-
-        input.disabled =
-          false;
+        if (welcome) {
+            welcome.style.display = "flex";
+        }
 
 
         input.focus();
 
-      }
+    }
+);
+
+
+/* =========================================================
+   CHECK BACKEND
+========================================================= */
+
+async function checkBackend() {
+
+    try {
+
+        const response =
+            await fetch(
+                API_BASE + "/health"
+            );
+
+
+        if (!response.ok) {
+            throw new Error(
+                "Backend unavailable"
+            );
+        }
+
+
+        statusText.textContent =
+            "Online";
 
     }
 
+    catch (error) {
 
-    /* =================================================
-       SEND BUTTON
-    ================================================= */
+        statusText.textContent =
+            "Offline";
 
-    sendButton.addEventListener(
-      "click",
-      sendMessage
+    }
+
+}
+
+
+/* =========================================================
+   TYPING INDICATOR
+========================================================= */
+
+function createTyping() {
+
+    const typing =
+        document.createElement("div");
+
+    typing.className =
+        "typing";
+
+
+    typing.innerHTML = `
+        <span></span>
+        <span></span>
+        <span></span>
+        <span>ASTRA is thinking...</span>
+    `;
+
+
+    chat.appendChild(typing);
+
+    chat.scrollTop =
+        chat.scrollHeight;
+
+
+    return typing;
+
+}
+
+
+/* =========================================================
+   SEND MESSAGE
+========================================================= */
+
+async function sendMessage() {
+
+    const message =
+        input.value.trim();
+
+
+    if (!message) {
+        return;
+    }
+
+
+    /*
+       Show user's message
+    */
+
+    addMessage(
+        message,
+        "user"
     );
 
 
-    /* =================================================
-       ENTER KEY
-    ================================================= */
+    input.value = "";
 
-    input.addEventListener(
-      "keydown",
-      function(event) {
+    sendButton.disabled = true;
+    input.disabled = true;
 
-        if (
-          event.key === "Enter"
-        ) {
 
-          event.preventDefault();
+    const typing =
+        createTyping();
 
-          sendMessage();
+
+    try {
+
+        const response =
+            await fetch(
+                API_BASE + "/api/chat",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            message:
+                                message
+                        })
+                }
+            );
+
+
+        let data;
+
+        try {
+
+            data =
+                await response.json();
 
         }
 
-      }
-    );
+        catch {
+
+            throw new Error(
+                "Invalid response from ASTRA server"
+            );
+
+        }
 
 
-    /* =================================================
-       START
-    ================================================= */
-
-    restoreHistory();
-
-    checkBackend();
-
-    input.focus();
+        typing.remove();
 
 
-  </script>
+        if (!response.ok) {
 
+            throw new Error(
+                data.detail ||
+                "Request failed"
+            );
+
+        }
+
+
+        const answer =
+            data.reply ||
+            "ASTRA did not return a response.";
+
+
+        /*
+           Add answer and save it
+        */
+
+        addMessage(
+            answer,
+            "assistant"
+        );
+
+
+    }
+
+    catch (error) {
+
+        typing.remove();
+
+
+        addMessage(
+            "Sorry, I couldn't connect to ASTRA right now.\n\nError: " +
+            error.message,
+            "assistant"
+        );
+
+    }
+
+    finally {
+
+        sendButton.disabled = false;
+
+        input.disabled = false;
+
+        input.focus();
+
+    }
+
+}
+
+
+/* =========================================================
+   SEND BUTTON
+========================================================= */
+
+sendButton.addEventListener(
+    "click",
+    sendMessage
+);
+
+
+/* =========================================================
+   ENTER KEY
+========================================================= */
+
+input.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            sendMessage();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   START ASTRA
+========================================================= */
+
+loadHistory();
+
+checkBackend();
+
+input.focus();
+
+</script>
 
 </body>
-
 </html>
