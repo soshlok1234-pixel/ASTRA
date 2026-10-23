@@ -1010,259 +1010,163 @@ header {
 
 
 <script>
-
 /* =========================================================
    ASTRA BACKEND
 ========================================================= */
-
-const API_BASE =
-    "https://astra-backend-2hac.onrender.com";
-
+const API_BASE = "https://astra-backend-2hac.onrender.com";
 
 /* =========================================================
    ELEMENTS
 ========================================================= */
-
-const chat =
-    document.getElementById("chat");
-
-const input =
-    document.getElementById("messageInput");
-
-const sendButton =
-    document.getElementById("sendButton");
-
-const newChatButton =
-    document.getElementById("newChatButton");
-
-const statusText =
-    document.getElementById("statusText");
-
-const welcome =
-    document.getElementById("welcome");
-
+const chat = document.getElementById("chat");
+const input = document.getElementById("messageInput");
+const sendButton = document.getElementById("sendButton");
+const newChatButton = document.getElementById("newChatButton");
+const statusText = document.getElementById("statusText");
+const welcome = document.getElementById("welcome");
 
 /* =========================================================
-   LOCAL CHAT HISTORY
+   CONVERSATION ID
+   One browser keeps one current conversation.
+   The actual messages are stored in PostgreSQL.
 ========================================================= */
+function createConversationId() {
+    if (window.crypto && crypto.randomUUID) {
+        return crypto.randomUUID();
+    }
 
-let chatHistory =
-    JSON.parse(
-        localStorage.getItem(
-            "astra_chat_history"
-        )
-    ) || [];
-
-
-/* =========================================================
-   SAVE HISTORY
-========================================================= */
-
-function saveHistory() {
-
-    localStorage.setItem(
-        "astra_chat_history",
-        JSON.stringify(chatHistory)
-    );
-
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === "x" ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
 }
 
+let conversationId = localStorage.getItem("astra_conversation_id");
+
+if (!conversationId) {
+    conversationId = createConversationId();
+    localStorage.setItem("astra_conversation_id", conversationId);
+}
 
 /* =========================================================
-   ADD MESSAGE
+   ADD MESSAGE TO SCREEN
 ========================================================= */
-
-function addMessage(
-    text,
-    type,
-    save = true
-) {
-
+function addMessage(text, type) {
     if (welcome) {
         welcome.style.display = "none";
     }
 
+    const message = document.createElement("div");
+    message.className = "message " + type;
 
-    const message =
-        document.createElement("div");
-
-    message.className =
-        "message " + type;
-
-
-    const bubble =
-        document.createElement("div");
-
-    bubble.className =
-        "bubble";
-
-    bubble.textContent =
-        text;
-
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.textContent = text;
 
     message.appendChild(bubble);
-
     chat.appendChild(message);
 
-
-    chat.scrollTop =
-        chat.scrollHeight;
-
-
-    if (save) {
-
-        chatHistory.push({
-
-            role:
-                type === "user"
-                    ? "user"
-                    : "assistant",
-
-            text: text,
-
-            time:
-                new Date().toISOString()
-
-        });
-
-
-        saveHistory();
-    }
-
+    chat.scrollTop = chat.scrollHeight;
 }
 
-
 /* =========================================================
-   LOAD HISTORY
+   CLEAR SCREEN ONLY
+   Does NOT delete old database history.
 ========================================================= */
-
-function loadHistory() {
-
-    if (!chatHistory.length) {
-        return;
-    }
-
+function clearChatScreen() {
+    chat.querySelectorAll(".message, .typing").forEach(function(element) {
+        element.remove();
+    });
 
     if (welcome) {
-        welcome.style.display = "none";
+        welcome.style.display = "flex";
     }
-
-
-    chatHistory.forEach(
-        message => {
-
-            addMessage(
-                message.text,
-
-                message.role === "user"
-                    ? "user"
-                    : "assistant",
-
-                false
-            );
-
-        }
-    );
-
-
-    chat.scrollTop =
-        chat.scrollHeight;
-
 }
 
-
 /* =========================================================
-   NEW CHAT
+   LOAD CURRENT CONVERSATION FROM POSTGRESQL
 ========================================================= */
+async function loadHistory() {
+    try {
+        const response = await fetch(
+            API_BASE + "/api/history?conversation_id=" + encodeURIComponent(conversationId)
+        );
 
-newChatButton.addEventListener(
-    "click",
-    function() {
+        if (!response.ok) {
+            throw new Error("History request failed");
+        }
 
-        const confirmation =
-            confirm(
-                "Start a new chat?\n\nThis will clear the current conversation from this browser."
-            );
+        const data = await response.json();
+        const messages = Array.isArray(data.messages) ? data.messages : [];
 
-
-        if (!confirmation) {
+        if (!messages.length) {
             return;
         }
 
-
-        chatHistory = [];
-
-
-        localStorage.removeItem(
-            "astra_chat_history"
-        );
-
-
-        chat.querySelectorAll(
-            ".message, .typing"
-        ).forEach(
-            element =>
-                element.remove()
-        );
-
-
         if (welcome) {
-            welcome.style.display = "flex";
+            welcome.style.display = "none";
         }
 
+        messages.forEach(function(message) {
+            addMessage(
+                message.content,
+                message.role === "user" ? "user" : "assistant"
+            );
+        });
 
-        input.focus();
-
+        chat.scrollTop = chat.scrollHeight;
     }
-);
+    catch (error) {
+        console.log("History could not be loaded:", error.message);
+        // The chat can still work if the history endpoint is temporarily unavailable.
+    }
+}
 
+/* =========================================================
+   NEW CHAT
+   Creates a new conversation but keeps the old one in PostgreSQL.
+========================================================= */
+newChatButton.addEventListener("click", function() {
+    const confirmation = confirm(
+        "Start a new chat?\n\nYour previous conversation will remain saved in ASTRA's database."
+    );
+
+    if (!confirmation) {
+        return;
+    }
+
+    conversationId = createConversationId();
+    localStorage.setItem("astra_conversation_id", conversationId);
+
+    clearChatScreen();
+    input.focus();
+});
 
 /* =========================================================
    BACKEND STATUS
 ========================================================= */
-
 async function checkBackend() {
-
     try {
-
-        const response =
-            await fetch(
-                API_BASE + "/health"
-            );
-
+        const response = await fetch(API_BASE + "/health");
 
         if (!response.ok) {
             throw new Error();
         }
 
-
-        statusText.textContent =
-            "SYSTEM ONLINE";
-
+        statusText.textContent = "SYSTEM ONLINE";
     }
-
     catch {
-
-        statusText.textContent =
-            "SYSTEM OFFLINE";
-
+        statusText.textContent = "SYSTEM OFFLINE";
     }
-
 }
 
-
 /* =========================================================
-   TYPING
+   TYPING INDICATOR
 ========================================================= */
-
 function createTyping() {
-
-    const typing =
-        document.createElement("div");
-
-    typing.className =
-        "typing";
-
+    const typing = document.createElement("div");
+    typing.className = "typing";
 
     typing.innerHTML = `
         <span class="dot"></span>
@@ -1271,188 +1175,104 @@ function createTyping() {
         <span>ASTRA is processing...</span>
     `;
 
-
     chat.appendChild(typing);
-
-
-    chat.scrollTop =
-        chat.scrollHeight;
-
+    chat.scrollTop = chat.scrollHeight;
 
     return typing;
-
 }
-
 
 /* =========================================================
    SEND MESSAGE
 ========================================================= */
-
 async function sendMessage() {
-
-    const message =
-        input.value.trim();
-
+    const message = input.value.trim();
 
     if (!message) {
         return;
     }
 
-
-    addMessage(
-        message,
-        "user"
-    );
-
+    addMessage(message, "user");
 
     input.value = "";
-
     sendButton.disabled = true;
-
     input.disabled = true;
 
-
-    const typing =
-        createTyping();
-
+    const typing = createTyping();
 
     try {
-
-        const response =
-            await fetch(
-                API_BASE + "/api/chat",
-                {
-
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:
-                        JSON.stringify({
-                            message:
-                                message
-                        })
-
-                }
-            );
-
+        const response = await fetch(
+            API_BASE + "/api/chat",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: message,
+                    conversation_id: conversationId
+                })
+            }
+        );
 
         let data;
 
-
         try {
-
-            data =
-                await response.json();
-
+            data = await response.json();
         }
-
         catch {
-
-            throw new Error(
-                "Invalid response from ASTRA server"
-            );
-
+            throw new Error("Invalid response from ASTRA server");
         }
-
 
         typing.remove();
 
-
         if (!response.ok) {
-
             throw new Error(
-                data.detail ||
-                "ASTRA request failed"
+                data.detail || "ASTRA request failed"
             );
-
         }
-
 
         const answer =
             data.reply ||
             "ASTRA did not return a response.";
 
-
-        addMessage(
-            answer,
-            "assistant"
-        );
-
-
+        addMessage(answer, "assistant");
     }
-
     catch (error) {
-
         typing.remove();
 
-
         addMessage(
-            "Connection error.\n\n" +
-            error.message,
+            "Connection error.\n\n" + error.message,
             "assistant"
         );
-
     }
-
     finally {
-
         sendButton.disabled = false;
-
         input.disabled = false;
-
         input.focus();
-
     }
-
 }
-
 
 /* =========================================================
    BUTTON
 ========================================================= */
-
-sendButton.addEventListener(
-    "click",
-    sendMessage
-);
-
+sendButton.addEventListener("click", sendMessage);
 
 /* =========================================================
    ENTER
 ========================================================= */
-
-input.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key === "Enter"
-        ) {
-
-            event.preventDefault();
-
-            sendMessage();
-
-        }
-
+input.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        sendMessage();
     }
-);
-
+});
 
 /* =========================================================
    START
 ========================================================= */
-
 loadHistory();
-
 checkBackend();
-
 input.focus();
-
 </script>
 
 </body>
