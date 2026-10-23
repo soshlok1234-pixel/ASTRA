@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>ASTRA | OCA NDA AI</title>
 
 <style>
+
 /* =========================================================
    OCA ASTRA — NDA DEFENCE ACADEMY THEME
 ========================================================= */
@@ -18,6 +20,7 @@
 }
 
 :root {
+
     --bg: #080b08;
     --panel: #0d120e;
     --panel2: #111811;
@@ -38,7 +41,13 @@
     --green: #54c477;
 }
 
+
+/* =========================================================
+   BODY
+========================================================= */
+
 body {
+
     font-family:
         Inter,
         Arial,
@@ -58,16 +67,21 @@ body {
     min-height: 100vh;
 
     display: flex;
+
     justify-content: center;
+
     align-items: center;
 }
+
 
 /* =========================================================
    MAIN APP
 ========================================================= */
 
 .app {
+
     width: 97%;
+
     max-width: 1450px;
 
     height: 94vh;
@@ -86,6 +100,7 @@ body {
     overflow: hidden;
 
     display: flex;
+
     flex-direction: column;
 
     position: relative;
@@ -95,11 +110,13 @@ body {
         inset 0 0 80px rgba(255,255,255,.015);
 }
 
+
 /* =========================================================
-   DECORATIVE MILITARY GRID
+   MILITARY GRID
 ========================================================= */
 
 .app::after {
+
     content: "";
 
     position: absolute;
@@ -126,22 +143,28 @@ body {
     z-index: 0;
 }
 
+
 /* =========================================================
-   OCA LOGO WATERMARK
+   OCA WATERMARK
 ========================================================= */
 
 .watermark {
+
     position: absolute;
 
     width: 520px;
+
     height: 520px;
 
     left: 50%;
+
     top: 53%;
 
-    transform: translate(-50%, -50%);
+    transform:
+        translate(-50%, -50%);
 
-    background-image: url("logo.png");
+    background-image:
+        url("logo.png");
 
     background-size: contain;
 
@@ -160,11 +183,13 @@ body {
     z-index: 1;
 }
 
+
 /* =========================================================
    HEADER
 ========================================================= */
 
 header {
+
     height: 105px;
 
     padding: 0 30px;
@@ -189,9 +214,13 @@ header {
     z-index: 10;
 }
 
-/* LEFT HEADER */
+
+/* =========================================================
+   BRAND
+========================================================= */
 
 .brand {
+
     display: flex;
 
     align-items: center;
@@ -199,8 +228,11 @@ header {
     gap: 18px;
 }
 
+
 .brand-mark {
+
     width: 52px;
+
     height: 52px;
 
     border: 1px solid #70623d;
@@ -232,7 +264,9 @@ header {
         inset 0 0 20px rgba(197,167,91,.06);
 }
 
+
 .brand-text {
+
     display: flex;
 
     flex-direction: column;
@@ -240,7 +274,9 @@ header {
     gap: 3px;
 }
 
+
 .astra {
+
     font-size: 31px;
 
     font-weight: 800;
@@ -250,7 +286,9 @@ header {
     color: #f3f3ef;
 }
 
+
 .subtitle {
+
     font-size: 11px;
 
     letter-spacing: 2.8px;
@@ -260,9 +298,13 @@ header {
     text-transform: uppercase;
 }
 
-/* STATUS */
+
+/* =========================================================
+   HEADER RIGHT
+========================================================= */
 
 .header-right {
+
     display: flex;
 
     align-items: center;
@@ -270,7 +312,9 @@ header {
     gap: 25px;
 }
 
+
 .system-status {
+
     display: flex;
 
     align-items: center;
@@ -284,8 +328,11 @@ header {
     letter-spacing: 1px;
 }
 
+
 .status-dot {
+
     width: 8px;
+
     height: 8px;
 
     border-radius: 50%;
@@ -296,9 +343,13 @@ header {
         0 0 12px rgba(84,196,119,.8);
 }
 
-/* NEW CHAT */
+
+/* =========================================================
+   NEW CHAT
+========================================================= */
 
 #newChatButton {
+
     padding: 12px 19px;
 
     background:
@@ -323,7 +374,9 @@ header {
     transition: .2s;
 }
 
+
 #newChatButton:hover {
+
     border-color: var(--gold);
 
     color: white;
@@ -331,11 +384,13 @@ header {
     background: #222c1f;
 }
 
+
 /* =========================================================
    COMMAND BAR
 ========================================================= */
 
 .command-bar {
+
     height: 44px;
 
     padding: 0 30px;
@@ -355,7 +410,9 @@ header {
     z-index: 8;
 }
 
+
 .command-item {
+
     color: #687064;
 
     font-size: 10px;
@@ -365,11 +422,15 @@ header {
     text-transform: uppercase;
 }
 
+
 .command-item.active {
+
     color: var(--gold);
 }
 
+
 .separator {
+
     height: 15px;
 
     width: 1px;
@@ -377,11 +438,13 @@ header {
     background: #323a30;
 }
 
+
 /* =========================================================
    CHAT
 ========================================================= */
 
 .chat {
+
     flex: 1;
 
     overflow-y: auto;
@@ -395,47 +458,71 @@ header {
     scroll-behavior: smooth;
 }
 
+
 .chat::-webkit-scrollbar {
+
     width: 8px;
 }
 
+
 .chat::-webkit-scrollbar-track {
+
     background: transparent;
 }
 
+
 .chat::-webkit-scrollbar-thumb {
+
     background: #30382f;
 
     border-radius: 10px;
 }
 
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
 .message {
+
     margin-bottom: 24px;
 
     display: flex;
 
-    animation: messageIn .22s ease;
+    animation:
+        messageIn .22s ease;
 }
+
 
 @keyframes messageIn {
 
     from {
+
         opacity: 0;
-        transform: translateY(7px);
+
+        transform:
+            translateY(7px);
     }
 
     to {
+
         opacity: 1;
-        transform: translateY(0);
+
+        transform:
+            translateY(0);
     }
 
 }
 
+
 .message.user {
+
     justify-content: flex-end;
 }
 
+
 .bubble {
+
     max-width: 78%;
 
     padding: 17px 20px;
@@ -453,7 +540,9 @@ header {
     position: relative;
 }
 
+
 .assistant .bubble {
+
     background:
         linear-gradient(
             145deg,
@@ -470,7 +559,9 @@ header {
     border-bottom-left-radius: 4px;
 }
 
+
 .user .bubble {
+
     background:
         linear-gradient(
             145deg,
@@ -485,11 +576,13 @@ header {
     border-bottom-right-radius: 4px;
 }
 
+
 /* =========================================================
-   SMALL MESSAGE LABEL
+   ASTRA LABEL
 ========================================================= */
 
 .message.assistant::before {
+
     content: "ASTRA";
 
     position: absolute;
@@ -505,11 +598,13 @@ header {
     color: #77846b;
 }
 
+
 /* =========================================================
    WELCOME
 ========================================================= */
 
 .welcome {
+
     min-height: 100%;
 
     display: flex;
@@ -521,19 +616,26 @@ header {
     text-align: center;
 }
 
+
 .welcome-content {
+
     position: relative;
 
     z-index: 3;
 }
 
+
 .welcome-emblem {
+
     width: 82px;
+
     height: 82px;
 
-    margin: 0 auto 20px;
+    margin:
+        0 auto 20px;
 
-    border: 1px solid #685a38;
+    border:
+        1px solid #685a38;
 
     border-radius: 50%;
 
@@ -562,7 +664,9 @@ header {
         0 0 35px rgba(197,167,91,.08);
 }
 
+
 .welcome h1 {
+
     font-size: 52px;
 
     letter-spacing: 11px;
@@ -572,7 +676,9 @@ header {
     color: #f1f2ed;
 }
 
+
 .welcome .tagline {
+
     color: var(--gold);
 
     font-size: 12px;
@@ -584,7 +690,9 @@ header {
     margin-bottom: 17px;
 }
 
+
 .welcome p {
+
     color: #788174;
 
     font-size: 15px;
@@ -594,11 +702,13 @@ header {
     line-height: 1.7;
 }
 
+
 /* =========================================================
    TYPING
 ========================================================= */
 
 .typing {
+
     display: flex;
 
     align-items: center;
@@ -612,44 +722,61 @@ header {
     font-size: 13px;
 }
 
+
 .typing span.dot {
+
     width: 6px;
+
     height: 6px;
 
     border-radius: 50%;
 
     background: #82906f;
 
-    animation: typing 1.1s infinite;
+    animation:
+        typing 1.1s infinite;
 }
 
+
 .typing span.dot:nth-child(2) {
+
     animation-delay: .15s;
 }
 
+
 .typing span.dot:nth-child(3) {
+
     animation-delay: .3s;
 }
 
+
 @keyframes typing {
 
-    0%,60%,100% {
+    0%, 60%, 100% {
+
         opacity: .3;
-        transform: translateY(0);
+
+        transform:
+            translateY(0);
     }
 
     30% {
+
         opacity: 1;
-        transform: translateY(-4px);
+
+        transform:
+            translateY(-4px);
     }
 
 }
 
+
 /* =========================================================
-   INPUT AREA
+   INPUT
 ========================================================= */
 
 .input-area {
+
     min-height: 90px;
 
     padding: 15px 20px;
@@ -672,13 +799,17 @@ header {
     z-index: 10;
 }
 
+
 .input-wrap {
+
     flex: 1;
 
     position: relative;
 }
 
+
 #messageInput {
+
     width: 100%;
 
     height: 58px;
@@ -700,18 +831,24 @@ header {
     transition: .2s;
 }
 
+
 #messageInput::placeholder {
+
     color: #697267;
 }
 
+
 #messageInput:focus {
+
     border-color: #687953;
 
     box-shadow:
         0 0 0 3px rgba(104,121,83,.08);
 }
 
+
 #sendButton {
+
     height: 58px;
 
     min-width: 105px;
@@ -738,7 +875,9 @@ header {
     transition: .2s;
 }
 
+
 #sendButton:hover {
+
     background:
         linear-gradient(
             145deg,
@@ -746,16 +885,20 @@ header {
             #6d5a34
         );
 
-    transform: translateY(-1px);
+    transform:
+        translateY(-1px);
 }
 
+
 #sendButton:disabled {
+
     opacity: .5;
 
     cursor: not-allowed;
 
     transform: none;
 }
+
 
 /* =========================================================
    MOBILE
@@ -764,48 +907,65 @@ header {
 @media(max-width: 750px) {
 
     .app {
+
         width: 100%;
+
         height: 100vh;
 
         border-radius: 0;
     }
 
+
     header {
+
         height: 82px;
 
         padding: 0 16px;
     }
 
+
     .brand-mark {
+
         width: 42px;
+
         height: 42px;
 
         font-size: 15px;
     }
 
+
     .astra {
+
         font-size: 25px;
 
         letter-spacing: 5px;
     }
 
+
     .subtitle {
+
         font-size: 8px;
 
         letter-spacing: 1.8px;
     }
 
+
     .system-status {
+
         display: none;
     }
 
+
     #newChatButton {
+
         padding: 10px 12px;
 
         font-size: 12px;
     }
 
+
     .command-bar {
+
         padding: 0 15px;
 
         gap: 12px;
@@ -813,61 +973,90 @@ header {
         overflow: hidden;
     }
 
+
     .command-item {
+
         font-size: 8px;
 
         white-space: nowrap;
     }
 
+
     .chat {
+
         padding: 28px 15px;
     }
 
+
     .bubble {
+
         max-width: 90%;
 
         font-size: 15px;
     }
 
+
     .welcome h1 {
+
         font-size: 40px;
 
         letter-spacing: 7px;
     }
 
+
     .watermark {
+
         width: 350px;
+
         height: 350px;
     }
 
+
     .input-area {
+
         padding: 11px;
     }
 
+
     #messageInput {
+
         height: 53px;
 
         font-size: 15px;
     }
 
+
     #sendButton {
+
         height: 53px;
 
         min-width: 72px;
     }
+
 }
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="app">
 
-    <!-- OCA WATERMARK -->
+
+    <!-- =====================================================
+         OCA WATERMARK
+    ====================================================== -->
+
     <div class="watermark"></div>
 
 
-    <!-- HEADER -->
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
     <header>
 
         <div class="brand">
@@ -876,11 +1065,13 @@ header {
                 OCA
             </div>
 
+
             <div class="brand-text">
 
                 <div class="astra">
                     ASTRA
                 </div>
+
 
                 <div class="subtitle">
                     OCA • NDA PREPARATION AI
@@ -913,7 +1104,9 @@ header {
     </header>
 
 
-    <!-- COMMAND BAR -->
+    <!-- =====================================================
+         COMMAND BAR
+    ====================================================== -->
 
     <div class="command-bar">
 
@@ -921,31 +1114,41 @@ header {
             ASTRA COMMAND
         </span>
 
+
         <span class="separator"></span>
+
 
         <span class="command-item">
             NDA PREPARATION
         </span>
 
+
         <span class="separator"></span>
+
 
         <span class="command-item">
             GAT
         </span>
 
+
         <span class="separator"></span>
+
 
         <span class="command-item">
             MATHEMATICS
         </span>
 
+
         <span class="separator"></span>
+
 
         <span class="command-item">
             CURRENT AFFAIRS
         </span>
 
+
         <span class="separator"></span>
+
 
         <span class="command-item">
             DEFENCE
@@ -954,7 +1157,9 @@ header {
     </div>
 
 
-    <!-- CHAT -->
+    <!-- =====================================================
+         CHAT
+    ====================================================== -->
 
     <div class="chat" id="chat">
 
@@ -966,11 +1171,16 @@ header {
                     OCA
                 </div>
 
-                <h1>ASTRA</h1>
+
+                <h1>
+                    ASTRA
+                </h1>
+
 
                 <div class="tagline">
                     NDA PREPARATION AI
                 </div>
+
 
                 <p>
                     Your intelligent academic assistant
@@ -985,7 +1195,9 @@ header {
     </div>
 
 
-    <!-- INPUT -->
+    <!-- =====================================================
+         INPUT
+    ====================================================== -->
 
     <div class="input-area">
 
@@ -1000,6 +1212,7 @@ header {
 
         </div>
 
+
         <button id="sendButton">
             SEND
         </button>
@@ -1010,163 +1223,419 @@ header {
 
 
 <script>
+
 /* =========================================================
    ASTRA BACKEND
 ========================================================= */
-const API_BASE = "https://astra-backend-2hac.onrender.com";
+
+const API_BASE =
+    "https://astra-backend-2hac.onrender.com";
+
 
 /* =========================================================
    ELEMENTS
 ========================================================= */
-const chat = document.getElementById("chat");
-const input = document.getElementById("messageInput");
-const sendButton = document.getElementById("sendButton");
-const newChatButton = document.getElementById("newChatButton");
-const statusText = document.getElementById("statusText");
-const welcome = document.getElementById("welcome");
+
+const chat =
+    document.getElementById("chat");
+
+const input =
+    document.getElementById("messageInput");
+
+const sendButton =
+    document.getElementById("sendButton");
+
+const newChatButton =
+    document.getElementById("newChatButton");
+
+const statusText =
+    document.getElementById("statusText");
+
+const welcome =
+    document.getElementById("welcome");
+
 
 /* =========================================================
-   CONVERSATION ID
-   One browser keeps one current conversation.
-   The actual messages are stored in PostgreSQL.
+   CREATE BROWSER CONVERSATION ID
 ========================================================= */
+
 function createConversationId() {
-    if (window.crypto && crypto.randomUUID) {
+
+    if (
+        window.crypto &&
+        crypto.randomUUID
+    ) {
+
         return crypto.randomUUID();
+
     }
 
-    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-        const r = Math.random() * 16 | 0;
-        const v = c === "x" ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
+
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
+        .replace(
+            /[xy]/g,
+            function(c) {
+
+                const r =
+                    Math.random() * 16 | 0;
+
+                const v =
+                    c === "x"
+                        ? r
+                        : (r & 0x3 | 0x8);
+
+                return v.toString(16);
+
+            }
+        );
+
 }
 
-let conversationId = localStorage.getItem("astra_conversation_id");
+
+/* =========================================================
+   GET SAVED CONVERSATION ID
+========================================================= */
+
+let conversationId =
+    localStorage.getItem(
+        "astra_conversation_id"
+    );
+
 
 if (!conversationId) {
-    conversationId = createConversationId();
-    localStorage.setItem("astra_conversation_id", conversationId);
+
+    conversationId =
+        createConversationId();
+
+    localStorage.setItem(
+        "astra_conversation_id",
+        conversationId
+    );
+
 }
+
 
 /* =========================================================
    ADD MESSAGE TO SCREEN
 ========================================================= */
+
 function addMessage(text, type) {
+
     if (welcome) {
+
         welcome.style.display = "none";
+
     }
 
-    const message = document.createElement("div");
-    message.className = "message " + type;
 
-    const bubble = document.createElement("div");
-    bubble.className = "bubble";
-    bubble.textContent = text;
+    const message =
+        document.createElement("div");
+
+
+    message.className =
+        "message " + type;
+
+
+    const bubble =
+        document.createElement("div");
+
+
+    bubble.className =
+        "bubble";
+
+
+    bubble.textContent =
+        text;
+
 
     message.appendChild(bubble);
+
     chat.appendChild(message);
 
-    chat.scrollTop = chat.scrollHeight;
+
+    chat.scrollTop =
+        chat.scrollHeight;
+
 }
 
+
 /* =========================================================
-   CLEAR SCREEN ONLY
-   Does NOT delete old database history.
+   CLEAR CURRENT CHAT SCREEN
 ========================================================= */
+
 function clearChatScreen() {
-    chat.querySelectorAll(".message, .typing").forEach(function(element) {
-        element.remove();
-    });
 
-    if (welcome) {
-        welcome.style.display = "flex";
-    }
-}
+    chat
+        .querySelectorAll(
+            ".message, .typing"
+        )
+        .forEach(
+            function(element) {
 
-/* =========================================================
-   LOAD CURRENT CONVERSATION FROM POSTGRESQL
-========================================================= */
-async function loadHistory() {
-    try {
-        const response = await fetch(
-            API_BASE + "/api/history?conversation_id=" + encodeURIComponent(conversationId)
+                element.remove();
+
+            }
         );
 
-        if (!response.ok) {
-            throw new Error("History request failed");
+
+    if (welcome) {
+
+        welcome.style.display =
+            "flex";
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD SAVED HISTORY
+========================================================= */
+
+async function loadHistory() {
+
+    console.log(
+        "ASTRA: Loading conversation:",
+        conversationId
+    );
+
+
+    try {
+
+        /*
+         * IMPORTANT:
+         *
+         * Your FastAPI backend has:
+         *
+         * GET
+         * /api/conversations/{conversation_id}
+         *
+         * Therefore we use that endpoint here.
+         */
+
+        const response =
+            await fetch(
+                API_BASE +
+                "/api/conversations/" +
+                encodeURIComponent(
+                    conversationId
+                )
+            );
+
+
+        /*
+         * 404 means this browser does not
+         * have a conversation saved yet.
+         *
+         * That is normal for a new user.
+         */
+
+        if (response.status === 404) {
+
+            console.log(
+                "ASTRA: No saved conversation yet."
+            );
+
+            return;
+
         }
 
-        const data = await response.json();
-        const messages = Array.isArray(data.messages) ? data.messages : [];
+
+        if (!response.ok) {
+
+            throw new Error(
+                "History request failed: HTTP " +
+                response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "ASTRA: History received:",
+            data
+        );
+
+
+        const messages =
+            Array.isArray(data.messages)
+                ? data.messages
+                : [];
+
 
         if (!messages.length) {
+
+            console.log(
+                "ASTRA: Conversation has no messages."
+            );
+
             return;
+
         }
+
+
+        /*
+         * Hide welcome screen.
+         */
 
         if (welcome) {
-            welcome.style.display = "none";
+
+            welcome.style.display =
+                "none";
+
         }
 
-        messages.forEach(function(message) {
-            addMessage(
-                message.content,
-                message.role === "user" ? "user" : "assistant"
-            );
-        });
 
-        chat.scrollTop = chat.scrollHeight;
+        /*
+         * Display saved messages.
+         */
+
+        messages.forEach(
+            function(message) {
+
+                addMessage(
+                    message.content,
+                    message.role === "user"
+                        ? "user"
+                        : "assistant"
+                );
+
+            }
+        );
+
+
+        chat.scrollTop =
+            chat.scrollHeight;
+
+
+        console.log(
+            "ASTRA: History loaded successfully."
+        );
+
     }
     catch (error) {
-        console.log("History could not be loaded:", error.message);
-        // The chat can still work if the history endpoint is temporarily unavailable.
+
+        console.error(
+            "ASTRA HISTORY ERROR:",
+            error
+        );
+
     }
+
 }
+
 
 /* =========================================================
    NEW CHAT
-   Creates a new conversation but keeps the old one in PostgreSQL.
 ========================================================= */
-newChatButton.addEventListener("click", function() {
-    const confirmation = confirm(
-        "Start a new chat?\n\nYour previous conversation will remain saved in ASTRA's database."
-    );
 
-    if (!confirmation) {
-        return;
+newChatButton.addEventListener(
+    "click",
+    function() {
+
+        const confirmation =
+            confirm(
+                "Start a new chat?\n\n" +
+                "Your previous conversation " +
+                "will remain saved in ASTRA."
+            );
+
+
+        if (!confirmation) {
+
+            return;
+
+        }
+
+
+        /*
+         * Generate a new conversation ID.
+         */
+
+        conversationId =
+            createConversationId();
+
+
+        /*
+         * Save it locally.
+         */
+
+        localStorage.setItem(
+            "astra_conversation_id",
+            conversationId
+        );
+
+
+        /*
+         * Clear only the screen.
+         *
+         * OLD DATABASE HISTORY IS NOT DELETED.
+         */
+
+        clearChatScreen();
+
+
+        input.focus();
+
     }
+);
 
-    conversationId = createConversationId();
-    localStorage.setItem("astra_conversation_id", conversationId);
-
-    clearChatScreen();
-    input.focus();
-});
 
 /* =========================================================
    BACKEND STATUS
 ========================================================= */
+
 async function checkBackend() {
+
     try {
-        const response = await fetch(API_BASE + "/health");
+
+        const response =
+            await fetch(
+                API_BASE + "/health"
+            );
+
 
         if (!response.ok) {
-            throw new Error();
+
+            throw new Error(
+                "Backend offline"
+            );
+
         }
 
-        statusText.textContent = "SYSTEM ONLINE";
+
+        statusText.textContent =
+            "SYSTEM ONLINE";
+
+
     }
     catch {
-        statusText.textContent = "SYSTEM OFFLINE";
+
+        statusText.textContent =
+            "SYSTEM OFFLINE";
+
     }
+
 }
+
 
 /* =========================================================
    TYPING INDICATOR
 ========================================================= */
+
 function createTyping() {
-    const typing = document.createElement("div");
-    typing.className = "typing";
+
+    const typing =
+        document.createElement("div");
+
+
+    typing.className =
+        "typing";
+
 
     typing.innerHTML = `
         <span class="dot"></span>
@@ -1175,105 +1644,297 @@ function createTyping() {
         <span>ASTRA is processing...</span>
     `;
 
+
     chat.appendChild(typing);
-    chat.scrollTop = chat.scrollHeight;
+
+
+    chat.scrollTop =
+        chat.scrollHeight;
+
 
     return typing;
+
 }
+
 
 /* =========================================================
    SEND MESSAGE
 ========================================================= */
+
 async function sendMessage() {
-    const message = input.value.trim();
+
+    const message =
+        input.value.trim();
+
 
     if (!message) {
+
         return;
+
     }
 
-    addMessage(message, "user");
+
+    /*
+     * Show user message immediately.
+     */
+
+    addMessage(
+        message,
+        "user"
+    );
+
 
     input.value = "";
-    sendButton.disabled = true;
-    input.disabled = true;
 
-    const typing = createTyping();
+
+    sendButton.disabled =
+        true;
+
+
+    input.disabled =
+        true;
+
+
+    const typing =
+        createTyping();
+
 
     try {
-        const response = await fetch(
-            API_BASE + "/api/chat",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    message: message,
-                    conversation_id: conversationId
-                })
-            }
-        );
+
+        const response =
+            await fetch(
+                API_BASE + "/api/chat",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            message:
+                                message,
+
+                            conversation_id:
+                                conversationId
+
+                        })
+
+                }
+            );
+
 
         let data;
 
+
         try {
-            data = await response.json();
+
+            data =
+                await response.json();
+
         }
         catch {
-            throw new Error("Invalid response from ASTRA server");
+
+            throw new Error(
+                "Invalid response from ASTRA server"
+            );
+
         }
+
+
+        /*
+         * Remove typing indicator.
+         */
 
         typing.remove();
 
+
+        /*
+         * Backend error.
+         */
+
         if (!response.ok) {
+
             throw new Error(
-                data.detail || "ASTRA request failed"
+                data.detail ||
+                "ASTRA request failed"
             );
+
         }
+
+
+        /*
+         * VERY IMPORTANT:
+         *
+         * Backend returns the actual
+         * conversation_id.
+         *
+         * Save it in localStorage.
+         */
+
+        if (
+            data.conversation_id
+        ) {
+
+            conversationId =
+                data.conversation_id;
+
+
+            localStorage.setItem(
+                "astra_conversation_id",
+                conversationId
+            );
+
+
+            console.log(
+                "ASTRA conversation saved:",
+                conversationId
+            );
+
+        }
+
+
+        /*
+         * Get ASTRA response.
+         */
 
         const answer =
             data.reply ||
             "ASTRA did not return a response.";
 
-        addMessage(answer, "assistant");
-    }
-    catch (error) {
-        typing.remove();
+
+        /*
+         * Show ASTRA response.
+         */
 
         addMessage(
-            "Connection error.\n\n" + error.message,
+            answer,
             "assistant"
         );
+
+    }
+    catch (error) {
+
+        /*
+         * Remove typing indicator
+         * if it still exists.
+         */
+
+        if (
+            typing &&
+            typing.parentNode
+        ) {
+
+            typing.remove();
+
+        }
+
+
+        addMessage(
+
+            "Connection error.\n\n" +
+            error.message,
+
+            "assistant"
+
+        );
+
+
+        console.error(
+            "ASTRA CHAT ERROR:",
+            error
+        );
+
     }
     finally {
-        sendButton.disabled = false;
-        input.disabled = false;
+
+        sendButton.disabled =
+            false;
+
+
+        input.disabled =
+            false;
+
+
         input.focus();
+
     }
+
 }
 
-/* =========================================================
-   BUTTON
-========================================================= */
-sendButton.addEventListener("click", sendMessage);
 
 /* =========================================================
-   ENTER
+   SEND BUTTON
 ========================================================= */
-input.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        sendMessage();
+
+sendButton.addEventListener(
+    "click",
+    sendMessage
+);
+
+
+/* =========================================================
+   ENTER KEY
+========================================================= */
+
+input.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            event.preventDefault();
+
+            sendMessage();
+
+        }
+
     }
-});
+);
+
 
 /* =========================================================
-   START
+   START ASTRA
 ========================================================= */
+
+console.log(
+    "ASTRA starting..."
+);
+
+
+console.log(
+    "Current conversation ID:",
+    conversationId
+);
+
+
+/*
+ * First load saved conversation.
+ */
+
 loadHistory();
+
+
+/*
+ * Check backend.
+ */
+
 checkBackend();
+
+
+/*
+ * Focus input.
+ */
+
 input.focus();
+
 </script>
+
 
 </body>
 </html>
