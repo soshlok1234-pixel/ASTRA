@@ -1,482 +1,533 @@
 
 <script>
 /* =========================================================
-   ASTRA BACKEND
+   ASTRA AI — SAFE FRONTEND SCRIPT
 ========================================================= */
 
-const API_BASE = "https://astra-backend-2hac.onrender.com";
-const CONVERSATION_KEY = "astra_conversation_id";
-const CONVERSATIONS_KEY = "astra_conversations_list";
+(() => {
+    "use strict";
 
-/* =========================================================
-   ELEMENTS
-========================================================= */
+    const API_BASE = "https://astra-backend-2hac.onrender.com";
+    const CONVERSATION_KEY = "astra_conversation_id";
+    const CONVERSATIONS_KEY = "astra_conversations_list";
 
-const chat = document.getElementById("chat");
-const input = document.getElementById("messageInput");
-const sendButton = document.getElementById("sendButton");
-const newChatButton = document.getElementById("newChatButton");
-const statusText = document.getElementById("statusText");
-const welcome = document.getElementById("welcome");
-const historyList = document.getElementById("historyList");
-const historySearch = document.getElementById("historySearch");
-const sidebar = document.getElementById("sidebar");
-const historyButton = document.getElementById("historyButton");
-const sidebarOverlay = document.getElementById("sidebarOverlay");
+    /* ELEMENTS */
 
-/* =========================================================
-   CONVERSATION ID
-========================================================= */
+    const get = id => document.getElementById(id);
 
-function createConversationId() {
-    if (window.crypto && crypto.randomUUID) {
-        return crypto.randomUUID();
-    }
+    const chat = get("chat");
+    const input = get("messageInput");
+    const sendButton = get("sendButton");
+    const newChatButton = get("newChatButton");
 
-    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
-        const r = Math.random() * 16 | 0;
-        const v = c === "x" ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}
+    // Support either status ID used by your HTML.
+    const statusText = get("statusText") || get("status");
 
-let conversationId = localStorage.getItem(CONVERSATION_KEY);
+    const welcome = get("welcome");
+    const historyList = get("historyList");
+    const historySearch = get("historySearch");
+    const sidebar = get("sidebar");
+    const historyButton = get("historyButton");
+    const sidebarOverlay = get("sidebarOverlay");
 
-if (!conversationId) {
-    conversationId = createConversationId();
-    localStorage.setItem(CONVERSATION_KEY, conversationId);
-}
+    /* CONVERSATION ID */
 
-function getSavedConversations() {
-    try {
-        const saved = JSON.parse(
-            localStorage.getItem(CONVERSATIONS_KEY) || "[]"
-        );
-        return Array.isArray(saved) ? saved : [];
-    } catch {
-        return [];
-    }
-}
-
-let allConversations = getSavedConversations();
-
-function saveConversations() {
-    localStorage.setItem(
-        CONVERSATIONS_KEY,
-        JSON.stringify(allConversations)
-    );
-}
-
-function updateConversationList(id, title) {
-    const existing = allConversations.find(item => item.id === id);
-
-    if (existing) {
-        existing.title = existing.title || title || "New conversation";
-        existing.updated_at = new Date().toISOString();
-    } else {
-        allConversations.unshift({
-            id: id,
-            title: title || "New conversation",
-            updated_at: new Date().toISOString()
-        });
-    }
-
-    allConversations.sort(
-        (a, b) => new Date(b.updated_at || 0) - new Date(a.updated_at || 0)
-    );
-
-    saveConversations();
-    renderHistory();
-}
-
-/* =========================================================
-   MESSAGES
-========================================================= */
-
-function addMessage(text, type) {
-    if (welcome) welcome.style.display = "none";
-
-    const message = document.createElement("div");
-    message.className = "message " + type;
-
-    const bubble = document.createElement("div");
-    bubble.className = "bubble";
-    bubble.textContent = text == null ? "" : String(text);
-
-    message.appendChild(bubble);
-    chat.appendChild(message);
-
-    chat.scrollTop = chat.scrollHeight;
-}
-
-function clearChatScreen() {
-    chat.querySelectorAll(".message, .typing").forEach(element => {
-        element.remove();
-    });
-
-    if (welcome) welcome.style.display = "flex";
-}
-
-/* =========================================================
-   LOAD A CONVERSATION FROM BACKEND
-========================================================= */
-
-async function loadConversation(id) {
-    if (!id) return;
-
-    try {
-        const response = await fetch(
-            API_BASE + "/api/history?conversation_id=" +
-            encodeURIComponent(id)
-        );
-
-        if (!response.ok) {
-            throw new Error("History request failed (" + response.status + ")");
+    function createConversationId() {
+        if (window.crypto && typeof crypto.randomUUID === "function") {
+            return crypto.randomUUID();
         }
 
-        const data = await response.json();
-
-        conversationId = id;
-        localStorage.setItem(CONVERSATION_KEY, conversationId);
-
-        clearChatScreen();
-
-        const messages = Array.isArray(data.messages) ? data.messages : [];
-
-        messages.forEach(message => {
-            addMessage(
-                message.content || "",
-                message.role === "user" ? "user" : "assistant"
-            );
+        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+            const r = Math.random() * 16 | 0;
+            const v = c === "x" ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
         });
-
-        renderHistory();
-        closeSidebar();
-    } catch (error) {
-        console.error("Could not load conversation:", error);
-        alert(
-            "Could not load this conversation. It may not exist on the server."
-        );
     }
-}
 
-/* =========================================================
-   LOAD CURRENT CHAT ON STARTUP
-========================================================= */
+    function getConversationId() {
+        let id = localStorage.getItem(CONVERSATION_KEY);
 
-async function loadCurrentConversation() {
-    const id = localStorage.getItem(CONVERSATION_KEY);
+        if (!id) {
+            id = createConversationId();
+            localStorage.setItem(CONVERSATION_KEY, id);
+        }
 
-    if (!id) return;
+        return id;
+    }
 
-    try {
-        const response = await fetch(
-            API_BASE + "/api/history?conversation_id=" +
-            encodeURIComponent(id)
+    let conversationId = getConversationId();
+
+    function getSavedConversations() {
+        try {
+            const saved = JSON.parse(
+                localStorage.getItem(CONVERSATIONS_KEY) || "[]"
+            );
+
+            return Array.isArray(saved) ? saved : [];
+        } catch (error) {
+            console.warn("Could not read saved conversations:", error);
+            return [];
+        }
+    }
+
+    let allConversations = getSavedConversations();
+
+    function saveConversations() {
+        try {
+            localStorage.setItem(
+                CONVERSATIONS_KEY,
+                JSON.stringify(allConversations)
+            );
+        } catch (error) {
+            console.warn("Could not save conversation list:", error);
+        }
+    }
+
+    function updateConversationList(id, title) {
+        if (!id) return;
+
+        const existing = allConversations.find(item => item.id === id);
+
+        if (existing) {
+            // Keep the original title when one already exists.
+            existing.title = existing.title || title || "New conversation";
+            existing.updated_at = new Date().toISOString();
+        } else {
+            allConversations.unshift({
+                id,
+                title: title || "New conversation",
+                updated_at: new Date().toISOString()
+            });
+        }
+
+        allConversations.sort(
+            (a, b) =>
+                new Date(b.updated_at || 0) -
+                new Date(a.updated_at || 0)
         );
 
-        if (!response.ok) {
-            // An empty/new conversation may not exist on the server yet.
+        saveConversations();
+        renderHistory();
+    }
+
+    /* MESSAGES */
+
+    function addMessage(text, type) {
+        if (!chat) {
+            console.error('ASTRA: HTML element with id="chat" was not found.');
             return;
         }
 
-        const data = await response.json();
-        const messages = Array.isArray(data.messages) ? data.messages : [];
+        if (welcome) welcome.style.display = "none";
 
-        if (messages.length === 0) return;
+        const message = document.createElement("div");
+        message.className = "message " + type;
 
-        clearChatScreen();
+        const bubble = document.createElement("div");
+        bubble.className = "bubble";
+        bubble.textContent = text == null ? "" : String(text);
 
-        messages.forEach(message => {
-            addMessage(
-                message.content || "",
-                message.role === "user" ? "user" : "assistant"
-            );
-        });
+        message.appendChild(bubble);
+        chat.appendChild(message);
 
-        const firstUserMessage = messages.find(m => m.role === "user");
-
-        updateConversationList(
-            id,
-            firstUserMessage
-                ? firstUserMessage.content.slice(0, 45)
-                : "Conversation"
-        );
-    } catch (error) {
-        console.warn("Could not restore chat:", error);
-    }
-}
-
-/* =========================================================
-   HISTORY SIDEBAR
-   The list is stored locally because the backend's documented
-   endpoints do not include a GET endpoint for all conversations.
-========================================================= */
-
-function formatDate(value) {
-    if (!value) return "";
-
-    const date = new Date(value);
-
-    if (Number.isNaN(date.getTime())) return "";
-
-    return date.toLocaleDateString(undefined, {
-        day: "2-digit",
-        month: "short",
-        year: "numeric"
-    });
-}
-
-function renderHistory() {
-    if (!historyList) return;
-
-    const search = historySearch
-        ? historySearch.value.trim().toLowerCase()
-        : "";
-
-    const conversations = allConversations.filter(item => {
-        return !search ||
-            (item.title || "").toLowerCase().includes(search);
-    });
-
-    historyList.innerHTML = "";
-
-    if (conversations.length === 0) {
-        historyList.innerHTML = `
-            <div class="history-empty">
-                No saved conversations yet.<br><br>
-                Start a chat to see it here.
-            </div>
-        `;
-        return;
+        chat.scrollTop = chat.scrollHeight;
     }
 
-    conversations.forEach(item => {
-        const row = document.createElement("div");
-        row.className = "history-item";
-
-        if (item.id === conversationId) {
-            row.classList.add("active");
+    function clearChatScreen() {
+        if (chat) {
+            chat.querySelectorAll(".message, .typing").forEach(element => {
+                element.remove();
+            });
         }
 
-        const title = document.createElement("div");
-        title.className = "history-item-title";
-        title.textContent = item.title || "Untitled conversation";
-
-        const date = document.createElement("div");
-        date.className = "history-item-date";
-        date.textContent = formatDate(item.updated_at);
-
-        const deleteButton = document.createElement("button");
-        deleteButton.className = "delete-history";
-        deleteButton.textContent = "×";
-        deleteButton.title = "Remove from sidebar";
-        deleteButton.setAttribute("aria-label", "Remove conversation");
-
-        deleteButton.addEventListener("click", event => {
-            event.stopPropagation();
-            removeConversationFromList(item.id);
-        });
-
-        row.appendChild(title);
-        row.appendChild(date);
-        row.appendChild(deleteButton);
-
-        row.addEventListener("click", () => loadConversation(item.id));
-
-        historyList.appendChild(row);
-    });
-}
-
-function removeConversationFromList(id) {
-    const confirmed = confirm(
-        "Remove this conversation from the sidebar?\n\n" +
-        "This removes the local list entry. It does not delete messages on the server."
-    );
-
-    if (!confirmed) return;
-
-    allConversations = allConversations.filter(item => item.id !== id);
-    saveConversations();
-    renderHistory();
-
-    // Do not erase the currently open chat.
-}
-
-/* =========================================================
-   NEW CHAT
-========================================================= */
-
-newChatButton.addEventListener("click", () => {
-    conversationId = createConversationId();
-
-    localStorage.setItem(CONVERSATION_KEY, conversationId);
-
-    clearChatScreen();
-    renderHistory();
-    closeSidebar();
-    input.focus();
-});
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-if (historySearch) {
-    historySearch.addEventListener("input", renderHistory);
-}
-
-/* =========================================================
-   MOBILE SIDEBAR
-========================================================= */
-
-function openSidebar() {
-    sidebar.classList.add("open");
-    sidebarOverlay.classList.add("show");
-}
-
-function closeSidebar() {
-    sidebar.classList.remove("open");
-    sidebarOverlay.classList.remove("show");
-}
-
-historyButton.addEventListener("click", openSidebar);
-sidebarOverlay.addEventListener("click", closeSidebar);
-
-/* =========================================================
-   BACKEND STATUS
-========================================================= */
-
-async function checkBackend() {
-    try {
-        const response = await fetch(API_BASE + "/health");
-
-        if (!response.ok) throw new Error("Backend unavailable");
-
-        statusText.textContent = "SYSTEM ONLINE";
-    } catch {
-        statusText.textContent = "SYSTEM OFFLINE";
+        if (welcome) welcome.style.display = "flex";
     }
-}
 
-/* =========================================================
-   TYPING INDICATOR
-========================================================= */
+    /* SIDEBAR */
 
-function createTyping() {
-    const typing = document.createElement("div");
-    typing.className = "typing";
+    function openSidebar() {
+        if (sidebar) sidebar.classList.add("open");
+        if (sidebarOverlay) sidebarOverlay.classList.add("show");
+    }
 
-    typing.innerHTML = `
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span>ASTRA is processing...</span>
-    `;
+    function closeSidebar() {
+        if (sidebar) sidebar.classList.remove("open");
+        if (sidebarOverlay) sidebarOverlay.classList.remove("show");
+    }
 
-    chat.appendChild(typing);
-    chat.scrollTop = chat.scrollHeight;
+    function formatDate(value) {
+        if (!value) return "";
 
-    return typing;
-}
+        const date = new Date(value);
 
-/* =========================================================
-   SEND MESSAGE
-========================================================= */
+        if (Number.isNaN(date.getTime())) return "";
 
-async function sendMessage() {
-    const message = input.value.trim();
-
-    if (!message || sendButton.disabled) return;
-
-    addMessage(message, "user");
-
-    input.value = "";
-    sendButton.disabled = true;
-    input.disabled = true;
-
-    const typing = createTyping();
-
-    try {
-        const response = await fetch(API_BASE + "/api/chat", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                message: message,
-                conversation_id: conversationId
-            })
+        return date.toLocaleDateString(undefined, {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
         });
+    }
 
-        let data;
+    function renderHistory() {
+        if (!historyList) return;
+
+        const search = historySearch
+            ? historySearch.value.trim().toLowerCase()
+            : "";
+
+        const conversations = allConversations.filter(item =>
+            !search ||
+            (item.title || "").toLowerCase().includes(search)
+        );
+
+        historyList.innerHTML = "";
+
+        if (conversations.length === 0) {
+            const empty = document.createElement("div");
+            empty.className = "history-empty";
+            empty.textContent = "No saved conversations yet. Start a chat to see it here.";
+            historyList.appendChild(empty);
+            return;
+        }
+
+        conversations.forEach(item => {
+            const row = document.createElement("div");
+            row.className = "history-item";
+
+            if (item.id === conversationId) {
+                row.classList.add("active");
+            }
+
+            const title = document.createElement("div");
+            title.className = "history-item-title";
+            title.textContent = item.title || "Untitled conversation";
+
+            const date = document.createElement("div");
+            date.className = "history-item-date";
+            date.textContent = formatDate(item.updated_at);
+
+            const deleteButton = document.createElement("button");
+            deleteButton.className = "delete-history";
+            deleteButton.type = "button";
+            deleteButton.textContent = "×";
+            deleteButton.title = "Remove from sidebar";
+            deleteButton.setAttribute("aria-label", "Remove conversation");
+
+            deleteButton.addEventListener("click", event => {
+                event.stopPropagation();
+                removeConversationFromList(item.id);
+            });
+
+            row.appendChild(title);
+            row.appendChild(date);
+            row.appendChild(deleteButton);
+
+            row.addEventListener("click", () => {
+                loadConversation(item.id);
+            });
+
+            historyList.appendChild(row);
+        });
+    }
+
+    function removeConversationFromList(id) {
+        const confirmed = window.confirm(
+            "Remove this conversation from the sidebar?\n\n" +
+            "This removes it from this browser's list only. " +
+            "Messages stored on the server will not be deleted."
+        );
+
+        if (!confirmed) return;
+
+        allConversations = allConversations.filter(item => item.id !== id);
+
+        saveConversations();
+        renderHistory();
+    }
+
+    /* LOAD CONVERSATION */
+
+    async function loadConversation(id) {
+        if (!id) return;
 
         try {
-            data = await response.json();
-        } catch {
-            throw new Error("Invalid response from ASTRA server");
-        }
+            const response = await fetch(
+                API_BASE + "/api/history?conversation_id=" +
+                encodeURIComponent(id)
+            );
 
-        if (!response.ok) {
-            throw new Error(
-                data.detail || "ASTRA request failed (" + response.status + ")"
+            if (!response.ok) {
+                throw new Error("History request failed (" + response.status + ")");
+            }
+
+            const data = await response.json();
+
+            conversationId = id;
+            localStorage.setItem(CONVERSATION_KEY, conversationId);
+
+            clearChatScreen();
+
+            const messages = Array.isArray(data.messages)
+                ? data.messages
+                : [];
+
+            messages.forEach(message => {
+                addMessage(
+                    message.content || "",
+                    message.role === "user" ? "user" : "assistant"
+                );
+            });
+
+            renderHistory();
+            closeSidebar();
+        } catch (error) {
+            console.error("Could not load conversation:", error);
+
+            window.alert(
+                "Could not load this conversation. Check your connection, " +
+                "or the conversation may not exist on the server."
+            );
+        }
+    }
+
+    /* RESTORE CURRENT CHAT */
+
+    async function loadCurrentConversation() {
+        const id = localStorage.getItem(CONVERSATION_KEY);
+
+        if (!id) return;
+
+        try {
+            const response = await fetch(
+                API_BASE + "/api/history?conversation_id=" +
+                encodeURIComponent(id)
+            );
+
+            // A new conversation might not exist on the server yet.
+            if (!response.ok) return;
+
+            const data = await response.json();
+
+            const messages = Array.isArray(data.messages)
+                ? data.messages
+                : [];
+
+            if (messages.length === 0) return;
+
+            clearChatScreen();
+
+            messages.forEach(message => {
+                addMessage(
+                    message.content || "",
+                    message.role === "user" ? "user" : "assistant"
+                );
+            });
+
+            const firstUserMessage = messages.find(
+                message => message.role === "user"
+            );
+
+            updateConversationList(
+                id,
+                firstUserMessage
+                    ? firstUserMessage.content.slice(0, 45)
+                    : "Conversation"
+            );
+        } catch (error) {
+            console.warn("Could not restore previous chat:", error);
+        }
+    }
+
+    /* NEW CHAT */
+
+    function startNewChat() {
+        conversationId = createConversationId();
+
+        localStorage.setItem(CONVERSATION_KEY, conversationId);
+
+        clearChatScreen();
+        renderHistory();
+        closeSidebar();
+
+        if (input) input.focus();
+    }
+
+    /* BACKEND STATUS */
+
+    async function checkBackend() {
+        if (!statusText) {
+            console.warn(
+                'ASTRA: No element found with id="statusText" or id="status".'
             );
         }
 
-        if (data.conversation_id) {
-            conversationId = data.conversation_id;
-            localStorage.setItem(CONVERSATION_KEY, conversationId);
+        try {
+            const response = await fetch(API_BASE + "/health");
+
+            if (!response.ok) {
+                throw new Error("Backend returned " + response.status);
+            }
+
+            if (statusText) statusText.textContent = "SYSTEM ONLINE";
+        } catch (error) {
+            if (statusText) statusText.textContent = "SYSTEM OFFLINE";
+            console.warn("ASTRA backend status check failed:", error);
+        }
+    }
+
+    /* TYPING INDICATOR */
+
+    function createTyping() {
+        if (!chat) return null;
+
+        const typing = document.createElement("div");
+        typing.className = "typing";
+
+        const label = document.createElement("span");
+        label.textContent = "ASTRA is processing...";
+
+        for (let i = 0; i < 3; i++) {
+            const dot = document.createElement("span");
+            dot.className = "dot";
+            typing.appendChild(dot);
         }
 
-        typing.remove();
+        typing.appendChild(label);
+        chat.appendChild(typing);
+        chat.scrollTop = chat.scrollHeight;
 
-        const answer = data.reply || "ASTRA did not return a response.";
-
-        addMessage(answer, "assistant");
-
-        const existing = allConversations.find(
-            item => item.id === conversationId
-        );
-
-        updateConversationList(
-            conversationId,
-            existing ? existing.title : message.slice(0, 45)
-        );
-    } catch (error) {
-        typing.remove();
-
-        addMessage(
-            "Connection error.\n\n" + error.message,
-            "assistant"
-        );
-
-        console.error("ASTRA chat error:", error);
-    } finally {
-        sendButton.disabled = false;
-        input.disabled = false;
-        input.focus();
+        return typing;
     }
-}
 
-/* =========================================================
-   SEND CONTROLS
-========================================================= */
+    /* SEND MESSAGE */
 
-sendButton.addEventListener("click", sendMessage);
+    async function sendMessage() {
+        if (!input || !sendButton) {
+            console.error(
+                'ASTRA: Check that your HTML contains id="messageInput" ' +
+                'and id="sendButton".'
+            );
+            return;
+        }
 
-input.addEventListener("keydown", event => {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        sendMessage();
+        const message = input.value.trim();
+
+        if (!message || sendButton.disabled) return;
+
+        addMessage(message, "user");
+
+        input.value = "";
+        sendButton.disabled = true;
+        input.disabled = true;
+
+        const typing = createTyping();
+
+        try {
+            const response = await fetch(API_BASE + "/api/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message,
+                    conversation_id: conversationId
+                })
+            });
+
+            let data;
+
+            try {
+                data = await response.json();
+            } catch {
+                throw new Error("Invalid response from ASTRA server.");
+            }
+
+            if (!response.ok) {
+                throw new Error(
+                    data.detail || "ASTRA request failed (" + response.status + ")"
+                );
+            }
+
+            if (data.conversation_id) {
+                conversationId = data.conversation_id;
+                localStorage.setItem(CONVERSATION_KEY, conversationId);
+            }
+
+            if (typing) typing.remove();
+
+            const answer = data.reply || "ASTRA did not return a response.";
+
+            addMessage(answer, "assistant");
+
+            const existing = allConversations.find(
+                item => item.id === conversationId
+            );
+
+            updateConversationList(
+                conversationId,
+                existing ? existing.title : message.slice(0, 45)
+            );
+        } catch (error) {
+            if (typing) typing.remove();
+
+            addMessage(
+                "Connection error.\n\n" + error.message,
+                "assistant"
+            );
+
+            console.error("ASTRA chat error:", error);
+        } finally {
+            sendButton.disabled = false;
+            input.disabled = false;
+            input.focus();
+        }
     }
-});
 
-/* =========================================================
-   START ASTRA
-========================================================= */
+    /* CONNECT EVENTS SAFELY */
 
-renderHistory();
-checkBackend();
-loadCurrentConversation();
-input.focus();
+    if (newChatButton) {
+        newChatButton.addEventListener("click", startNewChat);
+    } else {
+        console.warn('ASTRA: No element found with id="newChatButton".');
+    }
+
+    if (historySearch) {
+        historySearch.addEventListener("input", renderHistory);
+    }
+
+    if (historyButton) {
+        historyButton.addEventListener("click", openSidebar);
+    }
+
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener("click", closeSidebar);
+    }
+
+    if (sendButton) {
+        sendButton.addEventListener("click", sendMessage);
+    } else {
+        console.warn('ASTRA: No element found with id="sendButton".');
+    }
+
+    if (input) {
+        input.addEventListener("keydown", event => {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+    } else {
+        console.warn('ASTRA: No element found with id="messageInput".');
+    }
+
+    /* START ASTRA */
+
+    renderHistory();
+    checkBackend();
+    loadCurrentConversation();
+
+    if (input) input.focus();
+
+})();
 </script>
