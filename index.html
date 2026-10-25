@@ -1,2701 +1,482 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>ASTRA | OCA NDA AI</title>
-
-<style>
-
-/* =========================================================
-   ASTRA OCA — PHASE 3A
-   CHAT HISTORY SIDEBAR
-========================================================= */
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-:root {
-
-    --bg: #080b08;
-    --panel: #0d120e;
-    --panel2: #111811;
-    --panel3: #151d16;
-
-    --border: #30382f;
-
-    --olive: #596642;
-    --olive-light: #7f9160;
-
-    --gold: #c5a75b;
-    --gold-light: #e0c77d;
-
-    --white: #f1f2ed;
-    --muted: #929a8d;
-
-    --user: #344b35;
-    --assistant: #151d16;
-
-    --green: #54c477;
-
-}
-
-
-/* =========================================================
-   BODY
-========================================================= */
-
-body {
-
-    font-family:
-        Inter,
-        Arial,
-        Helvetica,
-        sans-serif;
-
-    background:
-
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(93,111,67,.16),
-            transparent 42%
-        ),
-
-        #080b08;
-
-    color: var(--white);
-
-    min-height: 100vh;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-}
-
-
-/* =========================================================
-   MAIN APP
-========================================================= */
-
-.app {
-
-    width: 97%;
-
-    max-width: 1450px;
-
-    height: 94vh;
-
-    background:
-
-        linear-gradient(
-            145deg,
-            rgba(16,22,16,.98),
-            rgba(7,10,8,.99)
-        );
-
-    border: 1px solid #3b4337;
-
-    border-radius: 18px;
-
-    overflow: hidden;
-
-    display: flex;
-
-    position: relative;
-
-    box-shadow:
-
-        0 30px 100px rgba(0,0,0,.65),
-
-        inset 0 0 80px rgba(255,255,255,.015);
-
-}
-
-
-/* =========================================================
-   GRID
-========================================================= */
-
-.app::after {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    pointer-events: none;
-
-    background-image:
-
-        linear-gradient(
-            rgba(255,255,255,.018) 1px,
-            transparent 1px
-        ),
-
-        linear-gradient(
-            90deg,
-            rgba(255,255,255,.018) 1px,
-            transparent 1px
-        );
-
-    background-size: 45px 45px;
-
-    opacity: .18;
-
-    z-index: 0;
-
-}
-
-
-/* =========================================================
-   WATERMARK
-========================================================= */
-
-.watermark {
-
-    position: absolute;
-
-    width: 520px;
-    height: 520px;
-
-    left: 58%;
-    top: 55%;
-
-    transform:
-        translate(-50%,-50%);
-
-    background-image:
-        url("logo.png");
-
-    background-size: contain;
-
-    background-position: center;
-
-    background-repeat: no-repeat;
-
-    opacity: .075;
-
-    filter:
-        grayscale(100%)
-        brightness(1.9);
-
-    pointer-events: none;
-
-    z-index: 1;
-
-}
-
-
-/* =========================================================
-   SIDEBAR
-========================================================= */
-
-.sidebar {
-
-    width: 285px;
-
-    height: 100%;
-
-    flex-shrink: 0;
-
-    background:
-
-        linear-gradient(
-            180deg,
-            #0c110d,
-            #080c08
-        );
-
-    border-right: 1px solid #30382f;
-
-    display: flex;
-
-    flex-direction: column;
-
-    position: relative;
-
-    z-index: 20;
-
-}
-
-
-/* SIDEBAR HEADER */
-
-.sidebar-header {
-
-    height: 105px;
-
-    padding: 20px;
-
-    border-bottom: 1px solid #293229;
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    gap: 12px;
-
-}
-
-
-.sidebar-title {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-}
-
-
-.sidebar-logo {
-
-    width: 35px;
-
-    height: 35px;
-
-    border: 1px solid #76643d;
-
-    border-radius: 8px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    color: var(--gold);
-
-    font-size: 11px;
-
-    font-weight: bold;
-
-}
-
-
-.sidebar-title-text {
-
-    font-size: 15px;
-
-    letter-spacing: 2px;
-
-    font-weight: 700;
-
-}
-
-
-.sidebar-subtitle {
-
-    font-size: 9px;
-
-    color: #6f786c;
-
-    letter-spacing: 1.5px;
-
-}
-
-
-/* NEW CHAT */
-
-#newChatButton {
-
-    width: 100%;
-
-    padding: 11px;
-
-    border-radius: 8px;
-
-    border: 1px solid #4e5a47;
-
-    background:
-
-        linear-gradient(
-            145deg,
-            #1b251a,
-            #111711
-        );
-
-    color: #e4e5dc;
-
-    cursor: pointer;
-
-    font-size: 13px;
-
-    transition: .2s;
-
-}
-
-
-#newChatButton:hover {
-
-    border-color: var(--gold);
-
-    color: white;
-
-    background: #222c1f;
-
-}
-
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-.history-search {
-
-    padding: 14px;
-
-    border-bottom: 1px solid #242c24;
-
-}
-
-
-#historySearch {
-
-    width: 100%;
-
-    height: 38px;
-
-    padding: 0 12px;
-
-    background: #0c120d;
-
-    color: white;
-
-    border: 1px solid #303930;
-
-    border-radius: 8px;
-
-    outline: none;
-
-    font-size: 12px;
-
-}
-
-
-#historySearch:focus {
-
-    border-color: #647550;
-
-}
-
-
-#historySearch::placeholder {
-
-    color: #697267;
-
-}
-
-
-/* =========================================================
-   HISTORY LIST
-========================================================= */
-
-.history-list {
-
-    flex: 1;
-
-    overflow-y: auto;
-
-    padding: 10px;
-
-}
-
-
-.history-list::-webkit-scrollbar {
-
-    width: 5px;
-
-}
-
-
-.history-list::-webkit-scrollbar-thumb {
-
-    background: #30382f;
-
-    border-radius: 10px;
-
-}
-
-
-/* HISTORY ITEM */
-
-.history-item {
-
-    padding: 12px;
-
-    margin-bottom: 6px;
-
-    border-radius: 8px;
-
-    border: 1px solid transparent;
-
-    cursor: pointer;
-
-    transition: .18s;
-
-    position: relative;
-
-}
-
-
-.history-item:hover {
-
-    background: #141b14;
-
-    border-color: #303a30;
-
-}
-
-
-.history-item.active {
-
-    background:
-
-        linear-gradient(
-            145deg,
-            #192319,
-            #111711
-        );
-
-    border-color: #4c5945;
-
-}
-
-
-.history-item-title {
-
-    font-size: 13px;
-
-    color: #d9ddd4;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    padding-right: 25px;
-
-}
-
-
-.history-item-date {
-
-    font-size: 9px;
-
-    color: #687166;
-
-    margin-top: 5px;
-
-}
-
-
-.delete-history {
-
-    position: absolute;
-
-    right: 8px;
-
-    top: 10px;
-
-    width: 20px;
-
-    height: 20px;
-
-    border: none;
-
-    background: transparent;
-
-    color: #687166;
-
-    cursor: pointer;
-
-    border-radius: 5px;
-
-}
-
-
-.delete-history:hover {
-
-    background: #342020;
-
-    color: #e77b7b;
-
-}
-
-
-/* EMPTY HISTORY */
-
-.history-empty {
-
-    text-align: center;
-
-    color: #5f685e;
-
-    font-size: 11px;
-
-    padding: 30px 15px;
-
-    line-height: 1.6;
-
-}
-
-
-/* =========================================================
-   MAIN CONTENT
-========================================================= */
-
-.main {
-
-    flex: 1;
-
-    min-width: 0;
-
-    height: 100%;
-
-    display: flex;
-
-    flex-direction: column;
-
-    position: relative;
-
-    z-index: 5;
-
-}
-
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-header {
-
-    height: 105px;
-
-    padding: 0 30px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    background:
-
-        linear-gradient(
-            180deg,
-            rgba(18,24,18,.98),
-            rgba(10,14,10,.96)
-        );
-
-    border-bottom: 1px solid #394236;
-
-    position: relative;
-
-    z-index: 10;
-
-}
-
-
-.brand {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 18px;
-
-}
-
-
-.brand-mark {
-
-    width: 52px;
-
-    height: 52px;
-
-    border: 1px solid #70623d;
-
-    border-radius: 10px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    color: var(--gold);
-
-    font-weight: bold;
-
-    font-size: 16px;
-
-    letter-spacing: 2px;
-
-    background:
-
-        linear-gradient(
-            145deg,
-            #20271c,
-            #0e130e
-        );
-
-}
-
-
-.brand-text {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 3px;
-
-}
-
-
-.astra {
-
-    font-size: 31px;
-
-    font-weight: 800;
-
-    letter-spacing: 7px;
-
-}
-
-
-.subtitle {
-
-    font-size: 11px;
-
-    letter-spacing: 2.8px;
-
-    color: var(--gold);
-
-}
-
-
-.header-right {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 20px;
-
-}
-
-
-.system-status {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-
-    color: #8fd49e;
-
-    font-size: 12px;
-
-    letter-spacing: 1px;
-
-}
-
-
-.status-dot {
-
-    width: 8px;
-
-    height: 8px;
-
-    border-radius: 50%;
-
-    background: var(--green);
-
-    box-shadow:
-
-        0 0 12px rgba(84,196,119,.8);
-
-}
-
-
-/* MOBILE HISTORY BUTTON */
-
-#historyButton {
-
-    display: none;
-
-    padding: 9px 12px;
-
-    background: #182018;
-
-    color: #dfe4d9;
-
-    border: 1px solid #465142;
-
-    border-radius: 7px;
-
-    cursor: pointer;
-
-}
-
-
-/* =========================================================
-   COMMAND BAR
-========================================================= */
-
-.command-bar {
-
-    height: 44px;
-
-    padding: 0 30px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 25px;
-
-    background: #0b100b;
-
-    border-bottom: 1px solid #252c24;
-
-    overflow: hidden;
-
-}
-
-
-.command-item {
-
-    color: #687064;
-
-    font-size: 10px;
-
-    letter-spacing: 1.5px;
-
-    text-transform: uppercase;
-
-    white-space: nowrap;
-
-}
-
-
-.command-item.active {
-
-    color: var(--gold);
-
-}
-
-
-.separator {
-
-    height: 15px;
-
-    width: 1px;
-
-    background: #323a30;
-
-}
-
-
-/* =========================================================
-   CHAT
-========================================================= */
-
-.chat {
-
-    flex: 1;
-
-    overflow-y: auto;
-
-    padding: 35px 32px 30px;
-
-    position: relative;
-
-    z-index: 5;
-
-    scroll-behavior: smooth;
-
-}
-
-
-.chat::-webkit-scrollbar {
-
-    width: 8px;
-
-}
-
-
-.chat::-webkit-scrollbar-thumb {
-
-    background: #30382f;
-
-    border-radius: 10px;
-
-}
-
-
-.message {
-
-    margin-bottom: 24px;
-
-    display: flex;
-
-    animation: messageIn .22s ease;
-
-}
-
-
-@keyframes messageIn {
-
-    from {
-
-        opacity: 0;
-
-        transform: translateY(7px);
-
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform: translateY(0);
-
-    }
-
-}
-
-
-.message.user {
-
-    justify-content: flex-end;
-
-}
-
-
-.bubble {
-
-    max-width: 78%;
-
-    padding: 17px 20px;
-
-    border-radius: 14px;
-
-    line-height: 1.65;
-
-    white-space: pre-wrap;
-
-    word-wrap: break-word;
-
-    font-size: 16px;
-
-}
-
-
-.assistant .bubble {
-
-    background:
-
-        linear-gradient(
-            145deg,
-            rgba(23,31,23,.96),
-            rgba(15,21,16,.96)
-        );
-
-    border: 1px solid #293329;
-
-    color: #e5e8df;
-
-    border-left: 3px solid #667650;
-
-    border-bottom-left-radius: 4px;
-
-}
-
-
-.user .bubble {
-
-    background:
-
-        linear-gradient(
-            145deg,
-            #3b523b,
-            #2b402f
-        );
-
-    border: 1px solid #4d644c;
-
-    color: #f2f4ed;
-
-    border-bottom-right-radius: 4px;
-
-}
-
-
-/* =========================================================
-   WELCOME
-========================================================= */
-
-.welcome {
-
-    min-height: 100%;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    text-align: center;
-
-}
-
-
-.welcome-content {
-
-    position: relative;
-
-    z-index: 3;
-
-}
-
-
-.welcome-emblem {
-
-    width: 82px;
-
-    height: 82px;
-
-    margin: 0 auto 20px;
-
-    border: 1px solid #685a38;
-
-    border-radius: 50%;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    color: var(--gold);
-
-    font-size: 22px;
-
-    font-weight: bold;
-
-    letter-spacing: 2px;
-
-}
-
-
-.welcome h1 {
-
-    font-size: 52px;
-
-    letter-spacing: 11px;
-
-    margin-bottom: 9px;
-
-}
-
-
-.welcome .tagline {
-
-    color: var(--gold);
-
-    font-size: 12px;
-
-    letter-spacing: 3px;
-
-    margin-bottom: 17px;
-
-}
-
-
-.welcome p {
-
-    color: #788174;
-
-    font-size: 15px;
-
-    max-width: 520px;
-
-    line-height: 1.7;
-
-}
-
-
-/* =========================================================
-   TYPING
-========================================================= */
-
-.typing {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 6px;
-
-    margin-bottom: 20px;
-
-    color: #7d8778;
-
-    font-size: 13px;
-
-}
-
-
-.typing .dot {
-
-    width: 6px;
-
-    height: 6px;
-
-    border-radius: 50%;
-
-    background: #82906f;
-
-    animation: typing 1.1s infinite;
-
-}
-
-
-.typing .dot:nth-child(2) {
-
-    animation-delay: .15s;
-
-}
-
-
-.typing .dot:nth-child(3) {
-
-    animation-delay: .3s;
-
-}
-
-
-@keyframes typing {
-
-    0%,60%,100% {
-
-        opacity: .3;
-
-        transform: translateY(0);
-
-    }
-
-    30% {
-
-        opacity: 1;
-
-        transform: translateY(-4px);
-
-    }
-
-}
-
-
-/* =========================================================
-   INPUT
-========================================================= */
-
-.input-area {
-
-    min-height: 90px;
-
-    padding: 15px 20px;
-
-    display: flex;
-
-    gap: 11px;
-
-    background:
-
-        linear-gradient(
-            180deg,
-            #0b100b,
-            #090d09
-        );
-
-    border-top: 1px solid #30382f;
-
-}
-
-
-.input-wrap {
-
-    flex: 1;
-
-}
-
-
-#messageInput {
-
-    width: 100%;
-
-    height: 58px;
-
-    background: #0c120d;
-
-    color: #f1f2ed;
-
-    border: 1px solid #394538;
-
-    border-radius: 11px;
-
-    padding: 0 18px;
-
-    outline: none;
-
-    font-size: 16px;
-
-}
-
-
-#messageInput:focus {
-
-    border-color: #687953;
-
-    box-shadow:
-
-        0 0 0 3px rgba(104,121,83,.08);
-
-}
-
-
-#messageInput::placeholder {
-
-    color: #697267;
-
-}
-
-
-#sendButton {
-
-    height: 58px;
-
-    min-width: 105px;
-
-    border: 1px solid #77643a;
-
-    border-radius: 11px;
-
-    background:
-
-        linear-gradient(
-            145deg,
-            #77643a,
-            #5c4c2d
-        );
-
-    color: #fff8df;
-
-    font-size: 15px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-}
-
-
-#sendButton:disabled {
-
-    opacity: .5;
-
-    cursor: not-allowed;
-
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width:850px) {
-
-    body {
-
-        align-items: stretch;
-
-    }
-
-
-    .app {
-
-        width: 100%;
-
-        height: 100vh;
-
-        border-radius: 0;
-
-    }
-
-
-    .sidebar {
-
-        position: absolute;
-
-        left: 0;
-
-        top: 0;
-
-        bottom: 0;
-
-        width: 285px;
-
-        transform: translateX(-100%);
-
-        transition: transform .25s ease;
-
-        box-shadow:
-
-            20px 0 50px rgba(0,0,0,.6);
-
-    }
-
-
-    .sidebar.open {
-
-        transform: translateX(0);
-
-    }
-
-
-    #historyButton {
-
-        display: block;
-
-    }
-
-
-    header {
-
-        height: 82px;
-
-        padding: 0 15px;
-
-    }
-
-
-    .brand-mark {
-
-        width: 42px;
-
-        height: 42px;
-
-    }
-
-
-    .astra {
-
-        font-size: 25px;
-
-        letter-spacing: 5px;
-
-    }
-
-
-    .subtitle {
-
-        font-size: 8px;
-
-    }
-
-
-    .system-status {
-
-        display: none;
-
-    }
-
-
-    .command-bar {
-
-        padding: 0 15px;
-
-        gap: 12px;
-
-    }
-
-
-    .chat {
-
-        padding: 28px 15px;
-
-    }
-
-
-    .bubble {
-
-        max-width: 90%;
-
-        font-size: 15px;
-
-    }
-
-
-    .welcome h1 {
-
-        font-size: 40px;
-
-        letter-spacing: 7px;
-
-    }
-
-
-    .watermark {
-
-        width: 350px;
-
-        height: 350px;
-
-    }
-
-
-}
-
-
-/* =========================================================
-   SIDEBAR OVERLAY MOBILE
-========================================================= */
-
-.sidebar-overlay {
-
-    display: none;
-
-}
-
-
-@media(max-width:850px) {
-
-    .sidebar-overlay {
-
-        position: fixed;
-
-        inset: 0;
-
-        background: rgba(0,0,0,.55);
-
-        z-index: 15;
-
-    }
-
-
-    .sidebar-overlay.show {
-
-        display: block;
-
-    }
-
-}
-
-</style>
-
-</head>
-
-
-<body>
-
-
-<div class="app">
-
-
-    <!-- =====================================================
-         SIDEBAR
-    ====================================================== -->
-
-    <aside class="sidebar" id="sidebar">
-
-
-        <div class="sidebar-header">
-
-
-            <div class="sidebar-title">
-
-                <div class="sidebar-logo">
-                    OCA
-                </div>
-
-                <div>
-
-                    <div class="sidebar-title-text">
-                        ASTRA HISTORY
-                    </div>
-
-                    <div class="sidebar-subtitle">
-                        SECURE CONVERSATION ARCHIVE
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <button id="newChatButton">
-                + NEW CHAT
-            </button>
-
-
-        </div>
-
-
-        <div class="history-search">
-
-            <input
-                id="historySearch"
-                type="text"
-                placeholder="Search conversations..."
-                autocomplete="off"
-            >
-
-        </div>
-
-
-        <div
-            class="history-list"
-            id="historyList"
-        >
-
-            <div class="history-empty">
-                Loading conversations...
-            </div>
-
-        </div>
-
-
-    </aside>
-
-
-    <div
-        class="sidebar-overlay"
-        id="sidebarOverlay"
-    ></div>
-
-
-    <!-- =====================================================
-         MAIN
-    ====================================================== -->
-
-    <main class="main">
-
-
-        <!-- HEADER -->
-
-        <header>
-
-
-            <div class="brand">
-
-
-                <button
-                    id="historyButton"
-                    title="Chat History"
-                >
-                    ☰
-                </button>
-
-
-                <div class="brand-mark">
-                    OCA
-                </div>
-
-
-                <div class="brand-text">
-
-                    <div class="astra">
-                        ASTRA
-                    </div>
-
-                    <div class="subtitle">
-                        OCA • NDA PREPARATION AI
-                    </div>
-
-                </div>
-
-
-            </div>
-
-
-            <div class="header-right">
-
-
-                <div class="system-status">
-
-                    <span class="status-dot"></span>
-
-                    <span id="statusText">
-                        SYSTEM ONLINE
-                    </span>
-
-                </div>
-
-
-            </div>
-
-
-        </header>
-
-
-        <!-- COMMAND BAR -->
-
-        <div class="command-bar">
-
-
-            <span class="command-item active">
-                ASTRA COMMAND
-            </span>
-
-
-            <span class="separator"></span>
-
-
-            <span class="command-item">
-                NDA PREPARATION
-            </span>
-
-
-            <span class="separator"></span>
-
-
-            <span class="command-item">
-                GAT
-            </span>
-
-
-            <span class="separator"></span>
-
-
-            <span class="command-item">
-                MATHEMATICS
-            </span>
-
-
-            <span class="separator"></span>
-
-
-            <span class="command-item">
-                CURRENT AFFAIRS
-            </span>
-
-
-            <span class="separator"></span>
-
-
-            <span class="command-item">
-                DEFENCE
-            </span>
-
-
-        </div>
-
-
-        <!-- CHAT -->
-
-        <div
-            class="chat"
-            id="chat"
-        >
-
-
-            <div
-                class="welcome"
-                id="welcome"
-            >
-
-
-                <div class="welcome-content">
-
-
-                    <div class="welcome-emblem">
-                        OCA
-                    </div>
-
-
-                    <h1>
-                        ASTRA
-                    </h1>
-
-
-                    <div class="tagline">
-                        NDA PREPARATION AI
-                    </div>
-
-
-                    <p>
-                        Your intelligent academic assistant
-                        for NDA preparation, mathematics,
-                        GAT, current affairs and defence studies.
-                    </p>
-
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-        <!-- INPUT -->
-
-        <div class="input-area">
-
-
-            <div class="input-wrap">
-
-                <input
-                    id="messageInput"
-                    type="text"
-                    placeholder="Enter your question for ASTRA..."
-                    autocomplete="off"
-                >
-
-            </div>
-
-
-            <button id="sendButton">
-                SEND
-            </button>
-
-
-        </div>
-
-
-    </main>
-
-
-</div>
-
 
 <script>
-
 /* =========================================================
    ASTRA BACKEND
 ========================================================= */
 
-const API_BASE =
-    "https://astra-backend-2hac.onrender.com";
-
+const API_BASE = "https://astra-backend-2hac.onrender.com";
+const CONVERSATION_KEY = "astra_conversation_id";
+const CONVERSATIONS_KEY = "astra_conversations_list";
 
 /* =========================================================
    ELEMENTS
 ========================================================= */
 
-const chat =
-    document.getElementById("chat");
-
-const input =
-    document.getElementById("messageInput");
-
-const sendButton =
-    document.getElementById("sendButton");
-
-const newChatButton =
-    document.getElementById("newChatButton");
-
-const statusText =
-    document.getElementById("statusText");
-
-const welcome =
-    document.getElementById("welcome");
-
-const historyList =
-    document.getElementById("historyList");
-
-const historySearch =
-    document.getElementById("historySearch");
-
-const sidebar =
-    document.getElementById("sidebar");
-
-const historyButton =
-    document.getElementById("historyButton");
-
-const sidebarOverlay =
-    document.getElementById("sidebarOverlay");
-
+const chat = document.getElementById("chat");
+const input = document.getElementById("messageInput");
+const sendButton = document.getElementById("sendButton");
+const newChatButton = document.getElementById("newChatButton");
+const statusText = document.getElementById("statusText");
+const welcome = document.getElementById("welcome");
+const historyList = document.getElementById("historyList");
+const historySearch = document.getElementById("historySearch");
+const sidebar = document.getElementById("sidebar");
+const historyButton = document.getElementById("historyButton");
+const sidebarOverlay = document.getElementById("sidebarOverlay");
 
 /* =========================================================
    CONVERSATION ID
 ========================================================= */
 
 function createConversationId() {
-
-    if (
-        window.crypto &&
-        crypto.randomUUID
-    ) {
-
+    if (window.crypto && crypto.randomUUID) {
         return crypto.randomUUID();
-
     }
 
-
-    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
-        .replace(
-            /[xy]/g,
-            function(c) {
-
-                const r =
-                    Math.random() * 16 | 0;
-
-                const v =
-                    c === "x"
-                        ? r
-                        : (r & 0x3 | 0x8);
-
-                return v.toString(16);
-
-            }
-        );
-
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+        const r = Math.random() * 16 | 0;
+        const v = c === "x" ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
 }
 
-
-let conversationId =
-    localStorage.getItem(
-        "astra_conversation_id"
-    );
-
+let conversationId = localStorage.getItem(CONVERSATION_KEY);
 
 if (!conversationId) {
+    conversationId = createConversationId();
+    localStorage.setItem(CONVERSATION_KEY, conversationId);
+}
 
-    conversationId =
-        createConversationId();
+function getSavedConversations() {
+    try {
+        const saved = JSON.parse(
+            localStorage.getItem(CONVERSATIONS_KEY) || "[]"
+        );
+        return Array.isArray(saved) ? saved : [];
+    } catch {
+        return [];
+    }
+}
 
+let allConversations = getSavedConversations();
+
+function saveConversations() {
     localStorage.setItem(
-        "astra_conversation_id",
-        conversationId
+        CONVERSATIONS_KEY,
+        JSON.stringify(allConversations)
+    );
+}
+
+function updateConversationList(id, title) {
+    const existing = allConversations.find(item => item.id === id);
+
+    if (existing) {
+        existing.title = existing.title || title || "New conversation";
+        existing.updated_at = new Date().toISOString();
+    } else {
+        allConversations.unshift({
+            id: id,
+            title: title || "New conversation",
+            updated_at: new Date().toISOString()
+        });
+    }
+
+    allConversations.sort(
+        (a, b) => new Date(b.updated_at || 0) - new Date(a.updated_at || 0)
     );
 
+    saveConversations();
+    renderHistory();
 }
 
-
 /* =========================================================
-   ADD MESSAGE
+   MESSAGES
 ========================================================= */
 
-function addMessage(
-    text,
-    type
-) {
+function addMessage(text, type) {
+    if (welcome) welcome.style.display = "none";
 
-    if (welcome) {
+    const message = document.createElement("div");
+    message.className = "message " + type;
 
-        welcome.style.display =
-            "none";
-
-    }
-
-
-    const message =
-        document.createElement("div");
-
-    message.className =
-        "message " + type;
-
-
-    const bubble =
-        document.createElement("div");
-
-    bubble.className =
-        "bubble";
-
-    bubble.textContent =
-        text;
-
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.textContent = text == null ? "" : String(text);
 
     message.appendChild(bubble);
-
     chat.appendChild(message);
 
-
-    chat.scrollTop =
-        chat.scrollHeight;
-
+    chat.scrollTop = chat.scrollHeight;
 }
-
-
-/* =========================================================
-   CLEAR CHAT
-========================================================= */
 
 function clearChatScreen() {
+    chat.querySelectorAll(".message, .typing").forEach(element => {
+        element.remove();
+    });
 
-    chat
-        .querySelectorAll(
-            ".message, .typing"
-        )
-        .forEach(
-            function(element) {
-
-                element.remove();
-
-            }
-        );
-
-
-    if (welcome) {
-
-        welcome.style.display =
-            "flex";
-
-    }
-
+    if (welcome) welcome.style.display = "flex";
 }
 
-
 /* =========================================================
-   LOAD ONE CONVERSATION
+   LOAD A CONVERSATION FROM BACKEND
 ========================================================= */
 
-async function loadConversation(
-    id
-) {
+async function loadConversation(id) {
+    if (!id) return;
 
     try {
-
-        const response =
-            await fetch(
-                API_BASE +
-                "/api/conversations/" +
-                encodeURIComponent(id)
-            );
-
+        const response = await fetch(
+            API_BASE + "/api/history?conversation_id=" +
+            encodeURIComponent(id)
+        );
 
         if (!response.ok) {
-
-            throw new Error(
-                "Conversation not found"
-            );
-
+            throw new Error("History request failed (" + response.status + ")");
         }
 
+        const data = await response.json();
 
-        const data =
-            await response.json();
-
+        conversationId = id;
+        localStorage.setItem(CONVERSATION_KEY, conversationId);
 
         clearChatScreen();
 
+        const messages = Array.isArray(data.messages) ? data.messages : [];
 
-        const messages =
-            Array.isArray(data.messages)
-                ? data.messages
-                : [];
-
-
-        messages.forEach(
-            function(message) {
-
-                addMessage(
-
-                    message.content,
-
-                    message.role === "user"
-                        ? "user"
-                        : "assistant"
-
-                );
-
-            }
-        );
-
-
-        conversationId =
-            data.id;
-
-
-        localStorage.setItem(
-            "astra_conversation_id",
-            conversationId
-        );
-
-
-        renderHistoryActive();
-
-
-        closeSidebar();
-
-
-    }
-    catch (error) {
-
-        console.error(
-            "Could not load conversation:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   LOAD HISTORY
-========================================================= */
-
-let allConversations = [];
-
-
-async function loadHistory() {
-
-    historyList.innerHTML = `
-        <div class="history-empty">
-            Loading conversations...
-        </div>
-    `;
-
-
-    try {
-
-        const response =
-            await fetch(
-                API_BASE +
-                "/api/conversations"
+        messages.forEach(message => {
+            addMessage(
+                message.content || "",
+                message.role === "user" ? "user" : "assistant"
             );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "History request failed"
-            );
-
-        }
-
-
-        const data =
-            await response.json();
-
-
-        allConversations =
-            Array.isArray(data)
-                ? data
-                : [];
-
+        });
 
         renderHistory();
-
-
+        closeSidebar();
+    } catch (error) {
+        console.error("Could not load conversation:", error);
+        alert(
+            "Could not load this conversation. It may not exist on the server."
+        );
     }
-    catch (error) {
+}
 
-        console.error(
-            "History error:",
-            error
+/* =========================================================
+   LOAD CURRENT CHAT ON STARTUP
+========================================================= */
+
+async function loadCurrentConversation() {
+    const id = localStorage.getItem(CONVERSATION_KEY);
+
+    if (!id) return;
+
+    try {
+        const response = await fetch(
+            API_BASE + "/api/history?conversation_id=" +
+            encodeURIComponent(id)
         );
 
-
-        historyList.innerHTML = `
-            <div class="history-empty">
-                Unable to load history.<br><br>
-                Check the ASTRA backend.
-            </div>
-        `;
-
-    }
-
-}
-
-
-/* =========================================================
-   FORMAT DATE
-========================================================= */
-
-function formatDate(
-    dateValue
-) {
-
-    if (!dateValue) {
-
-        return "";
-
-    }
-
-
-    const date =
-        new Date(dateValue);
-
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-
-        return "";
-
-    }
-
-
-    return date.toLocaleDateString(
-        undefined,
-        {
-            day: "2-digit",
-            month: "short",
-            year: "numeric"
+        if (!response.ok) {
+            // An empty/new conversation may not exist on the server yet.
+            return;
         }
-    );
 
+        const data = await response.json();
+        const messages = Array.isArray(data.messages) ? data.messages : [];
+
+        if (messages.length === 0) return;
+
+        clearChatScreen();
+
+        messages.forEach(message => {
+            addMessage(
+                message.content || "",
+                message.role === "user" ? "user" : "assistant"
+            );
+        });
+
+        const firstUserMessage = messages.find(m => m.role === "user");
+
+        updateConversationList(
+            id,
+            firstUserMessage
+                ? firstUserMessage.content.slice(0, 45)
+                : "Conversation"
+        );
+    } catch (error) {
+        console.warn("Could not restore chat:", error);
+    }
 }
 
-
 /* =========================================================
-   RENDER HISTORY
+   HISTORY SIDEBAR
+   The list is stored locally because the backend's documented
+   endpoints do not include a GET endpoint for all conversations.
 ========================================================= */
+
+function formatDate(value) {
+    if (!value) return "";
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) return "";
+
+    return date.toLocaleDateString(undefined, {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    });
+}
 
 function renderHistory() {
+    if (!historyList) return;
 
-    const search =
-        historySearch.value
-            .trim()
-            .toLowerCase();
+    const search = historySearch
+        ? historySearch.value.trim().toLowerCase()
+        : "";
 
-
-    let conversations =
-        allConversations.filter(
-            function(conversation) {
-
-                return (
-                    !search ||
-                    (
-                        conversation.title ||
-                        ""
-                    )
-                    .toLowerCase()
-                    .includes(search)
-                );
-
-            }
-        );
-
-
-    if (!conversations.length) {
-
-        historyList.innerHTML = `
-            <div class="history-empty">
-                No conversations found.
-            </div>
-        `;
-
-        return;
-
-    }
-
+    const conversations = allConversations.filter(item => {
+        return !search ||
+            (item.title || "").toLowerCase().includes(search);
+    });
 
     historyList.innerHTML = "";
 
+    if (conversations.length === 0) {
+        historyList.innerHTML = `
+            <div class="history-empty">
+                No saved conversations yet.<br><br>
+                Start a chat to see it here.
+            </div>
+        `;
+        return;
+    }
 
-    conversations.forEach(
-        function(conversation) {
+    conversations.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "history-item";
 
-
-            const item =
-                document.createElement("div");
-
-            item.className =
-                "history-item";
-
-
-            if (
-                conversation.id ===
-                conversationId
-            ) {
-
-                item.classList.add(
-                    "active"
-                );
-
-            }
-
-
-            const title =
-                document.createElement("div");
-
-            title.className =
-                "history-item-title";
-
-            title.textContent =
-                conversation.title ||
-                "Untitled conversation";
-
-
-            const date =
-                document.createElement("div");
-
-            date.className =
-                "history-item-date";
-
-            date.textContent =
-                formatDate(
-                    conversation.updated_at
-                );
-
-
-            const deleteButton =
-                document.createElement("button");
-
-            deleteButton.className =
-                "delete-history";
-
-            deleteButton.innerHTML =
-                "×";
-
-            deleteButton.title =
-                "Delete conversation";
-
-
-            deleteButton.addEventListener(
-                "click",
-                function(event) {
-
-                    event.stopPropagation();
-
-                    deleteConversation(
-                        conversation.id
-                    );
-
-                }
-            );
-
-
-            item.appendChild(title);
-
-            item.appendChild(date);
-
-            item.appendChild(
-                deleteButton
-            );
-
-
-            item.addEventListener(
-                "click",
-                function() {
-
-                    loadConversation(
-                        conversation.id
-                    );
-
-                }
-            );
-
-
-            historyList.appendChild(item);
-
+        if (item.id === conversationId) {
+            row.classList.add("active");
         }
+
+        const title = document.createElement("div");
+        title.className = "history-item-title";
+        title.textContent = item.title || "Untitled conversation";
+
+        const date = document.createElement("div");
+        date.className = "history-item-date";
+        date.textContent = formatDate(item.updated_at);
+
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "delete-history";
+        deleteButton.textContent = "×";
+        deleteButton.title = "Remove from sidebar";
+        deleteButton.setAttribute("aria-label", "Remove conversation");
+
+        deleteButton.addEventListener("click", event => {
+            event.stopPropagation();
+            removeConversationFromList(item.id);
+        });
+
+        row.appendChild(title);
+        row.appendChild(date);
+        row.appendChild(deleteButton);
+
+        row.addEventListener("click", () => loadConversation(item.id));
+
+        historyList.appendChild(row);
+    });
+}
+
+function removeConversationFromList(id) {
+    const confirmed = confirm(
+        "Remove this conversation from the sidebar?\n\n" +
+        "This removes the local list entry. It does not delete messages on the server."
     );
 
-}
+    if (!confirmed) return;
 
-
-/* =========================================================
-   REFRESH ACTIVE HISTORY ITEM
-========================================================= */
-
-function renderHistoryActive() {
-
-    document
-        .querySelectorAll(
-            ".history-item"
-        )
-        .forEach(
-            function(item) {
-
-                item.classList.remove(
-                    "active"
-                );
-
-            }
-        );
-
-
+    allConversations = allConversations.filter(item => item.id !== id);
+    saveConversations();
     renderHistory();
 
+    // Do not erase the currently open chat.
 }
-
-
-/* =========================================================
-   DELETE CONVERSATION
-========================================================= */
-
-async function deleteConversation(
-    id
-) {
-
-    const confirmation =
-        confirm(
-            "Delete this conversation?\n\nThis cannot be undone."
-        );
-
-
-    if (!confirmation) {
-
-        return;
-
-    }
-
-
-    try {
-
-        const response =
-            await fetch(
-
-                API_BASE +
-                "/api/conversations/" +
-                encodeURIComponent(id),
-
-                {
-                    method: "DELETE"
-                }
-
-            );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Delete failed"
-            );
-
-        }
-
-
-        if (
-            id === conversationId
-        ) {
-
-            conversationId =
-                createConversationId();
-
-
-            localStorage.setItem(
-                "astra_conversation_id",
-                conversationId
-            );
-
-
-            clearChatScreen();
-
-        }
-
-
-        await loadHistory();
-
-
-    }
-    catch (error) {
-
-        alert(
-            "Could not delete conversation."
-        );
-
-        console.error(error);
-
-    }
-
-}
-
 
 /* =========================================================
    NEW CHAT
 ========================================================= */
 
-newChatButton.addEventListener(
-    "click",
-    function() {
+newChatButton.addEventListener("click", () => {
+    conversationId = createConversationId();
 
-        conversationId =
-            createConversationId();
+    localStorage.setItem(CONVERSATION_KEY, conversationId);
 
-
-        localStorage.setItem(
-            "astra_conversation_id",
-            conversationId
-        );
-
-
-        clearChatScreen();
-
-
-        renderHistory();
-
-
-        closeSidebar();
-
-
-        input.focus();
-
-    }
-);
-
+    clearChatScreen();
+    renderHistory();
+    closeSidebar();
+    input.focus();
+});
 
 /* =========================================================
-   SEARCH HISTORY
+   SEARCH
 ========================================================= */
 
-historySearch.addEventListener(
-    "input",
-    renderHistory
-);
-
+if (historySearch) {
+    historySearch.addEventListener("input", renderHistory);
+}
 
 /* =========================================================
    MOBILE SIDEBAR
 ========================================================= */
 
 function openSidebar() {
-
-    sidebar.classList.add(
-        "open"
-    );
-
-    sidebarOverlay.classList.add(
-        "show"
-    );
-
+    sidebar.classList.add("open");
+    sidebarOverlay.classList.add("show");
 }
-
 
 function closeSidebar() {
-
-    sidebar.classList.remove(
-        "open"
-    );
-
-    sidebarOverlay.classList.remove(
-        "show"
-    );
-
+    sidebar.classList.remove("open");
+    sidebarOverlay.classList.remove("show");
 }
 
-
-historyButton.addEventListener(
-    "click",
-    openSidebar
-);
-
-
-sidebarOverlay.addEventListener(
-    "click",
-    closeSidebar
-);
-
+historyButton.addEventListener("click", openSidebar);
+sidebarOverlay.addEventListener("click", closeSidebar);
 
 /* =========================================================
    BACKEND STATUS
 ========================================================= */
 
 async function checkBackend() {
-
     try {
+        const response = await fetch(API_BASE + "/health");
 
-        const response =
-            await fetch(
-                API_BASE + "/health"
-            );
+        if (!response.ok) throw new Error("Backend unavailable");
 
-
-        if (!response.ok) {
-
-            throw new Error();
-
-        }
-
-
-        statusText.textContent =
-            "SYSTEM ONLINE";
-
+        statusText.textContent = "SYSTEM ONLINE";
+    } catch {
+        statusText.textContent = "SYSTEM OFFLINE";
     }
-    catch {
-
-        statusText.textContent =
-            "SYSTEM OFFLINE";
-
-    }
-
 }
 
-
 /* =========================================================
-   TYPING
+   TYPING INDICATOR
 ========================================================= */
 
 function createTyping() {
-
-    const typing =
-        document.createElement("div");
-
-    typing.className =
-        "typing";
-
+    const typing = document.createElement("div");
+    typing.className = "typing";
 
     typing.innerHTML = `
-
         <span class="dot"></span>
         <span class="dot"></span>
         <span class="dot"></span>
-
-        <span>
-            ASTRA is processing...
-        </span>
-
+        <span>ASTRA is processing...</span>
     `;
 
-
-    chat.appendChild(
-        typing
-    );
-
-
-    chat.scrollTop =
-        chat.scrollHeight;
-
+    chat.appendChild(typing);
+    chat.scrollTop = chat.scrollHeight;
 
     return typing;
-
 }
-
 
 /* =========================================================
    SEND MESSAGE
 ========================================================= */
 
 async function sendMessage() {
+    const message = input.value.trim();
 
-    const message =
-        input.value.trim();
+    if (!message || sendButton.disabled) return;
 
-
-    if (!message) {
-
-        return;
-
-    }
-
-
-    addMessage(
-        message,
-        "user"
-    );
-
+    addMessage(message, "user");
 
     input.value = "";
+    sendButton.disabled = true;
+    input.disabled = true;
 
-    sendButton.disabled =
-        true;
-
-    input.disabled =
-        true;
-
-
-    const typing =
-        createTyping();
-
+    const typing = createTyping();
 
     try {
-
-        const response =
-            await fetch(
-
-                API_BASE +
-                "/api/chat",
-
-                {
-
-                    method: "POST",
-
-                    headers: {
-
-                        "Content-Type":
-                            "application/json"
-
-                    },
-
-                    body:
-                        JSON.stringify({
-
-                            message:
-                                message,
-
-                            conversation_id:
-                                conversationId
-
-                        })
-
-                }
-
-            );
-
+        const response = await fetch(API_BASE + "/api/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: message,
+                conversation_id: conversationId
+            })
+        });
 
         let data;
 
-
         try {
-
-            data =
-                await response.json();
-
+            data = await response.json();
+        } catch {
+            throw new Error("Invalid response from ASTRA server");
         }
-        catch {
-
-            throw new Error(
-                "Invalid response from ASTRA server"
-            );
-
-        }
-
-
-        typing.remove();
-
 
         if (!response.ok) {
-
             throw new Error(
-
-                data.detail ||
-                "ASTRA request failed"
-
+                data.detail || "ASTRA request failed (" + response.status + ")"
             );
-
         }
 
-
-        const answer =
-            data.reply ||
-            "ASTRA did not return a response.";
-
-
-        /*
-         * IMPORTANT:
-         * Backend may create a NEW conversation ID
-         * when the first message is sent.
-         */
-
-        if (
-            data.conversation_id
-        ) {
-
-            conversationId =
-                data.conversation_id;
-
-
-            localStorage.setItem(
-                "astra_conversation_id",
-                conversationId
-            );
-
+        if (data.conversation_id) {
+            conversationId = data.conversation_id;
+            localStorage.setItem(CONVERSATION_KEY, conversationId);
         }
-
-
-        addMessage(
-            answer,
-            "assistant"
-        );
-
-
-        /*
-         * Refresh sidebar so the newly
-         * created conversation appears.
-         */
-
-        await loadHistory();
-
-
-    }
-    catch (error) {
 
         typing.remove();
 
+        const answer = data.reply || "ASTRA did not return a response.";
 
-        addMessage(
+        addMessage(answer, "assistant");
 
-            "Connection error.\n\n" +
-            error.message,
-
-            "assistant"
-
+        const existing = allConversations.find(
+            item => item.id === conversationId
         );
 
-    }
-    finally {
+        updateConversationList(
+            conversationId,
+            existing ? existing.title : message.slice(0, 45)
+        );
+    } catch (error) {
+        typing.remove();
 
-        sendButton.disabled =
-            false;
+        addMessage(
+            "Connection error.\n\n" + error.message,
+            "assistant"
+        );
 
-        input.disabled =
-            false;
-
+        console.error("ASTRA chat error:", error);
+    } finally {
+        sendButton.disabled = false;
+        input.disabled = false;
         input.focus();
-
     }
-
 }
 
-
 /* =========================================================
-   SEND BUTTON
+   SEND CONTROLS
 ========================================================= */
 
-sendButton.addEventListener(
-    "click",
-    sendMessage
-);
+sendButton.addEventListener("click", sendMessage);
 
-
-/* =========================================================
-   ENTER
-========================================================= */
-
-input.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key === "Enter"
-        ) {
-
-            event.preventDefault();
-
-            sendMessage();
-
-        }
-
+input.addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        sendMessage();
     }
-);
-
+});
 
 /* =========================================================
    START ASTRA
 ========================================================= */
 
-loadHistory();
-
+renderHistory();
 checkBackend();
-
+loadCurrentConversation();
 input.focus();
-
 </script>
-
-</body>
-</html>
