@@ -9,8 +9,8 @@
 <style>
 
 /* =========================================================
-   ASTRA PHASE 2A
-   OCA • NDA • FUTURISTIC DEFENCE INTERFACE
+   ASTRA — OCA NDA DEFENCE AI
+   PHASE 2B FUTURISTIC UI
 ========================================================= */
 
 * {
@@ -20,27 +20,26 @@
 }
 
 :root {
-    --bg: #050805;
-    --panel: #0a100b;
-    --panel2: #0f160f;
 
-    --border: #303b30;
-    --border-light: #4b5948;
+    --bg: #080b08;
+    --panel: #0d120e;
+    --panel2: #111811;
 
-    --olive: #65774b;
-    --olive-light: #91aa6b;
+    --border: #30382f;
 
-    --gold: #c7a95d;
-    --gold-light: #efd485;
+    --olive: #596642;
+    --olive-light: #7f9160;
 
-    --white: #f2f4ed;
-    --muted: #7e897b;
+    --gold: #c5a75b;
+    --gold-light: #e0c77d;
 
-    --green: #59d982;
-    --green-dark: #173b22;
+    --white: #f1f2ed;
+    --muted: #929a8d;
 
-    --user: #344c36;
-    --assistant: #121a13;
+    --user: #344b35;
+    --assistant: #151d16;
+
+    --green: #54c477;
 }
 
 
@@ -49,6 +48,7 @@
 ========================================================= */
 
 body {
+
     font-family:
         Inter,
         Arial,
@@ -56,17 +56,20 @@ body {
         sans-serif;
 
     background:
+
         radial-gradient(
-            circle at 50% -10%,
-            rgba(107, 135, 76, .20),
-            transparent 42%
+            circle at 50% 0%,
+            rgba(93,111,67,.14),
+            transparent 40%
         ),
+
         radial-gradient(
-            circle at 10% 100%,
-            rgba(81, 117, 65, .08),
+            circle at 20% 100%,
+            rgba(197,167,91,.035),
             transparent 35%
         ),
-        #050805;
+
+        #080b08;
 
     color: var(--white);
 
@@ -83,98 +86,7 @@ body {
 
 
 /* =========================================================
-   ANIMATED BACKGROUND GRID
-========================================================= */
-
-body::before {
-    content: "";
-
-    position: fixed;
-
-    inset: 0;
-
-    pointer-events: none;
-
-    background-image:
-        linear-gradient(
-            rgba(115, 140, 91, .035) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            90deg,
-            rgba(115, 140, 91, .035) 1px,
-            transparent 1px
-        );
-
-    background-size: 50px 50px;
-
-    animation:
-        gridMove 20s linear infinite;
-
-    z-index: -2;
-}
-
-@keyframes gridMove {
-
-    from {
-        transform: translateY(0);
-    }
-
-    to {
-        transform: translateY(50px);
-    }
-}
-
-
-/* =========================================================
-   AMBIENT GLOW
-========================================================= */
-
-body::after {
-    content: "";
-
-    position: fixed;
-
-    width: 500px;
-    height: 500px;
-
-    left: 50%;
-    top: 50%;
-
-    transform: translate(-50%, -50%);
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(105, 137, 76, .055),
-            transparent 70%
-        );
-
-    pointer-events: none;
-
-    animation: ambientPulse 5s ease-in-out infinite;
-
-    z-index: -1;
-}
-
-@keyframes ambientPulse {
-
-    0%,100% {
-        opacity: .55;
-        transform: translate(-50%, -50%) scale(.95);
-    }
-
-    50% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.08);
-    }
-}
-
-
-/* =========================================================
-   MAIN APPLICATION
+   MAIN APP
 ========================================================= */
 
 .app {
@@ -186,13 +98,14 @@ body::after {
     height: 94vh;
 
     background:
+
         linear-gradient(
             145deg,
-            rgba(13, 20, 14, .98),
-            rgba(5, 9, 6, .99)
+            rgba(16,22,16,.97),
+            rgba(7,10,8,.98)
         );
 
-    border: 1px solid #394638;
+    border: 1px solid #3b4337;
 
     border-radius: 18px;
 
@@ -205,53 +118,43 @@ body::after {
     position: relative;
 
     box-shadow:
-        0 35px 100px rgba(0,0,0,.75),
-        0 0 60px rgba(87,112,67,.035),
-        inset 0 0 80px rgba(255,255,255,.012);
 
-    animation: appAppear .7s ease;
+        0 30px 100px rgba(0,0,0,.65),
+
+        inset 0 0 80px rgba(255,255,255,.015);
+
+    animation: astraBoot .8s ease-out;
 }
 
-@keyframes appAppear {
+
+/* =========================================================
+   APP BOOT
+========================================================= */
+
+@keyframes astraBoot {
 
     from {
+
         opacity: 0;
+
         transform: scale(.985);
+
+        filter: brightness(.7);
     }
 
     to {
+
         opacity: 1;
+
         transform: scale(1);
+
+        filter: brightness(1);
     }
 }
 
 
 /* =========================================================
-   APP BORDER GLOW
-========================================================= */
-
-.app::before {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    border-radius: 18px;
-
-    pointer-events: none;
-
-    box-shadow:
-        inset 0 0 0 1px rgba(199,169,93,.035),
-        inset 0 0 100px rgba(88,116,67,.025);
-
-    z-index: 20;
-}
-
-
-/* =========================================================
-   DECORATIVE GRID
+   FUTURISTIC GRID
 ========================================================= */
 
 .app::after {
@@ -265,43 +168,63 @@ body::after {
     pointer-events: none;
 
     background-image:
+
         linear-gradient(
-            rgba(255,255,255,.014) 1px,
+            rgba(255,255,255,.018) 1px,
             transparent 1px
         ),
+
         linear-gradient(
             90deg,
-            rgba(255,255,255,.014) 1px,
+            rgba(255,255,255,.018) 1px,
             transparent 1px
         );
 
     background-size: 45px 45px;
 
-    opacity: .22;
+    opacity: .18;
 
     z-index: 0;
+
+    animation: gridMove 18s linear infinite;
+}
+
+@keyframes gridMove {
+
+    from {
+
+        background-position:
+            0 0,
+            0 0;
+    }
+
+    to {
+
+        background-position:
+            45px 45px,
+            45px 45px;
+    }
 }
 
 
 /* =========================================================
    OCA WATERMARK
-   BRIGHTER THAN OLD VERSION
 ========================================================= */
 
 .watermark {
 
     position: absolute;
 
-    width: 570px;
+    width: 520px;
 
-    height: 570px;
+    height: 520px;
 
     left: 50%;
 
-    top: 54%;
+    top: 53%;
 
     transform:
-        translate(-50%, -50%);
+        translate(-50%,-50%);
 
     background-image:
         url("logo.png");
@@ -312,28 +235,17 @@ body::after {
 
     background-repeat: no-repeat;
 
-    /*
-       OLD:
-       opacity: .055;
-
-       NEW:
-       .10 = more visible
-    */
-
-    opacity: .10;
+    opacity: .085;
 
     filter:
+
         grayscale(100%)
-        brightness(1.8)
+        brightness(1.9)
         contrast(1.05);
 
     pointer-events: none;
 
     z-index: 1;
-
-    transition:
-        opacity .5s ease,
-        transform .5s ease;
 
     animation:
         watermarkPulse 6s ease-in-out infinite;
@@ -341,12 +253,23 @@ body::after {
 
 @keyframes watermarkPulse {
 
-    0%,100% {
-        opacity: .075;
+    0%,
+    100% {
+
+        opacity: .065;
+
+        transform:
+            translate(-50%,-50%)
+            scale(1);
     }
 
     50% {
-        opacity: .11;
+
+        opacity: .10;
+
+        transform:
+            translate(-50%,-50%)
+            scale(1.025);
     }
 }
 
@@ -368,21 +291,24 @@ header {
     justify-content: space-between;
 
     background:
+
         linear-gradient(
             180deg,
-            rgba(18,26,18,.98),
-            rgba(8,13,9,.97)
+            rgba(18,24,18,.98),
+            rgba(10,14,10,.96)
         );
 
-    border-bottom:
-        1px solid #384436;
+    border-bottom: 1px solid #394236;
 
     position: relative;
 
     z-index: 10;
 
     box-shadow:
-        0 5px 30px rgba(0,0,0,.20);
+
+        0 1px 0 rgba(255,255,255,.015),
+
+        0 8px 30px rgba(0,0,0,.12);
 }
 
 
@@ -399,14 +325,14 @@ header {
     gap: 18px;
 }
 
+
 .brand-mark {
 
     width: 52px;
 
     height: 52px;
 
-    border:
-        1px solid #75643c;
+    border: 1px solid #70623d;
 
     border-radius: 10px;
 
@@ -425,29 +351,86 @@ header {
     letter-spacing: 2px;
 
     background:
+
         linear-gradient(
             145deg,
-            #222b1d,
-            #0d130d
+            #20271c,
+            #0e130e
         );
 
     box-shadow:
-        inset 0 0 20px rgba(197,167,91,.07),
-        0 0 18px rgba(197,167,91,.025);
 
-    transition: .25s;
+        inset 0 0 20px
+        rgba(197,167,91,.06);
+
+    position: relative;
+
+    overflow: hidden;
+
+    transition:
+
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
 }
+
+
+.brand-mark::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 120%;
+
+    height: 2px;
+
+    left: -120%;
+
+    top: 50%;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(224,199,125,.8),
+            transparent
+        );
+
+    animation:
+        logoScan 4s linear infinite;
+}
+
+@keyframes logoScan {
+
+    0% {
+        left: -120%;
+    }
+
+    100% {
+        left: 120%;
+    }
+}
+
 
 .brand-mark:hover {
 
-    border-color: var(--gold);
+    transform:
+        translateY(-2px);
+
+    border-color:
+        var(--gold);
 
     box-shadow:
-        0 0 20px rgba(197,167,91,.15),
-        inset 0 0 20px rgba(197,167,91,.08);
 
-    transform: translateY(-1px);
+        0 0 18px
+        rgba(197,167,91,.12),
+
+        inset 0 0 20px
+        rgba(197,167,91,.08);
 }
+
 
 .brand-text {
 
@@ -457,6 +440,7 @@ header {
 
     gap: 3px;
 }
+
 
 .astra {
 
@@ -469,8 +453,24 @@ header {
     color: #f3f3ef;
 
     text-shadow:
-        0 0 20px rgba(255,255,255,.04);
+
+        0 0 8px rgba(255,255,255,.08),
+
+        0 0 25px rgba(197,167,91,.08);
+
+    transition: .3s ease;
 }
+
+
+.astra:hover {
+
+    text-shadow:
+
+        0 0 10px rgba(255,255,255,.18),
+
+        0 0 35px rgba(197,167,91,.16);
+}
+
 
 .subtitle {
 
@@ -485,7 +485,7 @@ header {
 
 
 /* =========================================================
-   HEADER RIGHT
+   STATUS
 ========================================================= */
 
 .header-right {
@@ -496,6 +496,7 @@ header {
 
     gap: 25px;
 }
+
 
 .system-status {
 
@@ -512,6 +513,7 @@ header {
     letter-spacing: 1px;
 }
 
+
 .status-dot {
 
     width: 8px;
@@ -522,29 +524,32 @@ header {
 
     background: var(--green);
 
-    box-shadow:
-        0 0 12px rgba(84,196,119,.8);
-
     animation:
         statusPulse 2s ease-in-out infinite;
 }
 
+
 @keyframes statusPulse {
 
-    0%,100% {
-        opacity: .65;
-        box-shadow: 0 0 8px rgba(84,196,119,.4);
+    0%,
+    100% {
+
+        box-shadow:
+            0 0 5px
+            rgba(84,196,119,.5);
     }
 
     50% {
-        opacity: 1;
-        box-shadow: 0 0 16px rgba(84,196,119,.9);
+
+        box-shadow:
+            0 0 16px
+            rgba(84,196,119,1);
     }
 }
 
 
 /* =========================================================
-   NEW CHAT BUTTON
+   NEW CHAT
 ========================================================= */
 
 #newChatButton {
@@ -552,16 +557,16 @@ header {
     padding: 12px 19px;
 
     background:
+
         linear-gradient(
             145deg,
             #1b241a,
-            #101610
+            #111711
         );
 
     color: #dddccf;
 
-    border:
-        1px solid #4c5646;
+    border: 1px solid #4c5646;
 
     border-radius: 9px;
 
@@ -572,55 +577,33 @@ header {
     letter-spacing: .5px;
 
     transition:
-        .2s;
 
-    position: relative;
-
-    overflow: hidden;
+        transform .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease;
 }
 
-#newChatButton::before {
-
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-
-    left: -100%;
-
-    width: 100%;
-
-    height: 100%;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255,255,255,.06),
-            transparent
-        );
-
-    transition: .5s;
-}
-
-#newChatButton:hover::before {
-
-    left: 100%;
-}
 
 #newChatButton:hover {
 
-    border-color: var(--gold);
+    transform:
+        translateY(-1px);
+
+    border-color:
+        var(--gold);
 
     color: white;
 
-    background: #222c1f;
-
-    transform: translateY(-1px);
+    background:
+        #222c1f;
 
     box-shadow:
-        0 5px 20px rgba(0,0,0,.25);
+
+        0 5px 18px
+        rgba(0,0,0,.25),
+
+        0 0 15px
+        rgba(197,167,91,.04);
 }
 
 
@@ -640,21 +623,15 @@ header {
 
     gap: 25px;
 
-    background:
-        linear-gradient(
-            90deg,
-            #090e09,
-            #0d130d,
-            #090e09
-        );
+    background: #0b100b;
 
-    border-bottom:
-        1px solid #252d24;
+    border-bottom: 1px solid #252c24;
 
     position: relative;
 
     z-index: 8;
 }
+
 
 .command-item {
 
@@ -666,21 +643,28 @@ header {
 
     text-transform: uppercase;
 
-    transition: .2s;
+    transition:
+
+        color .25s ease,
+        text-shadow .25s ease;
 }
+
 
 .command-item:hover {
 
-    color: #a7b59a;
+    color: #a9b59a;
 }
+
 
 .command-item.active {
 
     color: var(--gold);
 
     text-shadow:
-        0 0 12px rgba(197,167,91,.15);
+        0 0 12px
+        rgba(197,167,91,.22);
 }
+
 
 .separator {
 
@@ -693,7 +677,7 @@ header {
 
 
 /* =========================================================
-   CHAT AREA
+   CHAT
 ========================================================= */
 
 .chat {
@@ -702,43 +686,49 @@ header {
 
     overflow-y: auto;
 
-    padding:
-        35px
-        32px
-        30px;
+    padding: 35px 32px 30px;
 
     position: relative;
 
     z-index: 5;
 
     scroll-behavior: smooth;
+
+    isolation: isolate;
 }
+
 
 .chat::-webkit-scrollbar {
 
     width: 8px;
 }
 
+
 .chat::-webkit-scrollbar-track {
 
     background: transparent;
 }
+
 
 .chat::-webkit-scrollbar-thumb {
 
     background: #30382f;
 
     border-radius: 10px;
+
+    transition:
+        background .2s ease;
 }
+
 
 .chat::-webkit-scrollbar-thumb:hover {
 
-    background: #4a5746;
+    background: #4a5647;
 }
 
 
 /* =========================================================
-   MESSAGE
+   MESSAGES
 ========================================================= */
 
 .message {
@@ -748,25 +738,36 @@ header {
     display: flex;
 
     animation:
-        messageIn .28s ease;
+        messageIn .3s
+        cubic-bezier(.2,.8,.2,1);
 }
+
 
 @keyframes messageIn {
 
     from {
+
         opacity: 0;
+
         transform:
-            translateY(10px)
-            scale(.99);
+            translateY(12px)
+            scale(.985);
+
+        filter: blur(2px);
     }
 
     to {
+
         opacity: 1;
+
         transform:
             translateY(0)
             scale(1);
+
+        filter: blur(0);
     }
 }
+
 
 .message.user {
 
@@ -782,9 +783,7 @@ header {
 
     max-width: 78%;
 
-    padding:
-        17px
-        20px;
+    padding: 17px 20px;
 
     border-radius: 14px;
 
@@ -799,29 +798,24 @@ header {
     position: relative;
 
     transition:
-        transform .2s,
-        box-shadow .2s;
+
+        border-color .25s ease,
+        box-shadow .25s ease,
+        transform .25s ease;
 }
 
-.bubble:hover {
-
-    transform: translateY(-1px);
-}
-
-
-/* ASTRA */
 
 .assistant .bubble {
 
     background:
+
         linear-gradient(
             145deg,
             rgba(23,31,23,.96),
             rgba(15,21,16,.96)
         );
 
-    border:
-        1px solid #293329;
+    border: 1px solid #293329;
 
     color: #e5e8df;
 
@@ -829,32 +823,55 @@ header {
         3px solid #667650;
 
     border-bottom-left-radius: 4px;
-
-    box-shadow:
-        0 8px 25px rgba(0,0,0,.12);
 }
 
 
-/* USER */
+.assistant .bubble:hover {
+
+    border-color: #3b4939;
+
+    box-shadow:
+
+        0 8px 30px
+        rgba(0,0,0,.18),
+
+        0 0 20px
+        rgba(104,121,83,.035);
+
+    transform:
+        translateY(-1px);
+}
+
 
 .user .bubble {
 
     background:
+
         linear-gradient(
             145deg,
             #3b523b,
             #2b402f
         );
 
-    border:
-        1px solid #4d644c;
+    border: 1px solid #4d644c;
 
     color: #f2f4ed;
 
     border-bottom-right-radius: 4px;
+}
+
+
+.user .bubble:hover {
+
+    border-color: #60785e;
 
     box-shadow:
-        0 8px 25px rgba(0,0,0,.18);
+
+        0 8px 25px
+        rgba(0,0,0,.18);
+
+    transform:
+        translateY(-1px);
 }
 
 
@@ -877,6 +894,10 @@ header {
     letter-spacing: 1.5px;
 
     color: #77846b;
+
+    text-shadow:
+        0 0 10px
+        rgba(127,145,96,.15);
 }
 
 
@@ -897,33 +918,14 @@ header {
     text-align: center;
 }
 
+
 .welcome-content {
 
     position: relative;
 
     z-index: 3;
-
-    animation:
-        welcomeIn .8s ease;
 }
 
-@keyframes welcomeIn {
-
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-
-/* =========================================================
-   WELCOME EMBLEM
-========================================================= */
 
 .welcome-emblem {
 
@@ -932,8 +934,7 @@ header {
     height: 82px;
 
     margin:
-        0 auto
-        20px;
+        0 auto 20px;
 
     border:
         1px solid #685a38;
@@ -955,6 +956,7 @@ header {
     letter-spacing: 2px;
 
     background:
+
         radial-gradient(
             circle,
             #242b1d,
@@ -962,29 +964,73 @@ header {
         );
 
     box-shadow:
-        0 0 35px rgba(197,167,91,.08);
+
+        0 0 35px
+        rgba(197,167,91,.08);
+
+    position: relative;
+
+    overflow: hidden;
 
     animation:
-        emblemGlow 4s ease-in-out infinite;
+        emblemFloat 4s ease-in-out infinite;
 }
 
-@keyframes emblemGlow {
 
-    0%,100% {
-        box-shadow:
-            0 0 25px rgba(197,167,91,.06);
+.welcome-emblem::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 160%;
+
+    height: 1px;
+
+    left: -180%;
+
+    top: 50%;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(224,199,125,.65),
+            transparent
+        );
+
+    animation:
+        emblemScan 3.5s linear infinite;
+}
+
+
+@keyframes emblemScan {
+
+    0% {
+        left: -180%;
+    }
+
+    100% {
+        left: 180%;
+    }
+}
+
+
+@keyframes emblemFloat {
+
+    0%,
+    100% {
+        transform:
+            translateY(0);
     }
 
     50% {
-        box-shadow:
-            0 0 45px rgba(197,167,91,.14);
+        transform:
+            translateY(-5px);
     }
 }
 
-
-/* =========================================================
-   WELCOME TITLE
-========================================================= */
 
 .welcome h1 {
 
@@ -997,8 +1043,41 @@ header {
     color: #f1f2ed;
 
     text-shadow:
-        0 0 30px rgba(255,255,255,.045);
+
+        0 0 15px
+        rgba(255,255,255,.04),
+
+        0 0 35px
+        rgba(197,167,91,.04);
+
+    animation:
+        titleAppear .8s ease-out;
 }
+
+
+@keyframes titleAppear {
+
+    from {
+
+        opacity: 0;
+
+        letter-spacing: 18px;
+
+        transform:
+            translateY(8px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        letter-spacing: 11px;
+
+        transform:
+            translateY(0);
+    }
+}
+
 
 .welcome .tagline {
 
@@ -1011,7 +1090,31 @@ header {
     text-transform: uppercase;
 
     margin-bottom: 17px;
+
+    animation:
+        taglineAppear 1s ease-out;
 }
+
+
+@keyframes taglineAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(5px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
 
 .welcome p {
 
@@ -1043,8 +1146,30 @@ header {
 
     font-size: 13px;
 
-    padding-left: 4px;
+    animation:
+        typingAppear .25s ease-out;
 }
+
+
+@keyframes typingAppear {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(5px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
 
 .typing span.dot {
 
@@ -1060,26 +1185,39 @@ header {
         typing 1.1s infinite;
 }
 
+
 .typing span.dot:nth-child(2) {
 
-    animation-delay: .15s;
+    animation-delay:
+        .15s;
 }
+
 
 .typing span.dot:nth-child(3) {
 
-    animation-delay: .3s;
+    animation-delay:
+        .3s;
 }
+
 
 @keyframes typing {
 
-    0%,60%,100% {
+    0%,
+    60%,
+    100% {
+
         opacity: .3;
-        transform: translateY(0);
+
+        transform:
+            translateY(0);
     }
 
     30% {
+
         opacity: 1;
-        transform: translateY(-4px);
+
+        transform:
+            translateY(-4px);
     }
 }
 
@@ -1092,15 +1230,14 @@ header {
 
     min-height: 90px;
 
-    padding:
-        15px
-        20px;
+    padding: 15px 20px;
 
     display: flex;
 
     gap: 11px;
 
     background:
+
         linear-gradient(
             180deg,
             #0b100b,
@@ -1115,8 +1252,10 @@ header {
     z-index: 10;
 
     box-shadow:
-        0 -10px 30px rgba(0,0,0,.12);
+        0 -10px 35px
+        rgba(0,0,0,.15);
 }
+
 
 .input-wrap {
 
@@ -1126,22 +1265,13 @@ header {
 }
 
 
-/* =========================================================
-   INPUT
-========================================================= */
-
 #messageInput {
 
     width: 100%;
 
     height: 58px;
 
-    background:
-        linear-gradient(
-            145deg,
-            #0e150f,
-            #0a100b
-        );
+    background: #0c120d;
 
     color: #f1f2ed;
 
@@ -1150,31 +1280,40 @@ header {
 
     border-radius: 11px;
 
-    padding:
-        0
-        18px;
+    padding: 0 18px;
 
     outline: none;
 
     font-size: 16px;
 
     transition:
-        .25s;
+
+        border-color .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
 }
+
 
 #messageInput::placeholder {
 
     color: #697267;
 }
 
+
 #messageInput:focus {
 
+    background: #0d140e;
+
     border-color:
-        #687953;
+        #788b5e;
 
     box-shadow:
-        0 0 0 3px rgba(104,121,83,.08),
-        0 0 25px rgba(104,121,83,.035);
+
+        0 0 0 3px
+        rgba(104,121,83,.08),
+
+        0 0 25px
+        rgba(104,121,83,.045);
 }
 
 
@@ -1194,6 +1333,7 @@ header {
     border-radius: 11px;
 
     background:
+
         linear-gradient(
             145deg,
             #77643a,
@@ -1208,13 +1348,21 @@ header {
 
     cursor: pointer;
 
-    transition:
-        .2s;
-
     position: relative;
 
     overflow: hidden;
+
+    box-shadow:
+        0 4px 15px
+        rgba(0,0,0,.25);
+
+    transition:
+
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
 }
+
 
 #sendButton::before {
 
@@ -1222,33 +1370,48 @@ header {
 
     position: absolute;
 
-    left: -100%;
+    width: 70px;
 
-    top: 0;
+    height: 180%;
 
-    width: 100%;
+    top: -40%;
 
-    height: 100%;
+    left: -100px;
+
+    transform:
+        rotate(20deg);
 
     background:
+
         linear-gradient(
             90deg,
             transparent,
-            rgba(255,255,255,.13),
+            rgba(255,255,255,.16),
             transparent
         );
 
-    transition: .5s;
+    animation:
+        buttonScan 4s linear infinite;
 }
 
-#sendButton:hover::before {
 
-    left: 100%;
+@keyframes buttonScan {
+
+    0% {
+        left: -100px;
+    }
+
+    55%,
+    100% {
+        left: 150%;
+    }
 }
+
 
 #sendButton:hover {
 
     background:
+
         linear-gradient(
             145deg,
             #8c7645,
@@ -1256,17 +1419,27 @@ header {
         );
 
     transform:
-        translateY(-1px);
+        translateY(-2px);
 
     box-shadow:
-        0 6px 22px rgba(0,0,0,.25);
+
+        0 8px 25px
+        rgba(0,0,0,.35),
+
+        0 0 18px
+        rgba(197,167,91,.08);
+
+    border-color:
+        #9a824a;
 }
+
 
 #sendButton:active {
 
     transform:
-        translateY(1px);
+        translateY(0);
 }
+
 
 #sendButton:disabled {
 
@@ -1275,62 +1448,6 @@ header {
     cursor: not-allowed;
 
     transform: none;
-}
-
-
-/* =========================================================
-   SMALL FUTURISTIC CORNER DETAILS
-========================================================= */
-
-.app .corner {
-
-    position: absolute;
-
-    width: 12px;
-
-    height: 12px;
-
-    border-color: rgba(199,169,93,.45);
-
-    pointer-events: none;
-
-    z-index: 25;
-}
-
-.corner.top-left {
-
-    top: 10px;
-    left: 10px;
-
-    border-top: 1px solid;
-    border-left: 1px solid;
-}
-
-.corner.top-right {
-
-    top: 10px;
-    right: 10px;
-
-    border-top: 1px solid;
-    border-right: 1px solid;
-}
-
-.corner.bottom-left {
-
-    bottom: 10px;
-    left: 10px;
-
-    border-bottom: 1px solid;
-    border-left: 1px solid;
-}
-
-.corner.bottom-right {
-
-    bottom: 10px;
-    right: 10px;
-
-    border-bottom: 1px solid;
-    border-right: 1px solid;
 }
 
 
@@ -1353,6 +1470,7 @@ header {
         border-radius: 0;
     }
 
+
     header {
 
         height: 82px;
@@ -1360,6 +1478,13 @@ header {
         padding:
             0 16px;
     }
+
+
+    .brand {
+
+        gap: 11px;
+    }
+
 
     .brand-mark {
 
@@ -1370,12 +1495,14 @@ header {
         font-size: 15px;
     }
 
+
     .astra {
 
         font-size: 25px;
 
         letter-spacing: 5px;
     }
+
 
     .subtitle {
 
@@ -1384,10 +1511,12 @@ header {
         letter-spacing: 1.8px;
     }
 
+
     .system-status {
 
         display: none;
     }
+
 
     #newChatButton {
 
@@ -1396,6 +1525,7 @@ header {
 
         font-size: 12px;
     }
+
 
     .command-bar {
 
@@ -1407,6 +1537,7 @@ header {
         overflow: hidden;
     }
 
+
     .command-item {
 
         font-size: 8px;
@@ -1414,11 +1545,13 @@ header {
         white-space: nowrap;
     }
 
+
     .chat {
 
         padding:
             28px 15px;
     }
+
 
     .bubble {
 
@@ -1427,6 +1560,7 @@ header {
         font-size: 15px;
     }
 
+
     .welcome h1 {
 
         font-size: 40px;
@@ -1434,13 +1568,13 @@ header {
         letter-spacing: 7px;
     }
 
+
     .welcome p {
 
         padding:
             0 20px;
-
-        font-size: 14px;
     }
+
 
     .watermark {
 
@@ -1448,14 +1582,17 @@ header {
 
         height: 350px;
 
-        opacity: .09;
+        opacity: .075;
+
+        animation: none;
     }
+
 
     .input-area {
 
-        padding:
-            11px;
+        padding: 11px;
     }
+
 
     #messageInput {
 
@@ -1464,6 +1601,7 @@ header {
         font-size: 15px;
     }
 
+
     #sendButton {
 
         height: 53px;
@@ -1471,8 +1609,43 @@ header {
         min-width: 72px;
     }
 
-    .corner {
-        display: none;
+
+    .app::after {
+
+        animation-duration:
+            30s;
+    }
+
+
+    #sendButton::before {
+
+        animation-duration:
+            6s;
+    }
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+@media(prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration:
+            .01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
+        scroll-behavior:
+            auto !important;
+
+        transition-duration:
+            .01ms !important;
     }
 }
 
@@ -1482,17 +1655,13 @@ header {
 
 <body>
 
+
 <div class="app">
 
-    <!-- FUTURISTIC CORNERS -->
 
-    <div class="corner top-left"></div>
-    <div class="corner top-right"></div>
-    <div class="corner bottom-left"></div>
-    <div class="corner bottom-right"></div>
-
-
-    <!-- OCA WATERMARK -->
+    <!-- =====================================================
+         OCA WATERMARK
+    ====================================================== -->
 
     <div class="watermark"></div>
 
@@ -1503,36 +1672,47 @@ header {
 
     <header>
 
+
         <div class="brand">
+
 
             <div class="brand-mark">
                 OCA
             </div>
 
+
             <div class="brand-text">
+
 
                 <div class="astra">
                     ASTRA
                 </div>
 
+
                 <div class="subtitle">
                     OCA • NDA PREPARATION AI
                 </div>
 
+
             </div>
+
 
         </div>
 
 
         <div class="header-right">
 
+
             <div class="system-status">
 
+
                 <span class="status-dot"></span>
+
 
                 <span id="statusText">
                     SYSTEM ONLINE
                 </span>
+
 
             </div>
 
@@ -1541,7 +1721,9 @@ header {
                 + New Chat
             </button>
 
+
         </div>
+
 
     </header>
 
@@ -1552,39 +1734,51 @@ header {
 
     <div class="command-bar">
 
+
         <span class="command-item active">
             ASTRA COMMAND
         </span>
 
+
         <span class="separator"></span>
+
 
         <span class="command-item">
             NDA PREPARATION
         </span>
 
+
         <span class="separator"></span>
+
 
         <span class="command-item">
             GAT
         </span>
 
+
         <span class="separator"></span>
+
 
         <span class="command-item">
             MATHEMATICS
         </span>
 
+
         <span class="separator"></span>
+
 
         <span class="command-item">
             CURRENT AFFAIRS
         </span>
 
+
         <span class="separator"></span>
+
 
         <span class="command-item">
             DEFENCE
         </span>
+
 
     </div>
 
@@ -1593,33 +1787,50 @@ header {
          CHAT
     ====================================================== -->
 
-    <div class="chat" id="chat">
+    <div
+        class="chat"
+        id="chat"
+    >
 
-        <div class="welcome" id="welcome">
+
+        <div
+            class="welcome"
+            id="welcome"
+        >
+
 
             <div class="welcome-content">
+
 
                 <div class="welcome-emblem">
                     OCA
                 </div>
 
+
                 <h1>
                     ASTRA
                 </h1>
+
 
                 <div class="tagline">
                     NDA PREPARATION AI
                 </div>
 
+
                 <p>
+
                     Your intelligent academic assistant
                     for NDA preparation, mathematics,
                     GAT, current affairs and defence studies.
+
                 </p>
+
 
             </div>
 
+
         </div>
+
 
     </div>
 
@@ -1630,7 +1841,9 @@ header {
 
     <div class="input-area">
 
+
         <div class="input-wrap">
+
 
             <input
                 id="messageInput"
@@ -1639,6 +1852,7 @@ header {
                 autocomplete="off"
             >
 
+
         </div>
 
 
@@ -1646,12 +1860,15 @@ header {
             SEND
         </button>
 
+
     </div>
+
 
 </div>
 
 
 <script>
+
 
 /* =========================================================
    ASTRA BACKEND
@@ -1685,7 +1902,7 @@ const welcome =
 
 
 /* =========================================================
-   CONVERSATION ID
+   CREATE CONVERSATION ID
 ========================================================= */
 
 function createConversationId() {
@@ -1699,25 +1916,28 @@ function createConversationId() {
     }
 
 
-    return (
-        "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
-    ).replace(
-        /[xy]/g,
-        function(c) {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
+        .replace(
+            /[xy]/g,
+            function(c) {
 
-            const r =
-                Math.random() * 16 | 0;
+                const r =
+                    Math.random() * 16 | 0;
 
-            const v =
-                c === "x"
+                const v =
+                    c === "x"
                     ? r
                     : (r & 0x3 | 0x8);
 
-            return v.toString(16);
-        }
-    );
+                return v.toString(16);
+            }
+        );
 }
 
+
+/* =========================================================
+   CURRENT CONVERSATION
+========================================================= */
 
 let conversationId =
     localStorage.getItem(
@@ -1754,14 +1974,18 @@ function addMessage(
 
 
     const message =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     message.className =
         "message " + type;
 
 
     const bubble =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     bubble.className =
         "bubble";
@@ -1787,7 +2011,7 @@ function addMessage(
 
 
 /* =========================================================
-   CLEAR CHAT SCREEN
+   CLEAR SCREEN
 ========================================================= */
 
 function clearChatScreen() {
@@ -1813,12 +2037,18 @@ function clearChatScreen() {
 
 
 /* =========================================================
-   LOAD HISTORY
+   LOAD CONVERSATION HISTORY
 ========================================================= */
 
 async function loadHistory() {
 
     try {
+
+        /*
+         * IMPORTANT:
+         * This endpoint is the conversation endpoint
+         * already provided by your FastAPI backend.
+         */
 
         const response =
             await fetch(
@@ -1832,6 +2062,16 @@ async function loadHistory() {
 
         if (!response.ok) {
 
+            /*
+             * 404 simply means this is a new
+             * conversation.
+             */
+
+            if (response.status === 404) {
+
+                return;
+            }
+
             throw new Error(
                 "History request failed"
             );
@@ -1843,9 +2083,11 @@ async function loadHistory() {
 
 
         const messages =
-            Array.isArray(data.messages)
-                ? data.messages
-                : [];
+            Array.isArray(
+                data.messages
+            )
+            ? data.messages
+            : [];
 
 
         if (!messages.length) {
@@ -1865,10 +2107,13 @@ async function loadHistory() {
             function(message) {
 
                 addMessage(
+
                     message.content,
+
                     message.role === "user"
                         ? "user"
                         : "assistant"
+
                 );
 
             }
@@ -1878,8 +2123,8 @@ async function loadHistory() {
         chat.scrollTop =
             chat.scrollHeight;
 
-    }
 
+    }
     catch (error) {
 
         console.log(
@@ -1897,6 +2142,7 @@ async function loadHistory() {
 newChatButton.addEventListener(
     "click",
     function() {
+
 
         const confirmation =
             confirm(
@@ -1925,6 +2171,7 @@ newChatButton.addEventListener(
 
 
         input.focus();
+
     }
 );
 
@@ -1953,8 +2200,8 @@ async function checkBackend() {
         statusText.textContent =
             "SYSTEM ONLINE";
 
-    }
 
+    }
     catch {
 
         statusText.textContent =
@@ -1980,10 +2227,17 @@ function createTyping() {
 
 
     typing.innerHTML = `
+
         <span class="dot"></span>
+
         <span class="dot"></span>
+
         <span class="dot"></span>
-        <span>ASTRA is processing...</span>
+
+        <span>
+            ASTRA is processing...
+        </span>
+
     `;
 
 
@@ -2005,6 +2259,7 @@ function createTyping() {
 ========================================================= */
 
 async function sendMessage() {
+
 
     const message =
         input.value.trim();
@@ -2028,6 +2283,7 @@ async function sendMessage() {
     sendButton.disabled =
         true;
 
+
     input.disabled =
         true;
 
@@ -2038,27 +2294,37 @@ async function sendMessage() {
 
     try {
 
+
         const response =
             await fetch(
+
                 API_BASE +
                 "/api/chat",
+
                 {
+
                     method: "POST",
 
                     headers: {
+
                         "Content-Type":
                             "application/json"
+
                     },
 
                     body:
                         JSON.stringify({
+
                             message:
                                 message,
 
                             conversation_id:
                                 conversationId
+
                         })
+
                 }
+
             );
 
 
@@ -2071,7 +2337,6 @@ async function sendMessage() {
                 await response.json();
 
         }
-
         catch {
 
             throw new Error(
@@ -2086,21 +2351,22 @@ async function sendMessage() {
         if (!response.ok) {
 
             throw new Error(
+
                 data.detail ||
                 "ASTRA request failed"
+
             );
         }
 
 
         /*
-           IMPORTANT:
-
-           The backend returns the real
-           database conversation ID.
-
-           Save it so the next message
-           continues the same conversation.
-        */
+         * IMPORTANT:
+         * The backend returns the real
+         * conversation ID.
+         *
+         * Save it so history continues
+         * correctly even after reload.
+         */
 
         if (
             data.conversation_id
@@ -2111,8 +2377,11 @@ async function sendMessage() {
 
 
             localStorage.setItem(
+
                 "astra_conversation_id",
+
                 conversationId
+
             );
         }
 
@@ -2127,29 +2396,37 @@ async function sendMessage() {
             "assistant"
         );
 
-    }
 
+    }
     catch (error) {
+
 
         typing.remove();
 
 
         addMessage(
+
             "Connection error.\n\n" +
             error.message,
-            "assistant"
-        );
-    }
 
+            "assistant"
+
+        );
+
+    }
     finally {
+
 
         sendButton.disabled =
             false;
 
+
         input.disabled =
             false;
 
+
         input.focus();
+
     }
 }
 
@@ -2194,6 +2471,7 @@ loadHistory();
 checkBackend();
 
 input.focus();
+
 
 </script>
 
