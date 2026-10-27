@@ -13,11 +13,63 @@
 <title>ASTRA | OCA NDA AI</title>
 
 
+<!-- =========================================================
+     MATHJAX
+     Renders Gemini LaTeX mathematics properly
+========================================================= -->
+
+<script>
+window.MathJax = {
+
+    tex: {
+
+        inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"]
+        ],
+
+        displayMath: [
+            ["$$", "$$"],
+            ["\\[", "\\]"]
+        ],
+
+        processEscapes: true,
+
+        processEnvironments: true
+    },
+
+    options: {
+
+        skipHtmlTags: [
+            "script",
+            "noscript",
+            "style",
+            "textarea",
+            "pre",
+            "code"
+        ]
+    },
+
+    startup: {
+
+        typeset: false
+    }
+
+};
+</script>
+
+<script
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
 <style>
 
 /* =========================================================
    ASTRA OCA
    TEMPORARY CHAT MEMORY
+   NO DATABASE
    NO CHAT HISTORY
 ========================================================= */
 
@@ -496,21 +548,68 @@ header {
 
 .bubble {
 
-    max-width: 78%;
+    max-width: 82%;
 
-    padding: 17px 20px;
+    padding: 18px 22px;
 
     border-radius: 14px;
 
-    line-height: 1.65;
-
-    white-space: pre-wrap;
+    line-height: 1.7;
 
     word-wrap: break-word;
 
+    overflow-wrap: break-word;
+
     font-size: 16px;
+
+    color: #e5e8df;
 }
 
+
+/* =========================================================
+   MATH
+========================================================= */
+
+.assistant .bubble mjx-container {
+
+    color: #f0f2ea !important;
+
+    max-width: 100%;
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+
+    padding: 4px 0;
+}
+
+
+/* Large display equations */
+
+.assistant .bubble mjx-container[display="true"] {
+
+    margin:
+        18px 0 !important;
+
+    padding:
+        12px 8px;
+
+    text-align: center;
+}
+
+
+/* Inline equations */
+
+.assistant .bubble mjx-container:not([display="true"]) {
+
+    margin:
+        0 2px;
+}
+
+
+/* =========================================================
+   ASSISTANT BUBBLE
+========================================================= */
 
 .assistant .bubble {
 
@@ -534,6 +633,10 @@ header {
 }
 
 
+/* =========================================================
+   USER BUBBLE
+========================================================= */
+
 .user .bubble {
 
     background:
@@ -550,6 +653,47 @@ header {
 
     border-bottom-right-radius:
         4px;
+}
+
+
+/* =========================================================
+   BASIC MARKDOWN
+========================================================= */
+
+.bubble strong {
+
+    color: var(--gold-light);
+
+    font-weight: 700;
+}
+
+
+.bubble em {
+
+    color: #d4d8ce;
+}
+
+
+.bubble code {
+
+    background:
+        #080d08;
+
+    border:
+        1px solid #30382f;
+
+    padding:
+        2px 6px;
+
+    border-radius:
+        5px;
+
+    font-family:
+        Consolas,
+        monospace;
+
+    color:
+        #e0c77d;
 }
 
 
@@ -811,6 +955,19 @@ header {
     font-weight: 600;
 
     cursor: pointer;
+
+    transition:
+        .2s ease;
+}
+
+
+#sendButton:hover {
+
+    transform:
+        translateY(-1px);
+
+    filter:
+        brightness(1.08);
 }
 
 
@@ -819,6 +976,9 @@ header {
     opacity: .5;
 
     cursor: not-allowed;
+
+    transform:
+        none;
 }
 
 
@@ -900,7 +1060,7 @@ header {
 
     .bubble {
 
-        max-width: 90%;
+        max-width: 94%;
 
         font-size: 15px;
     }
@@ -933,6 +1093,7 @@ header {
 
         min-width: 82px;
     }
+
 }
 
 </style>
@@ -1118,8 +1279,14 @@ header {
 /* =========================================================
    ASTRA FRONTEND
    TEMPORARY MEMORY ONLY
+   NO LOCAL STORAGE
+   NO DATABASE
 ========================================================= */
 
+
+/* =========================================================
+   API
+========================================================= */
 
 const API_BASE =
     "https://astra-backend-2hac.onrender.com";
@@ -1160,16 +1327,88 @@ const welcome =
 
 
 /* =========================================================
-   IMPORTANT
-   THIS ARRAY IS THE ONLY CHAT MEMORY.
-   IT EXISTS ONLY WHILE THIS PAGE IS OPEN.
+   TEMPORARY MEMORY
+   RAM ONLY
+   DELETED WHEN PAGE IS REFRESHED/CLOSED
 ========================================================= */
 
 let conversation = [];
 
 
 /* =========================================================
-   ADD MESSAGE TO SCREEN
+   ESCAPE HTML
+   Prevents AI response from inserting unsafe HTML
+========================================================= */
+
+function escapeHTML(text) {
+
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =========================================================
+   FORMAT AI TEXT
+   Keeps LaTeX intact for MathJax
+========================================================= */
+
+function formatAIText(text) {
+
+    let safe =
+        escapeHTML(text);
+
+
+    /*
+       Convert simple Markdown bold.
+
+       Example:
+
+       **Answer:** 4
+
+       becomes:
+
+       <strong>Answer:</strong> 4
+    */
+
+    safe =
+        safe.replace(
+            /\*\*(.+?)\*\*/gs,
+            "<strong>$1</strong>"
+        );
+
+
+    /*
+       Convert Markdown italic.
+    */
+
+    safe =
+        safe.replace(
+            /(?<!\*)\*([^*\n]+)\*(?!\*)/g,
+            "<em>$1</em>"
+        );
+
+
+    /*
+       Preserve line breaks.
+    */
+
+    safe =
+        safe.replace(
+            /\n/g,
+            "<br>"
+        );
+
+
+    return safe;
+}
+
+
+/* =========================================================
+   ADD MESSAGE
 ========================================================= */
 
 function addMessage(
@@ -1204,10 +1443,32 @@ function addMessage(
         "bubble";
 
 
-    bubble.textContent =
-        text == null
-            ? ""
-            : String(text);
+    /*
+       IMPORTANT:
+
+       Old code used:
+
+       bubble.textContent = text;
+
+       That displayed LaTeX as raw text.
+
+       New code uses innerHTML after
+       escaping the content, allowing
+       MathJax to render mathematics.
+    */
+
+    if (type === "assistant") {
+
+        bubble.innerHTML =
+            formatAIText(text);
+
+    } else {
+
+        bubble.textContent =
+            text == null
+                ? ""
+                : String(text);
+    }
 
 
     message.appendChild(
@@ -1222,11 +1483,47 @@ function addMessage(
 
     chat.scrollTop =
         chat.scrollHeight;
+
+
+    /*
+       Tell MathJax to render only
+       this new assistant message.
+
+       This is much faster than
+       re-rendering the entire chat.
+    */
+
+    if (
+        type === "assistant" &&
+        window.MathJax
+    ) {
+
+        MathJax.typesetPromise(
+            [bubble]
+        )
+        .then(() => {
+
+            chat.scrollTop =
+                chat.scrollHeight;
+
+        })
+        .catch(
+            error => {
+
+                console.error(
+                    "MathJax error:",
+                    error
+                );
+
+            }
+        );
+
+    }
 }
 
 
 /* =========================================================
-   TYPING
+   TYPING INDICATOR
 ========================================================= */
 
 function createTyping() {
@@ -1297,6 +1594,13 @@ async function checkBackend() {
             statusText.textContent =
                 "SYSTEM ONLINE";
 
+        } else if (
+            data.gemini
+        ) {
+
+            statusText.textContent =
+                "SYSTEM ONLINE";
+
         } else {
 
             statusText.textContent =
@@ -1337,7 +1641,9 @@ async function sendMessage() {
     }
 
 
-    /* Show user message */
+    /* -----------------------------------------------
+       SHOW USER MESSAGE
+    ----------------------------------------------- */
 
     addMessage(
         message,
@@ -1345,7 +1651,9 @@ async function sendMessage() {
     );
 
 
-    /* Add to temporary memory */
+    /* -----------------------------------------------
+       SAVE USER MESSAGE IN TEMPORARY MEMORY
+    ----------------------------------------------- */
 
     conversation.push({
 
@@ -1423,6 +1731,7 @@ async function sendMessage() {
             throw new Error(
 
                 data.detail ||
+
                 (
                     "ASTRA request failed (" +
                     response.status +
@@ -1441,7 +1750,9 @@ async function sendMessage() {
         typing.remove();
 
 
-        /* Show ASTRA response */
+        /* -------------------------------------------
+           SHOW ASTRA RESPONSE
+        ------------------------------------------- */
 
         addMessage(
             answer,
@@ -1449,7 +1760,9 @@ async function sendMessage() {
         );
 
 
-        /* Add ASTRA response to temporary memory */
+        /* -------------------------------------------
+           SAVE ASTRA RESPONSE IN TEMP MEMORY
+        ------------------------------------------- */
 
         conversation.push({
 
@@ -1529,6 +1842,31 @@ input.addEventListener(
 checkBackend();
 
 input.focus();
+
+
+/* =========================================================
+   MATHJAX READY
+========================================================= */
+
+window.addEventListener(
+    "load",
+    function() {
+
+        if (window.MathJax) {
+
+            MathJax.startup.promise
+                .then(() => {
+
+                    console.log(
+                        "ASTRA MathJax ready"
+                    );
+
+                });
+
+        }
+
+    }
+);
 
 </script>
 
