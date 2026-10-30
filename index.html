@@ -273,6 +273,10 @@ header {
     border-bottom-right-radius: 4px;
 }
 
+.message.assistant {
+    position: relative;
+}
+
 .message.assistant::before {
     content: "ASTRA";
     position: absolute;
@@ -336,7 +340,7 @@ header {
     line-height: 1.7;
 }
 
-/* TYPING INDICATOR */
+/* TYPING */
 
 .typing {
     display: flex;
@@ -374,7 +378,7 @@ header {
     }
 }
 
-/* INPUT AREA */
+/* INPUT */
 
 .input-area {
     min-height: 90px;
@@ -530,7 +534,6 @@ header {
         min-width: 72px;
     }
 }
-
 </style>
 </head>
 
@@ -540,7 +543,6 @@ header {
 
     <div class="watermark"></div>
 
-    <!-- HEADER -->
     <header>
         <div class="brand">
             <div class="brand-mark">OCA</div>
@@ -561,7 +563,6 @@ header {
         </div>
     </header>
 
-    <!-- COMMAND BAR -->
     <div class="command-bar">
         <span class="command-item active">ASTRA COMMAND</span>
         <span class="separator"></span>
@@ -576,33 +577,25 @@ header {
         <span class="command-item">DEFENCE</span>
     </div>
 
-    <!-- CHAT -->
     <div class="chat" id="chat">
 
         <div class="welcome" id="welcome">
             <div class="welcome-content">
-
                 <div class="welcome-emblem">OCA</div>
-
                 <h1>ASTRA</h1>
-
                 <div class="tagline">NDA PREPARATION AI</div>
-
                 <p>
                     Your intelligent academic assistant
                     for NDA preparation, mathematics,
                     GAT, current affairs and defence studies.
                     Ask me anything to get started.
                 </p>
-
             </div>
         </div>
 
     </div>
 
-    <!-- INPUT -->
     <div class="input-area">
-
         <div class="input-wrap">
             <input
                 id="messageInput"
@@ -613,7 +606,6 @@ header {
         </div>
 
         <button id="sendButton">SEND</button>
-
     </div>
 
 </div>
@@ -626,6 +618,7 @@ header {
 
 const API_BASE = "https://astra-backend-2hac.onrender.com";
 
+
 /* =========================================================
    ELEMENTS
 ========================================================= */
@@ -637,11 +630,17 @@ const newChatButton = document.getElementById("newChatButton");
 const statusText = document.getElementById("statusText");
 const welcome = document.getElementById("welcome");
 
+
 /* =========================================================
-   CONVERSATION ID
+   TEMPORARY SESSION MEMORY
+
+   sessionStorage survives page refreshes but is cleared
+   when the browser tab/session ends.
+
+   Never create a new ID for every message.
 ========================================================= */
 
-function createConversationId() {
+function createSessionId() {
 
     if (window.crypto && crypto.randomUUID) {
         return crypto.randomUUID();
@@ -650,21 +649,29 @@ function createConversationId() {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
         const r = Math.random() * 16 | 0;
         const v = c === "x" ? r : (r & 0x3 | 0x8);
-
         return v.toString(16);
     });
-
 }
 
-let conversationId = localStorage.getItem("astra_conversation_id");
+let astraSessionId = sessionStorage.getItem("astra_session_id");
 
-if (!conversationId) {
-
-    conversationId = createConversationId();
-
-    localStorage.setItem("astra_conversation_id", conversationId);
-
+if (!astraSessionId) {
+    astraSessionId = createSessionId();
+    sessionStorage.setItem("astra_session_id", astraSessionId);
 }
+
+
+/* =========================================================
+   FRONTEND CONVERSATION HISTORY
+
+   This history is sent with each request as an additional
+   fallback. The backend also maintains its own RAM memory.
+========================================================= */
+
+let conversationHistory = [];
+
+let isSending = false;
+
 
 /* =========================================================
    ADD MESSAGE TO SCREEN
@@ -687,8 +694,24 @@ function addMessage(text, type) {
     chat.appendChild(message);
 
     chat.scrollTop = chat.scrollHeight;
-
 }
+
+
+/* =========================================================
+   ADD MESSAGE TO FRONTEND MEMORY
+========================================================= */
+
+function rememberMessage(role, content) {
+
+    conversationHistory.push({
+        role: role,
+        content: content
+    });
+
+    // Keep recent messages only.
+    conversationHistory = conversationHistory.slice(-30);
+}
+
 
 /* =========================================================
    CLEAR CHAT SCREEN
@@ -703,83 +726,8 @@ function clearChatScreen() {
     if (welcome) {
         welcome.style.display = "flex";
     }
-
 }
 
-/* =========================================================
-   LOAD CONVERSATION HISTORY
-========================================================= */
-
-async function loadHistory() {
-
-    try {
-
-        const response = await fetch(
-            API_BASE + "/api/history?conversation_id=" +
-            encodeURIComponent(conversationId)
-        );
-
-        if (!response.ok) {
-            throw new Error("History request failed");
-        }
-
-        const data = await response.json();
-
-        const messages = Array.isArray(data.messages)
-            ? data.messages
-            : [];
-
-        if (!messages.length) {
-            return;
-        }
-
-        if (welcome) {
-            welcome.style.display = "none";
-        }
-
-        messages.forEach(function(message) {
-
-            addMessage(
-                message.content,
-                message.role === "user" ? "user" : "assistant"
-            );
-
-        });
-
-        chat.scrollTop = chat.scrollHeight;
-
-    }
-    catch (error) {
-
-        console.log("History could not be loaded:", error.message);
-
-    }
-
-}
-
-/* =========================================================
-   NEW CHAT
-========================================================= */
-
-newChatButton.addEventListener("click", function() {
-
-    const confirmation = confirm(
-        "Start a new chat?\n\nYour previous conversation will remain saved in ASTRA's database."
-    );
-
-    if (!confirmation) {
-        return;
-    }
-
-    conversationId = createConversationId();
-
-    localStorage.setItem("astra_conversation_id", conversationId);
-
-    clearChatScreen();
-
-    input.focus();
-
-});
 
 /* =========================================================
    BACKEND STATUS
@@ -795,16 +743,23 @@ async function checkBackend() {
             throw new Error("Backend unavailable");
         }
 
+        const data = await response.json();
+
+        if (data.gemini === false) {
+            statusText.textContent = "AI KEY MISSING";
+            return;
+        }
+
         statusText.textContent = "SYSTEM ONLINE";
 
-    }
-    catch (error) {
+    } catch (error) {
 
         statusText.textContent = "SYSTEM OFFLINE";
+        console.error("Backend health check:", error);
 
     }
-
 }
+
 
 /* =========================================================
    TYPING INDICATOR
@@ -828,8 +783,8 @@ function createTyping() {
     chat.scrollTop = chat.scrollHeight;
 
     return typing;
-
 }
+
 
 /* =========================================================
    SEND MESSAGE
@@ -839,11 +794,15 @@ async function sendMessage() {
 
     const message = input.value.trim();
 
-    if (!message || sendButton.disabled) {
+    if (!message || isSending) {
         return;
     }
 
+    isSending = true;
+
     addMessage(message, "user");
+
+    rememberMessage("user", message);
 
     input.value = "";
 
@@ -864,8 +823,15 @@ async function sendMessage() {
                 },
 
                 body: JSON.stringify({
+
                     message: message,
-                    conversation_id: conversationId
+
+                    // Send the previous messages.
+                    history: conversationHistory.slice(0, -1),
+
+                    // IMPORTANT: Same ID for every message.
+                    session_id: astraSessionId
+
                 })
             }
         );
@@ -873,59 +839,119 @@ async function sendMessage() {
         let data;
 
         try {
-
             data = await response.json();
-
-        }
-        catch {
-
-            throw new Error("Invalid response from ASTRA server");
-
+        } catch {
+            throw new Error("The server returned an invalid response.");
         }
 
         if (!response.ok) {
 
-            throw new Error(
-                typeof data.detail === "string"
-                    ? data.detail
-                    : "ASTRA request failed"
-            );
+            const detail = data.detail;
 
+            throw new Error(
+                typeof detail === "string"
+                    ? detail
+                    : "ASTRA request failed. HTTP " + response.status
+            );
         }
 
-        const answer =
-            data.reply ||
-            "ASTRA did not return a response.";
+        const answer = (
+            typeof data.reply === "string" && data.reply.trim()
+        )
+            ? data.reply.trim()
+            : "ASTRA did not return a response.";
 
         addMessage(answer, "assistant");
 
-    }
-    catch (error) {
+        rememberMessage("assistant", answer);
+
+    } catch (error) {
+
+        console.error("ASTRA chat error:", error);
 
         addMessage(
             "Connection error.\n\n" + error.message,
             "assistant"
         );
 
-    }
-    finally {
+        statusText.textContent = "CONNECTION ERROR";
+
+    } finally {
 
         typing.remove();
 
         sendButton.disabled = false;
         input.disabled = false;
 
+        isSending = false;
+
         input.focus();
+    }
+}
+
+
+/* =========================================================
+   NEW CHAT
+
+   Generate a new ID and discard the old conversation memory.
+========================================================= */
+
+newChatButton.addEventListener("click", async function() {
+
+    if (isSending) {
+        return;
+    }
+
+    const oldSessionId = astraSessionId;
+
+    const confirmation = confirm(
+        "Start a new temporary chat?\n\nYour current temporary memory will be cleared."
+    );
+
+    if (!confirmation) {
+        return;
+    }
+
+    // Clear old backend memory if the server is available.
+    try {
+
+        await fetch(
+            API_BASE + "/api/session/" + encodeURIComponent(oldSessionId),
+            {
+                method: "DELETE"
+            }
+        );
+
+    } catch (error) {
+
+        console.log("Could not clear old server session:", error);
 
     }
 
-}
+    // Create a fresh session.
+    astraSessionId = createSessionId();
+
+    sessionStorage.setItem("astra_session_id", astraSessionId);
+
+    // Clear frontend conversation memory.
+    conversationHistory = [];
+
+    // Clear displayed messages.
+    clearChatScreen();
+
+    statusText.textContent = "SYSTEM ONLINE";
+
+    input.focus();
+
+});
+
 
 /* =========================================================
    SEND BUTTON
 ========================================================= */
 
 sendButton.addEventListener("click", sendMessage);
+
 
 /* =========================================================
    ENTER KEY
@@ -934,20 +960,16 @@ sendButton.addEventListener("click", sendMessage);
 input.addEventListener("keydown", function(event) {
 
     if (event.key === "Enter") {
-
         event.preventDefault();
-
         sendMessage();
-
     }
 
 });
 
+
 /* =========================================================
    START ASTRA
 ========================================================= */
-
-loadHistory();
 
 checkBackend();
 
