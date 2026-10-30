@@ -1,16 +1,12 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>ASTRA | OCA NDA AI</title>
 
 <style>
-/* =========================================================
-   OCA ASTRA — NDA DEFENCE ACADEMY THEME
-========================================================= */
-
 * {
     box-sizing: border-box;
     margin: 0;
@@ -20,348 +16,183 @@
 :root {
     --bg: #080b08;
     --panel: #0d120e;
-    --panel2: #111811;
     --border: #30382f;
-
-    --olive: #596642;
-    --olive-light: #7f9160;
-
     --gold: #c5a75b;
     --gold-light: #e0c77d;
-
     --white: #f1f2ed;
     --muted: #929a8d;
-
-    --user: #344b35;
-    --assistant: #151d16;
-
     --green: #54c477;
 }
 
 body {
-    font-family:
-        Inter,
-        Arial,
-        Helvetica,
-        sans-serif;
-
+    font-family: Inter, Arial, Helvetica, sans-serif;
     background:
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(93, 111, 67, 0.14),
-            transparent 40%
-        ),
+        radial-gradient(circle at 50% 0%, rgba(93,111,67,.14), transparent 40%),
         #080b08;
-
     color: var(--white);
-
     min-height: 100vh;
-
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* =========================================================
-   MAIN APP
-========================================================= */
-
 .app {
     width: 97%;
     max-width: 1450px;
-
     height: 94vh;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(16, 22, 16, .97),
-            rgba(7, 10, 8, .98)
-        );
-
+    background: linear-gradient(145deg, rgba(16,22,16,.97), rgba(7,10,8,.98));
     border: 1px solid #3b4337;
-
     border-radius: 18px;
-
     overflow: hidden;
-
     display: flex;
     flex-direction: column;
-
     position: relative;
-
-    box-shadow:
-        0 30px 100px rgba(0,0,0,.65),
-        inset 0 0 80px rgba(255,255,255,.015);
+    box-shadow: 0 30px 100px rgba(0,0,0,.65);
 }
-
-/* =========================================================
-   DECORATIVE MILITARY GRID
-========================================================= */
 
 .app::after {
     content: "";
-
     position: absolute;
-
     inset: 0;
-
     pointer-events: none;
-
     background-image:
-        linear-gradient(
-            rgba(255,255,255,.018) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            90deg,
-            rgba(255,255,255,.018) 1px,
-            transparent 1px
-        );
-
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
     background-size: 45px 45px;
-
     opacity: .18;
-
     z-index: 0;
 }
 
-/* =========================================================
-   OCA LOGO WATERMARK
-========================================================= */
-
 .watermark {
     position: absolute;
-
     width: 520px;
     height: 520px;
-
     left: 50%;
     top: 53%;
-
     transform: translate(-50%, -50%);
-
     background-image: url("logo.png");
-
     background-size: contain;
-
     background-position: center;
-
     background-repeat: no-repeat;
-
     opacity: .055;
-
-    filter:
-        grayscale(100%)
-        brightness(1.7);
-
+    filter: grayscale(100%) brightness(1.7);
     pointer-events: none;
-
     z-index: 1;
 }
 
-/* =========================================================
-   HEADER
-========================================================= */
+/* HEADER */
 
 header {
-    height: 105px;
-
+    min-height: 105px;
     padding: 0 30px;
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(18,24,18,.98),
-            rgba(10,14,10,.96)
-        );
-
+    background: linear-gradient(180deg, rgba(18,24,18,.98), rgba(10,14,10,.96));
     border-bottom: 1px solid #394236;
-
     position: relative;
-
     z-index: 10;
 }
 
-/* LEFT HEADER */
-
 .brand {
     display: flex;
-
     align-items: center;
-
     gap: 18px;
 }
 
 .brand-mark {
     width: 52px;
     height: 52px;
-
     border: 1px solid #70623d;
-
     border-radius: 10px;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     color: var(--gold);
-
     font-weight: bold;
-
     font-size: 19px;
-
     letter-spacing: 2px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #20271c,
-            #0e130e
-        );
-
-    box-shadow:
-        inset 0 0 20px rgba(197,167,91,.06);
+    background: linear-gradient(145deg, #20271c, #0e130e);
 }
 
 .brand-text {
     display: flex;
-
     flex-direction: column;
-
     gap: 3px;
 }
 
 .astra {
     font-size: 31px;
-
     font-weight: 800;
-
     letter-spacing: 7px;
-
     color: #f3f3ef;
 }
 
 .subtitle {
     font-size: 11px;
-
     letter-spacing: 2.8px;
-
     color: var(--gold);
-
     text-transform: uppercase;
 }
 
-/* STATUS */
-
 .header-right {
     display: flex;
-
     align-items: center;
-
     gap: 25px;
 }
 
 .system-status {
     display: flex;
-
     align-items: center;
-
     gap: 8px;
-
     color: #8fd49e;
-
     font-size: 13px;
-
     letter-spacing: 1px;
 }
 
 .status-dot {
     width: 8px;
     height: 8px;
-
     border-radius: 50%;
-
     background: var(--green);
-
-    box-shadow:
-        0 0 12px rgba(84,196,119,.8);
+    box-shadow: 0 0 12px rgba(84,196,119,.8);
 }
-
-/* NEW CHAT */
 
 #newChatButton {
     padding: 12px 19px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #1b241a,
-            #111711
-        );
-
+    background: linear-gradient(145deg, #1b241a, #111711);
     color: #dddccf;
-
     border: 1px solid #4c5646;
-
     border-radius: 9px;
-
     cursor: pointer;
-
     font-size: 14px;
-
-    letter-spacing: .5px;
-
     transition: .2s;
 }
 
 #newChatButton:hover {
     border-color: var(--gold);
-
     color: white;
-
     background: #222c1f;
 }
 
-/* =========================================================
-   COMMAND BAR
-========================================================= */
+/* COMMAND BAR */
 
 .command-bar {
-    height: 44px;
-
+    min-height: 44px;
     padding: 0 30px;
-
     display: flex;
-
     align-items: center;
-
     gap: 25px;
-
     background: #0b100b;
-
     border-bottom: 1px solid #252c24;
-
     position: relative;
-
     z-index: 8;
 }
 
 .command-item {
     color: #687064;
-
     font-size: 10px;
-
     letter-spacing: 1.5px;
-
     text-transform: uppercase;
 }
 
@@ -371,27 +202,18 @@ header {
 
 .separator {
     height: 15px;
-
     width: 1px;
-
     background: #323a30;
 }
 
-/* =========================================================
-   CHAT
-========================================================= */
+/* CHAT */
 
 .chat {
     flex: 1;
-
     overflow-y: auto;
-
     padding: 35px 32px 30px;
-
     position: relative;
-
     z-index: 5;
-
     scroll-behavior: smooth;
 }
 
@@ -399,36 +221,26 @@ header {
     width: 8px;
 }
 
-.chat::-webkit-scrollbar-track {
-    background: transparent;
-}
-
 .chat::-webkit-scrollbar-thumb {
     background: #30382f;
-
     border-radius: 10px;
 }
 
 .message {
     margin-bottom: 24px;
-
     display: flex;
-
     animation: messageIn .22s ease;
 }
 
 @keyframes messageIn {
-
     from {
         opacity: 0;
         transform: translateY(7px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
     }
-
 }
 
 .message.user {
@@ -437,189 +249,109 @@ header {
 
 .bubble {
     max-width: 78%;
-
     padding: 17px 20px;
-
     border-radius: 14px;
-
     line-height: 1.65;
-
     white-space: pre-wrap;
-
-    word-wrap: break-word;
-
+    overflow-wrap: anywhere;
     font-size: 16px;
-
     position: relative;
 }
 
 .assistant .bubble {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(23,31,23,.96),
-            rgba(15,21,16,.96)
-        );
-
+    background: linear-gradient(145deg, rgba(23,31,23,.96), rgba(15,21,16,.96));
     border: 1px solid #293329;
-
     color: #e5e8df;
-
     border-left: 3px solid #667650;
-
     border-bottom-left-radius: 4px;
 }
 
 .user .bubble {
-    background:
-        linear-gradient(
-            145deg,
-            #3b523b,
-            #2b402f
-        );
-
+    background: linear-gradient(145deg, #3b523b, #2b402f);
     border: 1px solid #4d644c;
-
     color: #f2f4ed;
-
     border-bottom-right-radius: 4px;
 }
 
-/* =========================================================
-   SMALL MESSAGE LABEL
-========================================================= */
-
 .message.assistant::before {
     content: "ASTRA";
-
     position: absolute;
-
     margin-top: -19px;
-
     margin-left: 4px;
-
     font-size: 9px;
-
     letter-spacing: 1.5px;
-
     color: #77846b;
 }
 
-/* =========================================================
-   WELCOME
-========================================================= */
+/* WELCOME */
 
 .welcome {
     min-height: 100%;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     text-align: center;
 }
 
 .welcome-content {
     position: relative;
-
     z-index: 3;
 }
 
 .welcome-emblem {
     width: 82px;
     height: 82px;
-
     margin: 0 auto 20px;
-
     border: 1px solid #685a38;
-
     border-radius: 50%;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     color: var(--gold);
-
     font-size: 22px;
-
     font-weight: bold;
-
     letter-spacing: 2px;
-
-    background:
-        radial-gradient(
-            circle,
-            #242b1d,
-            #0d120d
-        );
-
-    box-shadow:
-        0 0 35px rgba(197,167,91,.08);
+    background: radial-gradient(circle, #242b1d, #0d120d);
 }
 
 .welcome h1 {
     font-size: 52px;
-
     letter-spacing: 11px;
-
     margin-bottom: 9px;
-
     color: #f1f2ed;
 }
 
 .welcome .tagline {
     color: var(--gold);
-
     font-size: 12px;
-
     letter-spacing: 3px;
-
     text-transform: uppercase;
-
     margin-bottom: 17px;
 }
 
 .welcome p {
     color: #788174;
-
     font-size: 15px;
-
     max-width: 520px;
-
     line-height: 1.7;
 }
 
-/* =========================================================
-   TYPING
-========================================================= */
+/* TYPING INDICATOR */
 
 .typing {
     display: flex;
-
     align-items: center;
-
     gap: 6px;
-
     margin-bottom: 20px;
-
     color: #7d8778;
-
     font-size: 13px;
 }
 
 .typing span.dot {
     width: 6px;
     height: 6px;
-
     border-radius: 50%;
-
     background: #82906f;
-
     animation: typing 1.1s infinite;
 }
 
@@ -632,71 +364,44 @@ header {
 }
 
 @keyframes typing {
-
     0%,60%,100% {
         opacity: .3;
         transform: translateY(0);
     }
-
     30% {
         opacity: 1;
         transform: translateY(-4px);
     }
-
 }
 
-/* =========================================================
-   INPUT AREA
-========================================================= */
+/* INPUT AREA */
 
 .input-area {
     min-height: 90px;
-
     padding: 15px 20px;
-
     display: flex;
-
     gap: 11px;
-
-    background:
-        linear-gradient(
-            180deg,
-            #0b100b,
-            #090d09
-        );
-
+    background: linear-gradient(180deg, #0b100b, #090d09);
     border-top: 1px solid #30382f;
-
     position: relative;
-
     z-index: 10;
 }
 
 .input-wrap {
     flex: 1;
-
     position: relative;
 }
 
 #messageInput {
     width: 100%;
-
     height: 58px;
-
     background: #0c120d;
-
     color: #f1f2ed;
-
     border: 1px solid #394538;
-
     border-radius: 11px;
-
     padding: 0 18px;
-
     outline: none;
-
     font-size: 16px;
-
     transition: .2s;
 }
 
@@ -706,92 +411,69 @@ header {
 
 #messageInput:focus {
     border-color: #687953;
-
-    box-shadow:
-        0 0 0 3px rgba(104,121,83,.08);
+    box-shadow: 0 0 0 3px rgba(104,121,83,.08);
 }
 
 #sendButton {
     height: 58px;
-
     min-width: 105px;
-
     border: 1px solid #77643a;
-
     border-radius: 11px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #77643a,
-            #5c4c2d
-        );
-
+    background: linear-gradient(145deg, #77643a, #5c4c2d);
     color: #fff8df;
-
     font-size: 15px;
-
     font-weight: 600;
-
     cursor: pointer;
-
     transition: .2s;
 }
 
 #sendButton:hover {
-    background:
-        linear-gradient(
-            145deg,
-            #8c7645,
-            #6d5a34
-        );
-
+    background: linear-gradient(145deg, #8c7645, #6d5a34);
     transform: translateY(-1px);
 }
 
 #sendButton:disabled {
     opacity: .5;
-
     cursor: not-allowed;
-
     transform: none;
 }
 
-/* =========================================================
-   MOBILE
-========================================================= */
+/* MOBILE */
 
-@media(max-width: 750px) {
+@media(max-width:750px) {
+    body {
+        align-items: stretch;
+    }
 
     .app {
         width: 100%;
         height: 100vh;
-
+        height: 100dvh;
         border-radius: 0;
     }
 
     header {
-        height: 82px;
-
+        min-height: 82px;
         padding: 0 16px;
     }
 
     .brand-mark {
         width: 42px;
         height: 42px;
-
         font-size: 15px;
+    }
+
+    .brand {
+        gap: 10px;
     }
 
     .astra {
         font-size: 25px;
-
         letter-spacing: 5px;
     }
 
     .subtitle {
         font-size: 8px;
-
         letter-spacing: 1.8px;
     }
 
@@ -801,21 +483,17 @@ header {
 
     #newChatButton {
         padding: 10px 12px;
-
         font-size: 12px;
     }
 
     .command-bar {
         padding: 0 15px;
-
         gap: 12px;
-
-        overflow: hidden;
+        overflow-x: auto;
     }
 
     .command-item {
         font-size: 8px;
-
         white-space: nowrap;
     }
 
@@ -825,13 +503,11 @@ header {
 
     .bubble {
         max-width: 90%;
-
         font-size: 15px;
     }
 
     .welcome h1 {
         font-size: 40px;
-
         letter-spacing: 7px;
     }
 
@@ -846,40 +522,14 @@ header {
 
     #messageInput {
         height: 53px;
-
         font-size: 15px;
     }
 
     #sendButton {
         height: 53px;
-
         min-width: 72px;
     }
 }
-
-/* ASTRA NDA PAPER GENERATOR */
-.practice-toolbar{display:flex;gap:10px;align-items:center;padding:12px 20px;background:rgba(11,16,11,.96);border-bottom:1px solid #252c24;position:relative;z-index:6;flex-wrap:wrap}
-.practice-button,.paper-action{border:1px solid #77643a;border-radius:9px;background:linear-gradient(145deg,#5c6b43,#34402d);color:#f7f2df;padding:10px 14px;font-weight:700;cursor:pointer}
-.practice-button.secondary,.paper-action.secondary{background:#111811;border-color:#394538;color:#d9dfd2}
-.practice-button:disabled,.paper-action:disabled{opacity:.55;cursor:not-allowed}
-.practice-panel{display:none;flex:1;min-height:0;overflow-y:auto;padding:22px;position:relative;z-index:5}
-.practice-panel.open{display:block}
-.practice-controls{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:12px;margin-bottom:16px}
-.practice-controls label{display:flex;flex-direction:column;gap:7px;color:var(--gold-light);font-size:12px;letter-spacing:.5px}
-.practice-controls select,.practice-controls input{min-width:0;width:100%;background:#0c120d;border:1px solid #394538;color:var(--white);border-radius:8px;padding:11px}
-.practice-note{color:var(--muted);line-height:1.5;font-size:13px;margin:8px 0 15px}
-.paper-status{color:var(--gold-light);margin:14px 0;white-space:pre-wrap}
-.paper-card{border:1px solid #30382f;border-left:3px solid #667650;background:rgba(17,24,17,.95);border-radius:12px;padding:16px;margin:14px 0}
-.paper-card h3{color:var(--gold-light);margin-bottom:12px;line-height:1.5}
-.paper-meta{color:var(--muted);font-size:12px;margin-bottom:10px}
-.paper-option{display:flex;gap:10px;align-items:flex-start;padding:10px;margin:7px 0;border:1px solid #30382f;border-radius:8px;cursor:pointer;color:#e5e8df;line-height:1.5}
-.paper-option:has(input:checked){border-color:var(--gold);background:rgba(197,167,91,.08)}
-.paper-option input{margin-top:4px;accent-color:var(--gold)}
-.paper-explanation{display:none;color:#b9c5b0;background:#0a100b;border-radius:8px;padding:12px;margin-top:12px;line-height:1.6;white-space:pre-wrap}
-.paper-explanation.visible{display:block}
-.paper-result{border:1px solid #77643a;background:rgba(92,76,45,.18);border-radius:10px;padding:15px;color:var(--gold-light);margin:15px 0}
-@media(max-width:850px){.practice-panel{padding:14px}.practice-controls{grid-template-columns:1fr 1fr}.practice-toolbar{padding:10px 12px}}
-@media(max-width:480px){.practice-controls{grid-template-columns:1fr}}
 
 </style>
 </head>
@@ -888,208 +538,98 @@ header {
 
 <div class="app">
 
-    <!-- OCA WATERMARK -->
     <div class="watermark"></div>
-
 
     <!-- HEADER -->
     <header>
-
         <div class="brand">
-
-            <div class="brand-mark">
-                OCA
-            </div>
+            <div class="brand-mark">OCA</div>
 
             <div class="brand-text">
-
-                <div class="astra">
-                    ASTRA
-                </div>
-
-                <div class="subtitle">
-                    OCA • NDA PREPARATION AI
-                </div>
-
+                <div class="astra">ASTRA</div>
+                <div class="subtitle">OCA • NDA PREPARATION AI</div>
             </div>
-
         </div>
-
 
         <div class="header-right">
-
             <div class="system-status">
-
                 <span class="status-dot"></span>
-
-                <span id="statusText">
-                    SYSTEM ONLINE
-                </span>
-
+                <span id="statusText">CONNECTING...</span>
             </div>
 
-
-            <button id="newChatButton">
-                + New Chat
-            </button>
-
+            <button id="newChatButton">+ New Chat</button>
         </div>
-
     </header>
 
-
     <!-- COMMAND BAR -->
-
     <div class="command-bar">
-
-        <span class="command-item active">
-            ASTRA COMMAND
-        </span>
-
+        <span class="command-item active">ASTRA COMMAND</span>
         <span class="separator"></span>
-
-        <span class="command-item">
-            NDA PREPARATION
-        </span>
-
+        <span class="command-item">NDA PREPARATION</span>
         <span class="separator"></span>
-
-        <span class="command-item">
-            GAT
-        </span>
-
+        <span class="command-item">GAT</span>
         <span class="separator"></span>
-
-        <span class="command-item">
-            MATHEMATICS
-        </span>
-
+        <span class="command-item">MATHEMATICS</span>
         <span class="separator"></span>
-
-        <span class="command-item">
-            CURRENT AFFAIRS
-        </span>
-
+        <span class="command-item">CURRENT AFFAIRS</span>
         <span class="separator"></span>
-
-        <span class="command-item">
-            DEFENCE
-        </span>
-
+        <span class="command-item">DEFENCE</span>
     </div>
-
-    <!-- NDA PAPER GENERATOR -->
-    <div class="practice-toolbar">
-        <button type="button" class="practice-button" id="openPracticeButton">NDA PRACTICE / MOCK PAPERS</button>
-        <button type="button" class="practice-button secondary" id="backToChatButton" style="display:none">BACK TO CHAT</button>
-    </div>
-    <section class="practice-panel" id="practicePanel" aria-label="NDA question paper generator">
-        <h2 style="color:var(--gold-light);margin-bottom:8px">ASTRA NDA QUESTION GENERATOR</h2>
-        <p class="practice-note">Generate a new AI practice paper. These are practice questions, not official NDA papers. Previously seen question text is remembered in this browser to help reduce repeats.</p>
-        <div class="practice-controls">
-            <label>SUBJECT
-                <select id="paperSubject">
-                    <option value="NDA Mathematics">NDA Mathematics</option>
-                    <option value="English">GAT — English</option>
-                    <option value="Physics">GAT — Physics</option>
-                    <option value="Chemistry">GAT — Chemistry</option>
-                    <option value="Biology">GAT — Biology</option>
-                    <option value="History">GAT — History</option>
-                    <option value="Geography">GAT — Geography</option>
-                    <option value="Polity">GAT — Polity</option>
-                    <option value="Economics">GAT — Economics</option>
-                    <option value="General Knowledge">GAT — General Knowledge</option>
-                </select>
-            </label>
-            <label>TOPIC
-                <input id="paperTopic" type="text" value="Mixed" maxlength="100" placeholder="e.g. Algebra, Trigonometry">
-            </label>
-            <label>DIFFICULTY
-                <select id="paperDifficulty">
-                    <option value="Mixed">Mixed</option><option value="Easy">Easy</option><option value="Medium">Medium</option><option value="Hard">Hard</option>
-                </select>
-            </label>
-            <label>NUMBER OF QUESTIONS
-                <select id="paperCount">
-                    <option value="5">5 questions (quick test)</option><option value="10">10 questions</option><option value="20" selected>20 questions</option><option value="30">30 questions</option><option value="50">50 questions</option>
-                </select>
-            </label>
-        </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-            <button type="button" class="paper-action" id="generatePaperButton">GENERATE NEW PAPER</button>
-            <button type="button" class="paper-action secondary" id="clearPaperHistoryButton">CLEAR SEEN-QUESTION HISTORY</button>
-        </div>
-        <p class="paper-status" id="paperStatus" role="status" aria-live="polite"></p>
-        <div id="paperResult"></div>
-    </section>
-
-
-
 
     <!-- CHAT -->
-
     <div class="chat" id="chat">
 
         <div class="welcome" id="welcome">
-
             <div class="welcome-content">
 
-                <div class="welcome-emblem">
-                    OCA
-                </div>
+                <div class="welcome-emblem">OCA</div>
 
                 <h1>ASTRA</h1>
 
-                <div class="tagline">
-                    NDA PREPARATION AI
-                </div>
+                <div class="tagline">NDA PREPARATION AI</div>
 
                 <p>
                     Your intelligent academic assistant
                     for NDA preparation, mathematics,
                     GAT, current affairs and defence studies.
+                    Ask me anything to get started.
                 </p>
 
             </div>
-
         </div>
 
     </div>
 
-
     <!-- INPUT -->
-
     <div class="input-area">
 
         <div class="input-wrap">
-
             <input
                 id="messageInput"
                 type="text"
                 placeholder="Enter your question for ASTRA..."
                 autocomplete="off"
             >
-
         </div>
 
-        <button id="sendButton">
-            SEND
-        </button>
+        <button id="sendButton">SEND</button>
 
     </div>
 
 </div>
 
-
 <script>
+
 /* =========================================================
    ASTRA BACKEND
 ========================================================= */
+
 const API_BASE = "https://astra-backend-2hac.onrender.com";
 
 /* =========================================================
    ELEMENTS
 ========================================================= */
+
 const chat = document.getElementById("chat");
 const input = document.getElementById("messageInput");
 const sendButton = document.getElementById("sendButton");
@@ -1099,10 +639,10 @@ const welcome = document.getElementById("welcome");
 
 /* =========================================================
    CONVERSATION ID
-   One browser keeps one current conversation.
-   The actual messages are stored in PostgreSQL.
 ========================================================= */
+
 function createConversationId() {
+
     if (window.crypto && crypto.randomUUID) {
         return crypto.randomUUID();
     }
@@ -1110,21 +650,28 @@ function createConversationId() {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
         const r = Math.random() * 16 | 0;
         const v = c === "x" ? r : (r & 0x3 | 0x8);
+
         return v.toString(16);
     });
+
 }
 
 let conversationId = localStorage.getItem("astra_conversation_id");
 
 if (!conversationId) {
+
     conversationId = createConversationId();
+
     localStorage.setItem("astra_conversation_id", conversationId);
+
 }
 
 /* =========================================================
    ADD MESSAGE TO SCREEN
 ========================================================= */
+
 function addMessage(text, type) {
+
     if (welcome) {
         welcome.style.display = "none";
     }
@@ -1140,13 +687,15 @@ function addMessage(text, type) {
     chat.appendChild(message);
 
     chat.scrollTop = chat.scrollHeight;
+
 }
 
 /* =========================================================
-   CLEAR SCREEN ONLY
-   Does NOT delete old database history.
+   CLEAR CHAT SCREEN
 ========================================================= */
+
 function clearChatScreen() {
+
     chat.querySelectorAll(".message, .typing").forEach(function(element) {
         element.remove();
     });
@@ -1154,15 +703,20 @@ function clearChatScreen() {
     if (welcome) {
         welcome.style.display = "flex";
     }
+
 }
 
 /* =========================================================
-   LOAD CURRENT CONVERSATION FROM POSTGRESQL
+   LOAD CONVERSATION HISTORY
 ========================================================= */
+
 async function loadHistory() {
+
     try {
+
         const response = await fetch(
-            API_BASE + "/api/history?conversation_id=" + encodeURIComponent(conversationId)
+            API_BASE + "/api/history?conversation_id=" +
+            encodeURIComponent(conversationId)
         );
 
         if (!response.ok) {
@@ -1170,7 +724,10 @@ async function loadHistory() {
         }
 
         const data = await response.json();
-        const messages = Array.isArray(data.messages) ? data.messages : [];
+
+        const messages = Array.isArray(data.messages)
+            ? data.messages
+            : [];
 
         if (!messages.length) {
             return;
@@ -1181,25 +738,31 @@ async function loadHistory() {
         }
 
         messages.forEach(function(message) {
+
             addMessage(
                 message.content,
                 message.role === "user" ? "user" : "assistant"
             );
+
         });
 
         chat.scrollTop = chat.scrollHeight;
+
     }
     catch (error) {
+
         console.log("History could not be loaded:", error.message);
-        // The chat can still work if the history endpoint is temporarily unavailable.
+
     }
+
 }
 
 /* =========================================================
    NEW CHAT
-   Creates a new conversation but keeps the old one in PostgreSQL.
 ========================================================= */
+
 newChatButton.addEventListener("click", function() {
+
     const confirmation = confirm(
         "Start a new chat?\n\nYour previous conversation will remain saved in ASTRA's database."
     );
@@ -1209,35 +772,48 @@ newChatButton.addEventListener("click", function() {
     }
 
     conversationId = createConversationId();
+
     localStorage.setItem("astra_conversation_id", conversationId);
 
     clearChatScreen();
+
     input.focus();
+
 });
 
 /* =========================================================
    BACKEND STATUS
 ========================================================= */
+
 async function checkBackend() {
+
     try {
+
         const response = await fetch(API_BASE + "/health");
 
         if (!response.ok) {
-            throw new Error();
+            throw new Error("Backend unavailable");
         }
 
         statusText.textContent = "SYSTEM ONLINE";
+
     }
-    catch {
+    catch (error) {
+
         statusText.textContent = "SYSTEM OFFLINE";
+
     }
+
 }
 
 /* =========================================================
    TYPING INDICATOR
 ========================================================= */
+
 function createTyping() {
+
     const typing = document.createElement("div");
+
     typing.className = "typing";
 
     typing.innerHTML = `
@@ -1248,37 +824,45 @@ function createTyping() {
     `;
 
     chat.appendChild(typing);
+
     chat.scrollTop = chat.scrollHeight;
 
     return typing;
+
 }
 
 /* =========================================================
    SEND MESSAGE
 ========================================================= */
+
 async function sendMessage() {
+
     const message = input.value.trim();
 
-    if (!message) {
+    if (!message || sendButton.disabled) {
         return;
     }
 
     addMessage(message, "user");
 
     input.value = "";
+
     sendButton.disabled = true;
     input.disabled = true;
 
     const typing = createTyping();
 
     try {
+
         const response = await fetch(
             API_BASE + "/api/chat",
             {
                 method: "POST",
+
                 headers: {
                     "Content-Type": "application/json"
                 },
+
                 body: JSON.stringify({
                     message: message,
                     conversation_id: conversationId
@@ -1289,18 +873,24 @@ async function sendMessage() {
         let data;
 
         try {
+
             data = await response.json();
+
         }
         catch {
+
             throw new Error("Invalid response from ASTRA server");
+
         }
 
-        typing.remove();
-
         if (!response.ok) {
+
             throw new Error(
-                data.detail || "ASTRA request failed"
+                typeof data.detail === "string"
+                    ? data.detail
+                    : "ASTRA request failed"
             );
+
         }
 
         const answer =
@@ -1308,250 +898,61 @@ async function sendMessage() {
             "ASTRA did not return a response.";
 
         addMessage(answer, "assistant");
+
     }
     catch (error) {
-        typing.remove();
 
         addMessage(
             "Connection error.\n\n" + error.message,
             "assistant"
         );
+
     }
     finally {
+
+        typing.remove();
+
         sendButton.disabled = false;
         input.disabled = false;
+
         input.focus();
+
     }
+
 }
 
 /* =========================================================
-   BUTTON
+   SEND BUTTON
 ========================================================= */
+
 sendButton.addEventListener("click", sendMessage);
 
 /* =========================================================
-   ENTER
+   ENTER KEY
 ========================================================= */
+
 input.addEventListener("keydown", function(event) {
+
     if (event.key === "Enter") {
+
         event.preventDefault();
+
         sendMessage();
+
     }
+
 });
-
-
-/* ASTRA NDA QUESTION PAPER GENERATOR */
-const openPracticeButton = document.getElementById("openPracticeButton");
-const backToChatButton = document.getElementById("backToChatButton");
-const practicePanel = document.getElementById("practicePanel");
-const paperSubject = document.getElementById("paperSubject");
-const paperTopic = document.getElementById("paperTopic");
-const paperDifficulty = document.getElementById("paperDifficulty");
-const paperCount = document.getElementById("paperCount");
-const generatePaperButton = document.getElementById("generatePaperButton");
-const clearPaperHistoryButton = document.getElementById("clearPaperHistoryButton");
-const paperStatus = document.getElementById("paperStatus");
-const paperResult = document.getElementById("paperResult");
-const PAPER_HISTORY_KEY = "astra_seen_question_text_v1";
-
-function showPractice() {
-    chat.style.display = "none";
-    practicePanel.classList.add("open");
-    openPracticeButton.style.display = "none";
-    backToChatButton.style.display = "inline-block";
-}
-function showChat() {
-    practicePanel.classList.remove("open");
-    chat.style.display = "block";
-    openPracticeButton.style.display = "inline-block";
-    backToChatButton.style.display = "none";
-}
-function normaliseQuestion(text) {
-    return String(text || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
-}
-function getSeenQuestions() {
-    try {
-        const value = JSON.parse(localStorage.getItem(PAPER_HISTORY_KEY) || "[]");
-        return Array.isArray(value) ? value.filter(x => typeof x === "string").slice(-300) : [];
-    } catch { return []; }
-}
-function saveSeenQuestions(questions) {
-    try {
-        const merged = getSeenQuestions();
-        const seen = new Set(merged.map(normaliseQuestion));
-        for (const question of questions) {
-            const text = String(question || "").trim();
-            const key = normaliseQuestion(text);
-            if (text && key && !seen.has(key)) {
-                merged.push(text);
-                seen.add(key);
-            }
-        }
-        localStorage.setItem(PAPER_HISTORY_KEY, JSON.stringify(merged.slice(-300)));
-    } catch (error) {
-        console.warn("Could not save ASTRA question history:", error);
-    }
-}
-function setText(element, text) {
-    element.textContent = String(text == null ? "" : text);
-}
-function renderPaper(paper) {
-    paperResult.replaceChildren();
-
-    const title = document.createElement("h2");
-    title.style.cssText = "color:var(--gold-light);margin:14px 0";
-    setText(title, paper.title || "ASTRA Practice Paper");
-    paperResult.appendChild(title);
-
-    const meta = document.createElement("p");
-    meta.className = "practice-note";
-    setText(meta, `${paper.subject} • ${paper.topic} • ${paper.difficulty} • ${paper.questions.length} questions`);
-    paperResult.appendChild(meta);
-
-    const cardRecords = [];
-    paper.questions.forEach((question, index) => {
-        const card = document.createElement("article");
-        card.className = "paper-card";
-
-        const heading = document.createElement("h3");
-        setText(heading, `${index + 1}. ${question.question}`);
-        card.appendChild(heading);
-
-        const details = document.createElement("p");
-        details.className = "paper-meta";
-        setText(details, `${question.subject || paper.subject} • ${question.topic || paper.topic} • ${question.difficulty || paper.difficulty}`);
-        card.appendChild(details);
-
-        const group = document.createElement("div");
-        group.setAttribute("role", "radiogroup");
-        group.setAttribute("aria-label", `Answers for question ${index + 1}`);
-        (question.options || []).forEach((option, optionIndex) => {
-            const label = document.createElement("label");
-            label.className = "paper-option";
-            const radio = document.createElement("input");
-            radio.type = "radio";
-            radio.name = `paper-question-${index}`;
-            radio.value = option;
-            const text = document.createElement("span");
-            setText(text, `${String.fromCharCode(65 + optionIndex)}. ${option}`);
-            label.append(radio, text);
-            group.appendChild(label);
-        });
-        card.appendChild(group);
-
-        const explanation = document.createElement("div");
-        explanation.className = "paper-explanation";
-        setText(explanation, `Correct answer: ${question.correct_answer}\n\nExplanation: ${question.explanation}`);
-        card.appendChild(explanation);
-
-        cardRecords.push({ card, explanation });
-        paperResult.appendChild(card);
-    });
-
-    const actions = document.createElement("div");
-    actions.style.cssText = "display:flex;gap:10px;flex-wrap:wrap;margin:16px 0";
-    const submit = document.createElement("button");
-    submit.type = "button";
-    submit.className = "paper-action";
-    submit.textContent = "SUBMIT ANSWERS";
-    const reveal = document.createElement("button");
-    reveal.type = "button";
-    reveal.className = "paper-action secondary";
-    reveal.textContent = "SHOW ANSWERS & EXPLANATIONS";
-    actions.append(submit, reveal);
-    paperResult.appendChild(actions);
-
-    const result = document.createElement("div");
-    result.className = "paper-result";
-    result.style.display = "none";
-    paperResult.appendChild(result);
-
-    const showExplanations = () => cardRecords.forEach(item => item.explanation.classList.add("visible"));
-    reveal.addEventListener("click", showExplanations);
-    submit.addEventListener("click", () => {
-        let correct = 0;
-        let answered = 0;
-        paper.questions.forEach((question, index) => {
-            const selected = paperResult.querySelector(`input[name="paper-question-${index}"]:checked`);
-            if (selected) {
-                answered++;
-                if (selected.value === question.correct_answer) correct++;
-            }
-        });
-        result.style.display = "block";
-        setText(result, `RESULT: ${correct}/${paper.questions.length} correct • ${answered} answered • ${paper.questions.length - answered} unanswered • Accuracy among answered: ${answered ? Math.round(correct / answered * 100) : 0}%`);
-        showExplanations();
-        result.scrollIntoView({ behavior: "smooth", block: "center" });
-    });
-}
-async function generatePaper() {
-    generatePaperButton.disabled = true;
-    clearPaperHistoryButton.disabled = true;
-    paperStatus.textContent = "Generating a fresh paper…";
-    paperResult.replaceChildren();
-
-    const payload = {
-        subject: paperSubject.value,
-        topic: paperTopic.value.trim() || "Mixed",
-        difficulty: paperDifficulty.value,
-        question_count: Number(paperCount.value),
-        request_id: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-        previous_questions: getSeenQuestions()
-    };
-
-    try {
-        const response = await fetch(`${API_BASE}/api/generate-paper`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-        });
-        let data;
-        try { data = await response.json(); }
-        catch { throw new Error("The server returned an invalid response."); }
-
-        if (!response.ok) {
-            throw new Error(typeof data.detail === "string" ? data.detail : "Question generation failed.");
-        }
-        if (!data || !Array.isArray(data.questions) || data.questions.length !== payload.question_count) {
-            throw new Error("The server returned an incomplete paper. Please retry.");
-        }
-
-        saveSeenQuestions(data.questions.map(question => question.question));
-        paperStatus.textContent = "Paper ready. Select your answers, then submit.";
-        renderPaper(data);
-    } catch (error) {
-        console.error("Paper generation error:", error);
-        paperStatus.textContent = `Could not generate a fresh paper: ${error.message}\nPlease retry. ASTRA will not silently show an old paper.`;
-        const retry = document.createElement("button");
-        retry.type = "button";
-        retry.className = "paper-action";
-        retry.textContent = "RETRY GENERATION";
-        retry.addEventListener("click", generatePaper);
-        paperResult.appendChild(retry);
-    } finally {
-        generatePaperButton.disabled = false;
-        clearPaperHistoryButton.disabled = false;
-    }
-}
-openPracticeButton.addEventListener("click", showPractice);
-backToChatButton.addEventListener("click", showChat);
-generatePaperButton.addEventListener("click", generatePaper);
-clearPaperHistoryButton.addEventListener("click", () => {
-    try {
-        localStorage.removeItem(PAPER_HISTORY_KEY);
-        paperStatus.textContent = "Seen-question history cleared in this browser.";
-    } catch {
-        paperStatus.textContent = "Browser storage is unavailable; history could not be cleared.";
-    }
-});
-
 
 /* =========================================================
-   START
+   START ASTRA
 ========================================================= */
+
 loadHistory();
+
 checkBackend();
+
 input.focus();
+
 </script>
 
 </body>
