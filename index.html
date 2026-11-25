@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ASTRA | OCA NDA AI</title>
 
+<!-- MathJax: renders mathematical equations -->
 <script>
 window.MathJax = {
     tex: {
@@ -15,10 +16,14 @@ window.MathJax = {
     options: {
         skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
     },
-    startup: { typeset: false }
+    startup: {
+        typeset: false
+    }
 };
 </script>
 <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- Markdown formatting and HTML sanitization -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
 
@@ -136,37 +141,7 @@ header {
     text-transform:uppercase;
 }
 
-.header-right {
-    display:flex;
-    align-items:center;
-    gap:18px;
-}
-
-/* ASTRA APP DOWNLOAD BUTTON */
-#downloadAppButton {
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    padding:12px 17px;
-    background:linear-gradient(145deg,#c5a75b,#92743b);
-    color:#10130c;
-    border:1px solid #dfc47c;
-    border-radius:9px;
-    text-decoration:none;
-    font-size:13px;
-    font-weight:800;
-    letter-spacing:.5px;
-    white-space:nowrap;
-    box-shadow:0 0 15px rgba(197,167,91,.16);
-    transition:.2s;
-}
-
-#downloadAppButton:hover {
-    background:linear-gradient(145deg,#e0c77d,#c5a75b);
-    transform:translateY(-2px);
-    box-shadow:0 0 20px rgba(197,167,91,.35);
-}
+.header-right { display:flex; align-items:center; gap:25px; }
 
 .system-status {
     display:flex;
@@ -222,6 +197,7 @@ header {
 }
 
 .command-item.active { color:var(--gold); }
+
 .separator { height:15px; width:1px; background:#323a30; }
 
 .chat {
@@ -286,6 +262,8 @@ header {
     color:#77846b;
 }
 
+/* Formatted AI response */
+
 .assistant .bubble p { margin:0 0 13px; }
 .assistant .bubble p:last-child { margin-bottom:0; }
 
@@ -309,6 +287,7 @@ header {
 }
 
 .assistant .bubble li { margin:6px 0; }
+
 .assistant .bubble strong { color:#e0c77d; }
 
 .assistant .bubble blockquote {
@@ -347,6 +326,8 @@ header {
     margin:15px 0;
 }
 
+/* MathJax equation formatting */
+
 .assistant .bubble mjx-container {
     color:#f1e6c3 !important;
     max-width:100%;
@@ -379,6 +360,8 @@ header {
     color:#e0c77d;
     background:#172017;
 }
+
+/* Welcome */
 
 .welcome {
     min-height:100%;
@@ -516,26 +499,15 @@ header {
         border-radius:0;
     }
 
-    header {
-        min-height:82px;
-        padding:0 12px;
-        gap:8px;
-    }
+    header { min-height:82px; padding:0 16px; }
 
-    .brand-mark { width:38px; height:38px; font-size:13px; }
-    .brand { gap:8px; }
-    .astra { font-size:21px; letter-spacing:4px; }
-    .subtitle { font-size:7px; letter-spacing:1px; }
-    .header-right { gap:7px; }
+    .brand-mark { width:42px; height:42px; font-size:15px; }
+    .brand { gap:10px; }
+    .astra { font-size:25px; letter-spacing:5px; }
+    .subtitle { font-size:8px; letter-spacing:1.8px; }
     .system-status { display:none; }
 
-    #downloadAppButton {
-        padding:10px 9px;
-        font-size:10px;
-        gap:4px;
-    }
-
-    #newChatButton { padding:9px 9px; font-size:11px; }
+    #newChatButton { padding:10px 12px; font-size:12px; }
 
     .command-bar {
         padding:0 15px;
@@ -544,10 +516,13 @@ header {
     }
 
     .command-item { font-size:8px; white-space:nowrap; }
+
     .chat { padding:28px 15px; }
     .bubble { max-width:95%; font-size:15px; }
+
     .welcome h1 { font-size:40px; letter-spacing:7px; }
     .watermark { width:350px; height:350px; }
+
     .input-area { padding:11px; }
     #messageInput { height:53px; font-size:15px; }
     #sendButton { height:53px; min-width:72px; }
@@ -570,20 +545,10 @@ header {
         </div>
 
         <div class="header-right">
-
-            <!-- DOWNLOAD ASTRA ANDROID APP -->
-            <a
-                id="downloadAppButton"
-                href="https://github.com/soshlok1234-pixel/ASTRA/releases/download/v1.0.0/ASTRA-v1.0.0.apk"
-                title="Download ASTRA Android App">
-                📲 DOWNLOAD APP
-            </a>
-
             <div class="system-status">
                 <span class="status-dot"></span>
                 <span id="statusText">CONNECTING...</span>
             </div>
-
             <button id="newChatButton">+ New Chat</button>
         </div>
     </header>
@@ -685,6 +650,7 @@ function renderAssistantText(text) {
             USE_PROFILES: { html: true }
         });
     } else {
+        // Safe fallback if formatting libraries fail to load.
         html = escapeHTML(text).replace(/\n/g, "<br>");
     }
 
@@ -716,4 +682,204 @@ function addMessage(text, type) {
     bubble.className = "bubble";
 
     if (type === "assistant") {
-        bubble.innerHTML = render
+        bubble.innerHTML = renderAssistantText(text);
+    } else {
+        bubble.textContent = text;
+    }
+
+    message.appendChild(bubble);
+    chat.appendChild(message);
+
+    chat.scrollTop = chat.scrollHeight;
+
+    // Render equations after inserting the response.
+    if (type === "assistant" && window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise([bubble]).catch(function(error) {
+            console.error("Math rendering error:", error);
+        });
+    }
+}
+
+/* REMEMBER MESSAGES */
+function rememberMessage(role, content) {
+    conversationHistory.push({
+        role: role,
+        content: content
+    });
+
+    conversationHistory = conversationHistory.slice(-30);
+}
+
+/* CLEAR SCREEN */
+function clearChatScreen() {
+    chat.querySelectorAll(".message, .typing").forEach(function(element) {
+        element.remove();
+    });
+
+    if (welcome) {
+        welcome.style.display = "flex";
+    }
+}
+
+/* BACKEND STATUS */
+async function checkBackend() {
+    try {
+        const response = await fetch(API_BASE + "/health");
+
+        if (!response.ok) {
+            throw new Error("Backend unavailable");
+        }
+
+        const data = await response.json();
+
+        statusText.textContent =
+            data.gemini === false ? "AI KEY MISSING" : "SYSTEM ONLINE";
+
+    } catch (error) {
+        statusText.textContent = "SYSTEM OFFLINE";
+        console.error("Backend health check:", error);
+    }
+}
+
+/* TYPING INDICATOR */
+function createTyping() {
+    const typing = document.createElement("div");
+    typing.className = "typing";
+
+    typing.innerHTML = `
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span>ASTRA is processing...</span>
+    `;
+
+    chat.appendChild(typing);
+    chat.scrollTop = chat.scrollHeight;
+
+    return typing;
+}
+
+/* SEND MESSAGE */
+async function sendMessage() {
+    const message = input.value.trim();
+
+    if (!message || isSending) return;
+
+    isSending = true;
+
+    addMessage(message, "user");
+    rememberMessage("user", message);
+
+    input.value = "";
+    sendButton.disabled = true;
+    input.disabled = true;
+
+    const typing = createTyping();
+
+    try {
+        const response = await fetch(API_BASE + "/api/chat", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: message,
+                history: conversationHistory.slice(0, -1),
+                session_id: astraSessionId
+            })
+        });
+
+        let data;
+
+        try {
+            data = await response.json();
+        } catch {
+            throw new Error("The server returned an invalid response.");
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                typeof data.detail === "string"
+                    ? data.detail
+                    : "ASTRA request failed. HTTP " + response.status
+            );
+        }
+
+        const answer =
+            typeof data.reply === "string" && data.reply.trim()
+                ? data.reply.trim()
+                : "ASTRA did not return a response.";
+
+        addMessage(answer, "assistant");
+        rememberMessage("assistant", answer);
+
+    } catch (error) {
+        console.error("ASTRA chat error:", error);
+
+        addMessage(
+            "Connection error.\n\n" + error.message,
+            "assistant"
+        );
+
+        statusText.textContent = "CONNECTION ERROR";
+
+    } finally {
+        typing.remove();
+
+        sendButton.disabled = false;
+        input.disabled = false;
+        isSending = false;
+
+        input.focus();
+    }
+}
+
+/* NEW CHAT */
+newChatButton.addEventListener("click", async function() {
+    if (isSending) return;
+
+    const oldSessionId = astraSessionId;
+
+    const confirmation = confirm(
+        "Start a new temporary chat?\n\nYour current temporary memory will be cleared."
+    );
+
+    if (!confirmation) return;
+
+    try {
+        await fetch(
+            API_BASE + "/api/session/" + encodeURIComponent(oldSessionId),
+            { method: "DELETE" }
+        );
+    } catch (error) {
+        console.log("Could not clear old server session:", error);
+    }
+
+    astraSessionId = createSessionId();
+    sessionStorage.setItem("astra_session_id", astraSessionId);
+
+    conversationHistory = [];
+    clearChatScreen();
+
+    statusText.textContent = "SYSTEM ONLINE";
+    input.focus();
+});
+
+/* SEND BUTTON */
+sendButton.addEventListener("click", sendMessage);
+
+/* ENTER KEY */
+input.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        sendMessage();
+    }
+});
+
+/* START ASTRA */
+checkBackend();
+input.focus();
+</script>
+
+</body>
+</html>
